@@ -12,6 +12,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+// static file for the style
+app.use(express.static("public"));
 
 app.use(session({
   secret: 'secretKey',
