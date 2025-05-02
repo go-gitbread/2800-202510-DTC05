@@ -1,0 +1,28 @@
+{
+  "name": "swolecat-repo-official",
+  "version": "1.0.0",
+  "description": "Team Name: DTC-05\r Team Members: \r - Roger Vanderheyden\r - Steve Xie\r - Jia Yin (Jossie) Yan\r - Mahyar Golestanpour\r - Anthony Herradura\r ## More details to come\r TBA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/go-gitbread/2800-202510-DTC05.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/go-gitbread/2800-202510-DTC05/issues"
+  },
+  "homepage": "https://github.com/go-gitbread/2800-202510-DTC05#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.14.1"
+  }
+}
