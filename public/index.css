@@ -5,10 +5,10 @@
 }
 
 body {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background-color: #f7f7ff;
+      font-family: 'Winky Rough', sans-serif;
+      padding-top: 80px;
+      margin: 0;
 }
 
 h2 {
@@ -19,12 +19,18 @@ h2 {
 }
 
 .container {
-      width: 500px;
+      width: 100%;
+      max-width: 1000px;
       margin: auto;
-      padding: 25px;
+      padding: 20px;
+    }
 
-}
-
+    .col-md-3 {
+      flex: 0 0 45% !important;
+      max-width: 45% !important;
+    }
+    
+    
 
 .btn {
       display: block;
@@ -41,3 +47,58 @@ h2 {
       cursor: pointer;
       margin: auto
 }
+
+.dashboard-header {
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    .dashboard-header img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    .stat-grid {
+      max-width: 700px;
+      margin: 30px auto;
+    }
+
+    .stat-grid .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .stat-card {
+      width: 150px;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .btn-logout {
+      display: inline-block;
+      background-color: #fe5f55;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      font-family: 'Winky Rough', sans-serif;
+    }
+
+    .btn-logout:hover {
+      background-color: #d64942;
