@@ -1,124 +1,124 @@
 * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-      background-color: #f7f7ff;
-      font-family: 'Winky Rough', sans-serif;
-      padding-top: 80px;
-      margin: 0;
+  background-color: #f7f7ff;
+  font-family: 'Winky Rough', sans-serif;
+  padding-top: 80px;
+  margin: 0;
 }
 
 h2 {
-      text-align: center;
-      margin-bottom: 10px;
-      font-family: 'Winky Rough', sans-serif;
-      font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: 'Winky Rough', sans-serif;
+  font-weight: 500;
 }
 
 .container {
-      width: 100%;
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
 
-    .col-md-3 {
-      flex: 0 0 45% !important;
-      max-width: 45% !important;
-    }
-    
-    
+.col-md-3 {
+  flex: 0 0 45% !important;
+  max-width: 45% !important;
+}
+
+
 
 .btn {
-      display: block;
-      text-align: center;
-      align-items: center;
-      width: 100px;
-      padding: 10px;
-      font-size: 12px;
-      font-family: 'Winky Rough', sans-serif;
-      font-weight: bold;
-      background-color: rgb(248, 126, 126);
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: auto
+  display: block;
+  text-align: center;
+  align-items: center;
+  width: 100px;
+  padding: 10px;
+  font-size: 12px;
+  font-family: 'Winky Rough', sans-serif;
+  font-weight: bold;
+  background-color: rgb(248, 126, 126);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: auto
 }
 
 .dashboard-header {
-      text-align: center;
-      margin-top: 100px;
-    }
+  text-align: center;
+  margin-top: 100px;
+}
 
-    .dashboard-header img {
-      width: 120px;
-      margin-bottom: 10px;
-    }
+.dashboard-header img {
+  width: 120px;
+  margin-bottom: 10px;
+}
 
-    .stat-grid {
-      max-width: 700px;
-      margin: 30px auto;
-    }
+.stat-grid {
+  max-width: 700px;
+  margin: 30px auto;
+}
 
-    .stat-grid .row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
+.stat-grid .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
 
-    .stat-card {
-      width: 150px;
-      height: 120px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 16px;
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    }
+.stat-card {
+  width: 150px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
 
-    .stat-icon {
-      font-size: 28px;
-      display: block;
-      margin-bottom: 8px;
-    }
+.stat-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 8px;
+}
 
-    .btn-home {
-      display: inline-block;
-      background-color: #fe5f55;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      font-family: 'Winky Rough', sans-serif;
-    }
+.btn-home {
+  display: inline-block;
+  background-color: #fe5f55;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Winky Rough', sans-serif;
+}
 
-    .btn-logout {
-      display: inline-block;
-      background-color: #fe5f55;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      font-family: 'Winky Rough', sans-serif;
-    }
+.btn-logout {
+  display: inline-block;
+  background-color: #fe5f55;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Winky Rough', sans-serif;
+}
 
-    .btn-logout:hover {
-      background-color: #d64942;
-    }
+.btn-logout:hover {
+  background-color: #d64942;
+}
 
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      width: 92%;
-    }
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 92%;
+}
