@@ -88,6 +88,18 @@ h2 {
       margin-bottom: 8px;
     }
 
+    .btn-home {
+      display: inline-block;
+      background-color: #fe5f55;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      font-family: 'Winky Rough', sans-serif;
+    }
+
     .btn-logout {
       display: inline-block;
       background-color: #fe5f55;
@@ -102,3 +114,11 @@ h2 {
 
     .btn-logout:hover {
       background-color: #d64942;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 92%;
+    }
