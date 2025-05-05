@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+//register.ejs
 app.get('/register', (req, res) => res.render('register'));
 app.post('/register', async (req, res) => {
   const { email, password } = req.body;
@@ -46,6 +47,7 @@ app.post('/register', async (req, res) => {
   res.redirect('/login');
 });
 
+//login.ejs
 app.get('/login', (req, res) => res.render('login'));
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -59,6 +61,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// home.ejs
 app.get('/home', (req, res) => res.render('home'));
 
 app.get('/logout', (req, res) => {
@@ -66,5 +69,9 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
+
+
+// leaderboard.ejs
+app.get('/leaderboard', (req, res) => res.render('leaderboard'));
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
