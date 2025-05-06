@@ -53,6 +53,26 @@ body {
     max-width: 60px;
     margin-right: 10px;
   }
+  .back-icon {
+    max-width: 40px;
+  }
+  
+  .back-button {
+    position: absolute;
+    left: calc(50% - 240px); /* Positions it to the left of the routine container */
+    top: 16%;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+  }
+  
+  .back-button:hover {
+    background-color: #f0f0f0;
+  }
   
   .add-exercise-button {
     position: fixed;

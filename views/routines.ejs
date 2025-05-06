@@ -16,18 +16,20 @@
 <body>
     <div class="container"><%- include('partials/navbar') %> </div> 
 
-     <div class="main-content">
-       <div class="welcome-text"><%= username %>'s Routines</div>
-       
-       <div class="routine-container">
-           <div class="routine-list-container">Routine List</div>
-           
-       </div>
-           <button class="add-exercise-button">
-           <img src="/images/plus.png" alt="" class="plus-icon">
-           Create New Routine
-         </button>
-
+<div class="main-content">
+    <a href="/back" class="back-button">
+        <img src="/images/back.png" alt="Back" class="back-icon">
+      </a>
+  <div class="welcome-text"><%= username %>'s Routines</div>
+  
+  <div class="routine-container">
+    <div class="routine-list-container">Routine List</div>
+  </div>
+  
+  <button class="add-exercise-button">
+    <img src="/images/plus.png" alt="Add" class="plus-icon">
+    Create New Routine
+  </button>
 </div>
 
 

@@ -69,4 +69,6 @@ app.get('/logout', (req, res) => {
 
 app.get('/routines', (req, res) => res.render('routines'));
 
+app.get('/back', (req, res) => res.render('home'));
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
