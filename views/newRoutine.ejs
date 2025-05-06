@@ -25,19 +25,17 @@
   <div class="routine-container">
     <div class="routine-list-container">
         <div class="exercise-list">
-            <!-- <div class="exercise-item">
-                <div class="exercise-name">Push-ups</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div> -->
-            </div>
-            <% if (selectedExercise) { %>
-              <div class="exercise-item">
-                <div class="exercise-name"><%= selectedExercise %></div>
-                <div class="exercise-delete">
+            <% if (routine && routine.length > 0) { %>
+              <% routine.forEach(function(exercise) { %>
+                <div class="exercise-item">
+                  <div class="exercise-name"><%= exercise %></div>
+                  <div class="exercise-delete">
                     <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
+                  </div>
                 </div>
-              </div>
+              <% }) %>
+            <% } else { %>
+              <div class="exercise-name">No exercises added yet.</div>
             <% } %>
 
         </div>

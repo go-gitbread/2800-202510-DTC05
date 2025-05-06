@@ -26,7 +26,7 @@
     <div class="routine-list-container">
         <div class="exercise-list">
           <% exercises.forEach(function(exercise) { %>
-            <a href="/newRoutine?exercise=<%= encodeURIComponent(exercise.name) %>">
+            <a href="/addExercise?exercise=<%= encodeURIComponent(exercise.name) %>">
               <div class="exercise-item">
                   <div class="exercise-name"><%= exercise.name %></div>
                   <div class="exercise-add">

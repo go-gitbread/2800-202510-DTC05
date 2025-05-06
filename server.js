@@ -71,12 +71,25 @@ app.get('/logout', (req, res) => {
 app.get('/routines', (req, res) => res.render('routines'));
 //Route to go to the Create New Routine page
 app.get('/newRoutine', (req, res) => {
-  const selectedExercise = req.query.exercise; // Set the selected exercise to a variable & pass to new routine
-  res.render('newRoutine', { selectedExercise }) // Second argument loads the selected exercise so it can be passed to the routine
+  const routine = req.session.routine || []; // This is the new routine draft. If no exercises have been added, show an empty list
+  res.render('newRoutine', { routine }); // Second argument loads the routine draft array so the page can access it & populate the list
 });
 //Route to go to the Exercise Selection page
 app.get('/selectExercise', (req, res) => { res.render('selectExercise', {exercises})}); // Second argument loads the exercises array so the page can access it
 //Route for the back button
 app.get('/back', (req, res) => res.redirect('home'));
+
+//Route to Add an Exercise to a new routine
+app.get('/addExercise', (req, res) => {
+  const exerciseName = req.query.exercise;
+  if (!exerciseName) return res.redirect('/selectExercise');
+  if (!req.session.routine) {   
+    req.session.routine = []; // Initialize routine array in session if empty
+  }
+  if (!req.session.routine.includes(exerciseName)) {       // Prevent duplicates
+    req.session.routine.push(exerciseName); //Only add a new exercise if it's not already included 
+  }
+  res.redirect('/newRoutine'); // Redirect back to Routine creation page after clicking to add an exercise
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
