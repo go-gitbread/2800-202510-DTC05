@@ -70,7 +70,10 @@ app.get('/logout', (req, res) => {
 //Route to go to the Routines page
 app.get('/routines', (req, res) => res.render('routines'));
 //Route to go to the Create New Routine page
-app.get('/newRoutine', (req, res) => res.render('newRoutine'));
+app.get('/newRoutine', (req, res) => {
+  const selectedExercise = req.query.exercise; // Set the selected exercise to a variable & pass to new routine
+  res.render('newRoutine', { selectedExercise }) // Second argument loads the selected exercise so it can be passed to the routine
+});
 //Route to go to the Exercise Selection page
 app.get('/selectExercise', (req, res) => { res.render('selectExercise', {exercises})}); // Second argument loads the exercises array so the page can access it
 //Route for the back button

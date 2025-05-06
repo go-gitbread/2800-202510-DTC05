@@ -26,13 +26,15 @@
     <div class="routine-list-container">
         <div class="exercise-list">
           <% exercises.forEach(function(exercise) { %>
-            <div class="exercise-item">
-                <div class="exercise-name"><%= exercise.name %></div>
-                <div class="exercise-delete">
-                    <img src="/images/plus.png"  class="plus-icon">
-                </div>
-            </div>
-        <% }); %>
+            <a href="/newRoutine?exercise=<%= encodeURIComponent(exercise.name) %>">
+              <div class="exercise-item">
+                  <div class="exercise-name"><%= exercise.name %></div>
+                  <div class="exercise-add">
+                      <img src="/images/plus.png" class="plus-icon">
+                  </div>
+              </div>
+            </a>
+          <% }); %>
 
         </div>
     </div>

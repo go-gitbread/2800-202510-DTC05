@@ -69,6 +69,7 @@ body {
   .exercise-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
   }
   
   .exercise-name {
@@ -124,20 +125,10 @@ body {
     transform:  scale(1.05); 
   }
 
-  .exercise-delete {
+  .exercise-add {
     cursor: pointer;
     display: flex;
     align-items: center;
-  }
-  
-  .trash-icon {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.2s ease;
-  }
-  
-  .trash-icon:hover {
-    transform: scale(1.2);
   }
 
   .button-row {
