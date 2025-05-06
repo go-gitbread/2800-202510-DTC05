@@ -70,8 +70,17 @@ app.get('/logout', (req, res) => {
   });
 });
 
-
-// leaderboard.ejs
-app.get('/leaderboard', (req, res) => res.render('leaderboard'));
+// use async to get the email
+app.get('/leaderboard', async (req, res) => {
+  const data = await User.find().select('email');
+  res.render('leaderboard', { usersList: data });
+  // try {
+  //   const data = await User.find().select('email');
+  //   res.render('leaderboard', { usersList: data });
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send("Error retrieving users");
+  // }
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
