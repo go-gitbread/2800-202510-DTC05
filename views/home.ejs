@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,32 @@
     <link rel="stylesheet" href="/home.css">
     <link rel="stylesheet" href="/navbar.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
         rel="stylesheet">
 </head>
-<body>
-     <div class="container"><%- include('partials/navbar') %> </div> 
 
-      <div class="main-content">
-        <div class="welcome-text">Welcome back, cool cat <%= username %></div>
+<body>
+    <div class="container"><%- include('partials/navbar') %> </div>
+
+    <div class="main-content">
+        <div class="welcome-text">Welcome back, cool cat <%= username %>
+        </div>
         <div class="cat-name">Cat Name</div>
-        
+
         <div class="avatar-container">
             <div class="cat-avatar">Cat Avatar</div>
         </div>
-        
-</div>
-    
+
+    </div>
+    <!-- comment: maybe we can make the bottom-nav into a partial (as it will need to open other pages/do things) -->
     <div class="bottom-nav">
         <a href="/routines" class="bottom-nav-item">Workout</a>
         <div class="bottom-nav-item">Swole Stats</div>
     </div>
+
 </body>
+
 </html>

@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+//register.ejs
 app.get('/register', (req, res) => res.render('register'));
 app.post('/register', async (req, res) => {
   const { email, password } = req.body;
@@ -46,6 +47,7 @@ app.post('/register', async (req, res) => {
   res.redirect('/login');
 });
 
+//login.ejs
 app.get('/login', (req, res) => res.render('login'));
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -59,6 +61,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// home.ejs
 app.get('/home', (req, res) => res.render('home'));
 
 app.get('/logout', (req, res) => {
@@ -82,5 +85,23 @@ app.get('/profile', (req, res) => {
     joinedDate: new Date().toDateString()
   });
 });
+
+// use async to get the email
+app.get('/leaderboard', async (req, res) => {
+  const data = await User.find().select('email');
+  res.render('leaderboard', { usersList: data });
+  // try {
+  //   const data = await User.find().select('email');
+  //   res.render('leaderboard', { usersList: data });
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send("Error retrieving users");
+  // }
+});
+
+// about page 
+app.get('/about', (req, res) => {
+  res.render('about');
+})
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
