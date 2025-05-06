@@ -54,20 +54,21 @@
 </div>
 
 <script>
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const exerciseName = btn.getAttribute('data-exercise');
+  //Delete button logic
+  document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
+    btn.addEventListener('click', async () => {       
+      const exerciseName = btn.getAttribute('data-exercise'); //This event listener will get the name of the exercise associated with the delete button when clicked
 
       const res = await fetch('/deleteExercise', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ exerciseName })
+        method: 'POST',       //modify the response (res) to send a POST request to the server
+        headers: { 'Content-Type': 'application/json' }, // 'headers' tell the HTTP what the type of content is, as a key-value pair. application/json means "We're sending you a JSON" as the request body
+        body: JSON.stringify({ exerciseName }) // convert exerciseName to a JSON string for sending to the server
       });
 
       if (res.ok) {
         // Remove from DOM
-        const item = btn.closest('.exercise-item');
-        item.remove();
+        const item = btn.closest('.exercise-item'); //item = the 'exercise-item' associated with the delete button
+        item.remove(); //remove the item from DOM
       } else {
         alert('Failed to delete exercise.');
       }
