@@ -66,9 +66,11 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
-
+//Route to go to the routines page
 app.get('/routines', (req, res) => res.render('routines'));
-
+//Route to go to the Create new routine page
+app.get('/newRoutine', (req, res) => res.render('newRoutine'));
+//Route for the back button
 app.get('/back', (req, res) => res.render('home'));
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

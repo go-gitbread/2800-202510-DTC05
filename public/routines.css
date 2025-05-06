@@ -49,10 +49,46 @@ body {
     color: #333;
   }
   
+  /* Exercise list styling */
+  .exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .exercise-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .exercise-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .exercise-name {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  .exercise-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  
   .plus-icon {
     max-width: 60px;
     margin-right: 10px;
   }
+  
   .back-icon {
     max-width: 40px;
   }
@@ -91,14 +127,29 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      width: 60vh; 
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      
+    width: 60vh; 
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
+  
   .add-exercise-button:hover {
     background-color: #e0e0e0;
     transform: translateX(-50%) scale(1.05); 
+  }
+
+  .exercise-delete {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .trash-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+  }
+  
+  .trash-icon:hover {
+    transform: scale(1.2);
   }
