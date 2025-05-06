@@ -83,4 +83,9 @@ app.get('/leaderboard', async (req, res) => {
   // }
 });
 
+// about page 
+app.get('/about', (req, res) => {
+  res.render('about');
+})
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
