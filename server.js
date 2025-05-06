@@ -9,7 +9,7 @@ const exercises = require('./public/js/exercises');
 dotenv.config();
 
 const app = express();
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -92,4 +92,12 @@ app.get('/addExercise', (req, res) => {
   res.redirect('/newRoutine'); // Redirect back to Routine creation page after clicking to add an exercise
 });
 
+//Route for deleting an exercise from a new routine
+app.post('/deleteExercise', (req, res) => {
+  const { exerciseName } = req.body;
+  if (req.session.routine) {
+    req.session.routine = req.session.routine.filter(name => name !== exerciseName);
+  }
+  res.sendStatus(200);
+});
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

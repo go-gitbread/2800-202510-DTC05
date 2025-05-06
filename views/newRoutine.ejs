@@ -27,10 +27,10 @@
         <div class="exercise-list">
             <% if (routine && routine.length > 0) { %>
               <% routine.forEach(function(exercise) { %>
-                <div class="exercise-item">
+                <div class="exercise-item" data-exercise-name="<%= exercise %>">
                   <div class="exercise-name"><%= exercise %></div>
                   <div class="exercise-delete">
-                    <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
+                    <img src="/images/garbageBin.png" alt="Delete" class="trash-icon delete-btn" data-exercise="<%= exercise %>">
                   </div>
                 </div>
               <% }) %>
@@ -53,6 +53,26 @@
   </button>
 </div>
 
+<script>
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const exerciseName = btn.getAttribute('data-exercise');
 
+      const res = await fetch('/deleteExercise', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ exerciseName })
+      });
+
+      if (res.ok) {
+        // Remove from DOM
+        const item = btn.closest('.exercise-item');
+        item.remove();
+      } else {
+        alert('Failed to delete exercise.');
+      }
+    });
+  });
+</script>
 </body>
 </html>
