@@ -49,7 +49,6 @@ body {
     color: #333;
   }
   
-  /* Exercise list styling */
   .exercise-list {
     display: flex;
     flex-direction: column;
@@ -88,6 +87,11 @@ body {
     max-width: 60px;
     margin-right: 10px;
   }
+
+  .save-icon {
+    max-width: 50px;
+    margin-right: 10p
+  }
   
   .back-icon {
     max-width: 40px;
@@ -95,7 +99,7 @@ body {
   
   .back-button {
     position: absolute;
-    left: calc(50% - 240px); /* Positions it to the left of the routine container */
+    left: calc(50% - 240px);
     top: 16%;
     transform: translateY(-50%);
     border: none;
@@ -110,32 +114,14 @@ body {
     background-color: #f0f0f0;
   }
   
-  .add-exercise-button {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 82%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px 20px;
-    color: rgb(0, 0, 0);
-    font-family: 'Winky Rough', sans-serif;
-    font-size: 22px;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 60vh; 
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
   .add-exercise-button:hover {
     background-color: #e0e0e0;
-    transform: translateX(-50%) scale(1.05); 
+    transform:  scale(1.05); 
+  }
+
+  .save-routine-button:hover {
+    background-color: #e0e0e0;
+    transform:  scale(1.05); 
   }
 
   .exercise-delete {
@@ -160,12 +146,52 @@ body {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 40px; /* distance between buttons */
+    gap: 10px;
     justify-content: center;
+    flex-wrap: wrap;
     z-index: 100;
+    width: 90vw; 
+    max-width: 600px; 
   }
   
-  .action-button {
+  .add-exercise-button,
+  .save-routine-button {
+    flex: 1 1 45%; 
+    min-width: 120px;
+    max-width: 300px;
+    padding: 10px 20px;
+    font-size: 18px; 
+  }
+  
+
+  @media (max-width: 400px) {
+    .add-exercise-button,
+    .save-routine-button {
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+  }
+  
+  .add-exercise-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 40px;
+    color: rgb(0, 0, 0);
+    font-family: 'Winky Rough', sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 50vh;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .save-routine-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,7 +206,7 @@ body {
     cursor: pointer;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 28vh;
+    width: 50vh;
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
