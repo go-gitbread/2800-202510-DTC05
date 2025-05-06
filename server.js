@@ -72,5 +72,15 @@ app.get('/routines', (req, res) => res.render('routines'));
 app.get('/newRoutine', (req, res) => res.render('newRoutine'));
 //Route for the back button
 app.get('/back', (req, res) => res.render('home'));
+//Route for profile page
+app.get('/profile', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+
+  res.render('profile', {
+    username: req.session.userEmail.split('@')[0], 
+    email: req.session.userEmail,
+    joinedDate: new Date().toDateString()
+  });
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

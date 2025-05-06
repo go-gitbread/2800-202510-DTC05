@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/profile.css">
+  <link rel="stylesheet" href="/navbar.css">
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color: #CAD5E1; font-family: 'Winky Rough', sans-serif;">
+
+  <%- include('partials/navbar') %>
+
+  <div class="profile-card">
+    <h2 class="section-title">Profile</h2>
+    <img src="/images/profile.jpg" alt="Avatar" class="avatar">
+    
+    <h3 class="username"><%= username %></h3>
+    <p class="email"><%= email %></p>
+    <p class="joined">Joined <%= joinedDate %></p>
+    
+    <div class="stats">
+      <p><strong>Level:</strong> 5</p>
+      <p><strong>XP:</strong> 1,240</p>
+      <p><strong>Days Active:</strong> 12</p>
+    </div>
+
+    <div class="button-row">
+      <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
+      <a href="/logout" class="btn logout-btn">Logout</a>
+    </div>
+  </div>
+
+</body>
+</html>
