@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const User = require('./models/User');
+const exercises = require('./public/js/exercises');
 
 dotenv.config();
 
@@ -66,11 +67,13 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
-//Route to go to the routines page
+//Route to go to the Routines page
 app.get('/routines', (req, res) => res.render('routines'));
-//Route to go to the Create new routine page
+//Route to go to the Create New Routine page
 app.get('/newRoutine', (req, res) => res.render('newRoutine'));
+//Route to go to the Exercise Selection page
+app.get('/selectExercise', (req, res) => { res.render('selectExercise', {exercises})}); // Second argument loads the exercises array so the page can access it
 //Route for the back button
-app.get('/back', (req, res) => res.render('home'));
+app.get('/back', (req, res) => res.redirect('home'));
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
