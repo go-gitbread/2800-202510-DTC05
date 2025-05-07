@@ -68,8 +68,8 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
-//Route to go to the Routines page
-app.get('/routines', (req, res) => res.render('routines'));
+// //Route to go to the Routines page
+// app.get('/routines', (req, res) => res.render('routines'));
 //Route to go to the Create New Routine page
 app.get('/newRoutine', (req, res) => {
   const routine = req.session.routine || []; // This is the new routine draft. If no exercises have been added, show an empty list
@@ -126,6 +126,26 @@ app.post('/saveRoutine', async (req, res) => { //When the saveRoutine route is t
   } catch (err) {
     console.error(err);
     res.status(500).send('Failed to save routine');
+  }
+});
+
+// Route to display all routines for the logged-in user
+app.get('/routines', async (req, res) => {
+  const userId = req.session.userId;  // Get the userId from the session
+  
+  if (!userId) {
+    return res.status(401).send('User is not logged in');  // Ensure user is logged in
+  }
+
+  try {
+    // Fetch routines associated with the current user from the database
+    const routines = await Routine.find({ userId });  
+
+    // Render the routines page and pass the routines data to the template
+    res.render('routines', { routines });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching routines');
   }
 });
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
