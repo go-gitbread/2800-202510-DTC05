@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const User = require('./models/User');
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
+const axios = require('axios');
 
 dotenv.config();
 
@@ -178,5 +179,67 @@ app.get('/leaderboard', async (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about');
 })
+
+//WEATHER
+app.get('/weather', (req, res) => {
+  res.render('weather');
+})
+// grab API keys from .env & set to variables
+const GEO_API_KEY = process.env.GEO_API_KEY;
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+
+// Helper function to fetch geolocation from IP
+async function getGeoLocation() {
+  const response = await axios.get('https://api.ipgeolocation.io/ipgeo', {  //Axios automatically transforms JSON responses, so you don't need to manually parse the response
+    params: { apiKey: GEO_API_KEY }
+  });
+  return response.data;
+}
+
+// Endpoint: Get IP-based location
+app.get('/api/location', async (req, res) => {
+  try {
+    const locationData = await getGeoLocation();
+    res.json({
+      ip: locationData.ip,
+      city: locationData.city,
+      district: locationData.district || locationData.state_prov,
+      latitude: locationData.latitude,
+      longitude: locationData.longitude
+    });
+  } catch (err) {
+    console.error('Location fetch error:', err.message);
+    res.status(500).json({ error: 'Failed to get location' });
+  }
+});
+
+// Endpoint: Get weather for IP-based location
+app.get('/api/weather', async (req, res) => {
+  try {
+    const locationData = await getGeoLocation();
+    const { latitude, longitude } = locationData;
+
+    const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+      params: { 
+        lat: latitude, //give the user's latitude as lat to the api
+        lon: longitude, //give the user's longitude as lon to the api
+        appid: WEATHER_API_KEY, //give the api key from .env
+        units: 'metric' //tell the API that you want the response in metric
+      }
+    });
+
+    const weather = weatherRes.data;
+
+    res.json({
+      temperature: weather.main.temp,
+      description: weather.weather[0].description,
+      icon: weather.weather[0].icon,
+      location: weather.name
+    });
+  } catch (err) {
+    console.error('Weather fetch error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch weather data' });
+  }
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
