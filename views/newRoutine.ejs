@@ -20,8 +20,11 @@
     <a href="/back" class="back-button">
         <img src="/images/back.png" alt="Back" class="back-icon">
       </a>
-  <div class="welcome-text">My New Routine</div>
-  
+  <!-- <div class="welcome-text">My New Routine</div> -->
+  <div class="welcome-text">
+    <label for="routine-name">Routine Name:</label> 
+    <input type="text" id="routine-name" name="routineName" placeholder="My New Routine" required>
+  </div>
   <div class="routine-container">
     <div class="routine-list-container">
         <div class="exercise-list">
@@ -54,6 +57,34 @@
 </div>
 
 <script>
+  //Save button logic
+  document.querySelector('.save-routine-button').addEventListener('click', async () => { //When the Save Routine button is clicked...
+  const routineName = document.getElementById('routine-name').value.trim(); //Get the name of the routine
+  
+  //Ensure a name is entered
+  if (!routineName) {
+    alert('Please enter a name for your routine.');
+    return;
+  }
+
+  // Get the current list of exercises in the routine draft
+  const exercises = Array.from(document.querySelectorAll('.exercise-name'))
+    .map(exerciseElement => exerciseElement.textContent.trim()); //Loop over each exercise element's text content and extract the name to a new array
+
+  const res = await fetch('/saveRoutine', {
+    method: 'POST', //modify the response (res) to send a POST request to the server
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ routineName, exercises })
+  });
+
+  if (res.ok) {
+    console.log('Routine saved successfully!');
+    window.location.href = '/routines'; //Redirect to the routines page
+  } else {
+    console.log('Failed to save routine.');
+  }
+});
+  
   //Delete button logic
   document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
     btn.addEventListener('click', async () => {       

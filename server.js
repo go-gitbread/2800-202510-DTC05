@@ -5,6 +5,7 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const User = require('./models/User');
 const exercises = require('./public/js/exercises');
+const Routine = require('./models/Routine');
 
 dotenv.config();
 
@@ -99,5 +100,32 @@ app.post('/deleteExercise', (req, res) => {
     req.session.routine = req.session.routine.filter(name => name !== exerciseName);
   }
   res.sendStatus(200);
+});
+
+// Route to save a routine to the Database , linked by userId
+app.post('/saveRoutine', async (req, res) => { //When the saveRoutine route is triggered...
+  const { routineName, exercises } = req.body; //Get the routine name & exercises
+  const userId = req.session.userId;  // Get the userId from the session
+  
+  //Error handling in case user is not signed in
+  if (!userId) {
+    return res.status(401).send('User is not logged in');
+  }
+  
+  // Create a new routine document
+  const routine = new Routine({
+    routineName, // Save the name of the new routine
+    exercises, //Save the exercises to the new routine
+    userId,  // Associate the routine with the logged-in user
+  });
+
+  try {
+    await routine.save();     // Save the routine to the database
+    req.session.routine = []; // Clear the routine from the session after saving
+    res.status(200).send('Routine saved successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to save routine');
+  }
 });
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
