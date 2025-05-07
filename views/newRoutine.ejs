@@ -20,57 +20,91 @@
     <a href="/back" class="back-button">
         <img src="/images/back.png" alt="Back" class="back-icon">
       </a>
-  <div class="welcome-text">My New Routine</div>
-  
+  <!-- <div class="welcome-text">My New Routine</div> -->
+  <div class="welcome-text">
+    <label for="routine-name">Routine Name:</label> 
+    <input type="text" id="routine-name" name="routineName" placeholder="My New Routine" required>
+  </div>
   <div class="routine-container">
     <div class="routine-list-container">
         <div class="exercise-list">
-            <div class="exercise-item">
-                <div class="exercise-name">Push-ups</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div>
-            </div>
-            <div class="exercise-item">
-                <div class="exercise-name">Squats</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div>
-            </div>
-            <div class="exercise-item">
-                <div class="exercise-name">Sit-ups</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div>
-            </div>
-            <div class="exercise-item">
-                <div class="exercise-name">Burpees</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div>
-            </div>
-            <div class="exercise-item">
-                <div class="exercise-name">Deadlifts</div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon">
-              </div>
-            </div>
+            <% if (routine && routine.length > 0) { %>
+              <% routine.forEach(function(exercise) { %>
+                <div class="exercise-item" data-exercise-name="<%= exercise %>">
+                  <div class="exercise-name"><%= exercise %></div>
+                  <div class="exercise-delete">
+                    <img src="/images/garbageBin.png" alt="Delete" class="trash-icon delete-btn" data-exercise="<%= exercise %>">
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="exercise-name">No exercises added yet.</div>
+            <% } %>
 
         </div>
     </div>
 </div>
   
 <div class="button-row">
-  <button class="add-exercise-button">
+  <a href="/selectExercise" class ="add-exercise-button">
     <img src="/images/plus.png" alt="Add" class="plus-icon">
     Add Exercise
-  </button>
+  </a>
   <button class="save-routine-button">
     <img src="/images/diskette.png" alt="Add" class="save-icon">
     Save Routine
   </button>
 </div>
 
+<script>
+  //Save button logic
+  document.querySelector('.save-routine-button').addEventListener('click', async () => { //When the Save Routine button is clicked...
+  const routineName = document.getElementById('routine-name').value.trim(); //Get the name of the routine
+  
+  //Ensure a name is entered
+  if (!routineName) {
+    alert('Please enter a name for your routine.');
+    return;
+  }
 
+  // Get the current list of exercises in the routine draft
+  const exercises = Array.from(document.querySelectorAll('.exercise-name'))
+    .map(exerciseElement => exerciseElement.textContent.trim()); //Loop over each exercise element's text content and extract the name to a new array
+
+  const res = await fetch('/saveRoutine', {
+    method: 'POST', //modify the response (res) to send a POST request to the server
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ routineName, exercises })
+  });
+
+  if (res.ok) {
+    console.log('Routine saved successfully!');
+    window.location.href = '/routines'; //Redirect to the routines page
+  } else {
+    console.log('Failed to save routine.');
+  }
+});
+  
+  //Delete button logic
+  document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
+    btn.addEventListener('click', async () => {       
+      const exerciseName = btn.getAttribute('data-exercise'); //This event listener will get the name of the exercise associated with the delete button when clicked
+
+      const res = await fetch('/deleteExercise', {
+        method: 'POST',       //modify the response (res) to send a POST request to the server
+        headers: { 'Content-Type': 'application/json' }, // 'headers' tell the HTTP what the type of content is, as a key-value pair. application/json means "We're sending you a JSON" as the request body
+        body: JSON.stringify({ exerciseName }) // convert exerciseName to a JSON string for sending to the server
+      });
+
+      if (res.ok) {
+        // Remove from DOM
+        const item = btn.closest('.exercise-item'); //item = the 'exercise-item' associated with the delete button
+        item.remove(); //remove the item from DOM
+      } else {
+        alert('Failed to delete exercise.');
+      }
+    });
+  });
+</script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/selectExercise.css">
+    <link rel="stylesheet" href="/navbar.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <div class="container"><%- include('partials/navbar') %> </div> 
+
+<div class="main-content">
+    <a href="/back" class="back-button">
+        <img src="/images/back.png" alt="Back" class="back-icon">
+      </a>
+  <div class="welcome-text">Select An Exercise</div>
+  
+  <div class="routine-container">
+    <div class="routine-list-container">
+        <div class="exercise-list">
+          <% exercises.forEach(function(exercise) { %>
+            <a href="/addExercise?exercise=<%= encodeURIComponent(exercise.name) %>">
+              <div class="exercise-item">
+                  <div class="exercise-name"><%= exercise.name %></div>
+                  <div class="exercise-add">
+                      <img src="/images/plus.png" class="plus-icon">
+                  </div>
+              </div>
+            </a>
+          <% }); %>
+
+        </div>
+    </div>
+</div>
+  
+
+
+</body>
+</html>
