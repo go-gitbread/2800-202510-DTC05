@@ -1,0 +1,20 @@
+.exercise-form {
+    background-color: #FFFFFC;
+    padding: 25px;
+    border-radius: 16px;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  }
+  
+  .exercise-form .form-control {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-family: 'Winky Rough', sans-serif;
+  }
+  
+  .workout-log ul {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  

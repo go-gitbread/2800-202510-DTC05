@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const User = require('./models/User');
+const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modular route for exercise session
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
 
@@ -32,6 +33,9 @@ app.use((req, res, next) => {
   res.locals.username = req.session.userEmail;
   next();
 });
+
+// Mount the exercise session routes at /exerciseSession
+app.use('/exerciseSession', exerciseSessionRoutes);
 
 // Routes
 app.get('/', (req, res) => {
@@ -150,7 +154,9 @@ app.get('/routines', async (req, res) => {
     console.error(err);
     res.status(500).send('Error fetching routines');
   }
-});//Route for profile page
+});
+
+//Route for profile page
 app.get('/profile', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
