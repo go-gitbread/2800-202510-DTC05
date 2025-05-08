@@ -38,10 +38,30 @@ app.use((req, res, next) => {
 // Mount the exercise session routes at /exerciseSession
 app.use('/exerciseSession', exerciseSessionRoutes);
 
-// Routes
+// Route: Dashboard (index)
+// If user is logged in, display dashboard with a random motivational quote
+// Otherwise, redirect to login page
 app.get('/', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
-  res.render('index');
+
+  const quotes = [
+    "Unleash your inner beast. There's a lion inside every cat.",
+    "Don't stop until you're feline fine.",
+    "You're making good pawgress. Keep it up!",
+    "Fuel your purrformance with a little tuna.",
+    "What are you waiting for? The time is meow.",
+    "One smol step for cat, one swole leap for catkind.",
+    "It's a purrfect day to be swole.",
+    "Stay pawsitive. Gains are just a stretch away.",
+    "Consistency builds fur-titude.",
+    "The road to swole is paved with paw prints.",
+    "No more kitten around, it's go time. ",
+    "It's never too late to pounce on your goals.",
+  ];
+
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  res.render('index', { quote: randomQuote });
 });
 
 //register.ejs

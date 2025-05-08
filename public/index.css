@@ -122,3 +122,33 @@ h2 {
   flex-wrap: wrap;
   width: 92%;
 }
+
+.quote-box {
+  background-color: #FFFFFC;
+  border-radius: 20px;
+  padding: 30px 40px;
+  margin: 40px auto;
+  max-width: 680px;
+  font-family: 'Winky Rough', sans-serif;
+  font-size: 24px;
+  color: #303C58;
+  text-align: center;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.quote-box::before {
+  content: "🐱";
+  font-size: 32px;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+
+.quote-box::after {
+  content: "💪";
+  font-size: 28px;
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+}
