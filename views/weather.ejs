@@ -34,11 +34,11 @@
         document.body.innerHTML = '<p>Error fetching location.</p>';
         console.error(err);
       });
-    //Fetch location data from the /api/weather server endpoint and update the HTML elements with the data
+    //Fetch weather data from the /api/weather server endpoint and update the HTML elements with the data
       fetch('/api/weather')
     .then(res => res.json()) //parse the response as a JSON
     .then(data => {
-    //Assign location data to corresponding HTML elements for use with front end
+    //Assign weather data to corresponding HTML elements for use with front end
       document.getElementById('weather-location').textContent = data.location || 'N/A';
       document.getElementById('temperature').textContent = data.temperature || 'N/A';
       document.getElementById('description').textContent = data.description || 'N/A';

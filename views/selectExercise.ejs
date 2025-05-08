@@ -22,7 +22,33 @@
       </a>
   <div class="welcome-text">Select An Exercise</div>
   
+
+
   <div class="routine-container">
+    <div class="filters">
+  <select id="categoryFilter" class="filter-dropdown">
+    <option value="">All Categories</option>
+    <option value="Strength">Strength</option>
+    <option value="Cardio">Cardio</option>
+  </select>
+
+  <select id="muscleGroupFilter" class="filter-dropdown">
+    <option value="">All Muscle Groups</option>
+    <option value="Arms">Arms</option>
+    <option value="Back">Back</option>
+    <option value="Chest">Chest</option>
+    <option value="Core">Core</option>
+    <option value="Full Body">Full Body</option>
+    <option value="Legs">Legs</option>
+    <option value="Shoulders">Shoulders</option>
+  </select>
+
+  <select id="equipmentFilter" class="filter-dropdown">
+    <option value="">All Equipment</option>
+    <option value="true">Requires Equipment</option>
+    <option value="false">No Equipment</option>
+  </select>
+</div>
     <div class="routine-list-container">
         <div class="exercise-list">
           <% exercises.forEach(function(exercise) { %>
@@ -39,8 +65,6 @@
         </div>
     </div>
 </div>
-  
-
 
 </body>
 </html>

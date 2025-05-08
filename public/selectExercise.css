@@ -205,3 +205,15 @@ body {
     background-color: #e0e0e0;
     transform: scale(1.05);
   }
+
+  .filters {
+  display: flex;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+
+.filter-dropdown {
+  padding: 2px;
+  font-size: 12px;
+  border-radius: 4px;
+}
