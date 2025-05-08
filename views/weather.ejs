@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Location Info</title>
+  <link rel="stylesheet" href="/navbar.css">
+  <link rel="stylesheet" href="/weather.css">
+  <link rel="stylesheet" href="/weatherPage.css">
+
+  <script src="/js/weather.js"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    h1 {
+      padding-top: 80px;
+    }
+  </style>
+
+
+
 </head>
+
 <body>
-  <h1>IP Location</h1>
+  <!-- <h1>IP Location</h1>
   <p><strong>IP:</strong> <span id="ip">Loading...</span></p>
   <p><strong>City:</strong> <span id="city">Loading...</span></p>
   <p><strong>District:</strong> <span id="district">Loading...</span></p>
   <p><strong>Latitude:</strong> <span id="latitude">Loading...</span></p>
-  <p><strong>Longitude:</strong> <span id="longitude">Loading...</span></p>
-  <h2>Current Weather</h2>
-  <p><strong>Location:</strong> <span id="weather-location">Loading...</span></p>
-  <p><strong>Temperature:</strong> <span id="temperature">Loading...</span> °C</p>
-  <p><strong>Condition:</strong> <span id="description">Loading...</span></p>
-  <img id="icon" src="" alt="" style="display:none;" />
+  <p><strong>Longitude:</strong> <span id="longitude">Loading...</span></p> -->
+  <div class="container"><%- include('partials/navbar') %> </div>
 
 
-  <script>
-    //Fetch location data from the /api/location server endpoint and update the HTML elements with the data
-    fetch('/api/location')
-      .then(res => res.json()) // Parse the response as a JSON
-      .then(data => {                    
-        //Assign location data to corresponding HTML elements for use with front end
-        document.getElementById('ip').textContent = data.ip || 'N/A';
-        document.getElementById('city').textContent = data.city || 'N/A';
-        document.getElementById('district').textContent = data.district || 'N/A';
-        document.getElementById('latitude').textContent = data.latitude || 'N/A';
-        document.getElementById('longitude').textContent = data.longitude || 'N/A';
-      })
-      .catch(err => {
-        document.body.innerHTML = '<p>Error fetching location.</p>';
-        console.error(err);
-      });
-    //Fetch location data from the /api/weather server endpoint and update the HTML elements with the data
-      fetch('/api/weather')
-    .then(res => res.json()) //parse the response as a JSON
-    .then(data => {
-    //Assign location data to corresponding HTML elements for use with front end
-      document.getElementById('weather-location').textContent = data.location || 'N/A';
-      document.getElementById('temperature').textContent = data.temperature || 'N/A';
-      document.getElementById('description').textContent = data.description || 'N/A';
+  <h1>CAN PUT MORE WEATHER INFO HERE?</h1>
 
-      if (data.icon) { //If there is an icon recieved with the weather data...
-        const icon = document.getElementById('icon'); // Assign an icon variable
-        icon.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`; //Assign the source of the icon 
-        icon.alt = data.description; //Assign a description in case there is a problem loading the icon
-        icon.style.display = 'inline'; //Set the icon to display inline
-      }
-    })
-    .catch(err => {
-      console.error('Weather fetch error:', err);
-    });
-  </script>
 </body>
+
 </html>

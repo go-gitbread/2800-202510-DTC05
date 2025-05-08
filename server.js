@@ -88,8 +88,13 @@ app.post('/login', async (req, res) => {
   }
 });
 
+
+
+app.get('/weather', (req, res) => res.render('weather.ejs'));
+
+
 // home.ejs
-app.get('/home', (req, res) => res.render('home'));
+app.get('/home', (req, res) => res.render('home.ejs'));
 
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
@@ -104,7 +109,7 @@ app.get('/newRoutine', (req, res) => {
   res.render('newRoutine', { routine }); // Second argument loads the routine draft array so the page can access it & populate the list
 });
 //Route to go to the Exercise Selection page
-app.get('/selectExercise', (req, res) => { res.render('selectExercise', {exercises})}); // Second argument loads the exercises array so the page can access it
+app.get('/selectExercise', (req, res) => { res.render('selectExercise', { exercises }) }); // Second argument loads the exercises array so the page can access it
 //Route for the back button
 app.get('/back', (req, res) => res.redirect('home'));
 
@@ -112,7 +117,7 @@ app.get('/back', (req, res) => res.redirect('home'));
 app.get('/addExercise', (req, res) => {
   const exerciseName = req.query.exercise;
   if (!exerciseName) return res.redirect('/selectExercise');
-  if (!req.session.routine) {   
+  if (!req.session.routine) {
     req.session.routine = []; // Initialize routine array in session if empty
   }
   if (!req.session.routine.includes(exerciseName)) {       // Prevent duplicates
@@ -134,12 +139,12 @@ app.post('/deleteExercise', (req, res) => {
 app.post('/saveRoutine', async (req, res) => { //When the saveRoutine route is triggered...
   const { routineName, exercises } = req.body; //Get the routine name & exercises
   const userId = req.session.userId;  // Get the userId from the session
-  
+
   //Error handling in case user is not signed in
   if (!userId) {
     return res.status(401).send('User is not logged in');
   }
-  
+
   // Create a new routine document
   const routine = new Routine({
     routineName, // Save the name of the new routine
@@ -160,14 +165,14 @@ app.post('/saveRoutine', async (req, res) => { //When the saveRoutine route is t
 // Route to display all routines for the logged-in user
 app.get('/routines', async (req, res) => {
   const userId = req.session.userId;  // Get the userId from the session
-  
+
   if (!userId) {
     return res.status(401).send('User is not logged in');  // Ensure user is logged in
   }
 
   try {
     // Fetch routines associated with the current user from the database
-    const routines = await Routine.find({ userId });  
+    const routines = await Routine.find({ userId });
 
     // Render the routines page and pass the routines data to the template
     res.render('routines', { routines });
@@ -182,7 +187,7 @@ app.get('/profile', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   res.render('profile', {
-    username: req.session.userEmail.split('@')[0], 
+    username: req.session.userEmail.split('@')[0],
     email: req.session.userEmail,
     joinedDate: new Date().toDateString()
   });
@@ -246,7 +251,7 @@ app.get('/api/weather', async (req, res) => {
     const { latitude, longitude } = locationData;
 
     const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-      params: { 
+      params: {
         lat: latitude, //give the user's latitude as lat to the api
         lon: longitude, //give the user's longitude as lon to the api
         appid: WEATHER_API_KEY, //give the api key from .env

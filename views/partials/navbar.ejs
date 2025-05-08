@@ -1,5 +1,7 @@
 <head>
       <script src="/js/navbar.js"></script>
+      <script src="/js/weather.js"></script>
+
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-dark custom-colour-nav fixed-top">
@@ -35,6 +37,18 @@
                   </ul>
             </div>
 
+
+            <a href="/weather">
+                  <div class="widget-container">
+                        <p><span id="weather-location">Loading...</span></p>
+                        <div class="temp-icon">
+                              <p id="degrees"><span id="temperature">Loading...</span>°C</p>
+                              <!-- <p><span id="description">Loading...</span></p> -->
+
+                              <img id="icon" src="" alt="" style="display:none;" />
+                        </div>
+                  </div>
+            </a>
 
             <a href="profile">
                   <img src="images/profile.jpg" alt="Profile" class="rounded-circle me-2" width="32" height="32">
