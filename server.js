@@ -248,9 +248,13 @@ const GEO_API_KEY = process.env.GEO_API_KEY;
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
 // Helper function to fetch geolocation from IP
-async function getGeoLocation() {
+async function getGeoLocation(ipAddress) {
+
   const response = await axios.get('https://api.ipgeolocation.io/ipgeo', {  //Axios automatically transforms JSON responses, so you don't need to manually parse the response
-    params: { apiKey: GEO_API_KEY }
+    params: {
+      apiKey: GEO_API_KEY,
+      ip: ipAddress
+    }
   });
   return response.data;
 }
@@ -275,7 +279,9 @@ app.get('/api/location', async (req, res) => {
 // Endpoint: Get weather for IP-based location
 app.get('/api/weather', async (req, res) => {
   try {
-    const locationData = await getGeoLocation();
+    console.log("Weather API hit", req.ip)
+    const locationData = await getGeoLocation(req.ip);
+    console.log("Location Data hit", locationData)
     const { latitude, longitude } = locationData;
 
     const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
@@ -288,7 +294,7 @@ app.get('/api/weather', async (req, res) => {
     });
 
     const weather = weatherRes.data;
-
+    console.log("Weather data", weather)
     res.json({
       temperature: weather.main.temp,
       description: weather.weather[0].description,
