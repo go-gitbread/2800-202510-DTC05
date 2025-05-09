@@ -248,9 +248,13 @@ const GEO_API_KEY = process.env.GEO_API_KEY;
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
 // Helper function to fetch geolocation from IP
-async function getGeoLocation() {
+async function getGeoLocation(ipAddress) {
+
   const response = await axios.get('https://api.ipgeolocation.io/ipgeo', {  //Axios automatically transforms JSON responses, so you don't need to manually parse the response
-    params: { apiKey: GEO_API_KEY }
+    params: {
+      apiKey: GEO_API_KEY,
+      ip: ipAddress
+    }
   });
   return response.data;
 }
@@ -258,7 +262,9 @@ async function getGeoLocation() {
 // Endpoint: Get IP-based location
 app.get('/api/location', async (req, res) => {
   try {
-    const locationData = await getGeoLocation();
+    const ipAddress = (req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').replace('::1', '8.8.8.8');
+
+    const locationData = await getGeoLocation(ipAddress);
     res.json({
       ip: locationData.ip,
       city: locationData.city,
@@ -275,25 +281,38 @@ app.get('/api/location', async (req, res) => {
 // Endpoint: Get weather for IP-based location
 app.get('/api/weather', async (req, res) => {
   try {
-    const locationData = await getGeoLocation();
+    const ip =
+      (req.headers['x-real-ip'] ||
+        req.headers['x-forwarded-for'] ||
+        req.socket.remoteAddress || '').replace('::1', '8.8.8.8');
+
+    ipArray = ip.split(",")
+    ipFirst = ipArray[0]
+
+
+    console.log(ipFirst);  // Log IP address for debugging
+
+    const locationData = await getGeoLocation(ipFirst);
+    console.log("Location Data:", locationData);  // Log the fetched geolocation
+
     const { latitude, longitude } = locationData;
 
     const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
       params: {
-        lat: latitude, //give the user's latitude as lat to the api
-        lon: longitude, //give the user's longitude as lon to the api
-        appid: WEATHER_API_KEY, //give the api key from .env
-        units: 'metric' //tell the API that you want the response in metric
+        lat: latitude,
+        lon: longitude,
+        appid: WEATHER_API_KEY,
+        units: 'metric'
       }
     });
 
-    const weather = weatherRes.data;
+    console.log("Weather Data:", weatherRes.data);  // Log the weather data response
 
     res.json({
-      temperature: weather.main.temp,
-      description: weather.weather[0].description,
-      icon: weather.weather[0].icon,
-      location: weather.name
+      temperature: weatherRes.data.main.temp,
+      description: weatherRes.data.weather[0].description,
+      icon: weatherRes.data.weather[0].icon,
+      location: weatherRes.data.name
     });
   } catch (err) {
     console.error('Weather fetch error:', err.message);
@@ -301,5 +320,20 @@ app.get('/api/weather', async (req, res) => {
   }
 });
 
+
+
+// app.get('/ip', (request, response) => {
+//   const ip =
+//     request.headers['x-real-ip'] ||
+//     request.headers['x-forwarded-for'] ||
+//     request.socket.remoteAddress || '';
+
+//   ipArray = ip.split(",")
+//   ipFirst = ipArray[0]
+
+//   return response.json({
+//     ipFirst
+//   })
+// });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
