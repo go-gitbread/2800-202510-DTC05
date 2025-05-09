@@ -70,3 +70,38 @@
       color: #323131;
 
 }
+
+
+
+/* below css for small screen was aided by chatgpt */
+/* Responsive for small screens */
+@media (max-width: 576px) {
+      .widget-container {
+            position: absolute;
+            right: 60px;
+            background: #9bc5ea;
+
+            top: 8px;
+            /* adjust top as needed */
+            width: auto;
+            padding: 2px 6px;
+            height: auto;
+
+            margin: 0;
+      }
+
+      #weather-location {
+            display: none;
+      }
+
+      .temp-icon img {
+            width: 20px;
+            height: 20px;
+      }
+
+      #degrees {
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+      }
+}
