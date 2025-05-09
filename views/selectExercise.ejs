@@ -73,34 +73,37 @@
 <script>
   //Read all of the exercises and store them as a JSON for sorting
   const allExercises = JSON.parse(document.getElementById('exercise-data').textContent)
-  
-  //Set the exercise list as a variable so we can dynamically manipulate it's contents
+  //Set the exercise list as a variable so we can dynamically update it's contents
   const exerciseList = document.querySelector('.exercise-list');
-
-
+  //This function populates the exerciseList with the filtered results
   function renderExercises(exercises){
-    exerciseList.innerHTML = ''
-    exercises.forEach( exercise => {
-      const exerciseElement = document.createElement('a');
-      exerciseElement.href = `/addExercise?exercise=${encodeURIComponent(exercise.name)}`
-      exerciseElement.innerHTML = 
-      `
-      <div class="exercise-item">
+    exerciseList.innerHTML = '' //clear the list whenever a filter is applied
+    exercises.forEach( exercise => {   //for every exercise in the filtered results...
+      const exerciseElement = document.createElement('a'); //create a new <a> element
+      exerciseElement.href = `/addExercise?exercise=${encodeURIComponent(exercise.name)}` //link the element to the /addExercise route with the exercise name as a URL parameter
+      exerciseElement.innerHTML = //Insert the standardized styling into the element
+      `<div class="exercise-item">
                   <div class="exercise-name">${exercise.name}</div>
                   <div class="exercise-add">
                       <img src="/images/plus.png" class="plus-icon">
                   </div>
-              </div>
-      `
-      exerciseList.appendChild(exerciseElement);
+              </div>`
+      exerciseList.appendChild(exerciseElement); //Append the element to the exerciseList
     });
 
   }
-
+  //This function applies the selected filters to the exercise list. 
+  // It then passes the filtered results to renderExercises to render
+  // the list on the page. 
   function applyFilters(){
-    const category = document.getElementById('categoryFilter').value;
+    const category = document.getElementById('categoryFilter').value; //grab the value of the filter
+    const muscle = document.getElementById('muscleGroupFilter').value; //grab the value of the filter
+    const equipment = document.getElementById('equipmentFilter').value; //grab the value of the filter
     const filteredResults = allExercises.filter(exercise =>{
-        return exercise.category == category
+      //if a filter category has been selected, filter by that value, otherwise don't filter it at all
+      return (!category || exercise.category === category)
+        && (!muscle || exercise.muscleGroup === muscle)
+        && (equipment === "" || String(exercise.equipmentRequired) === equipment);
       });
 
       renderExercises(filteredResults)
@@ -113,60 +116,5 @@
   document.getElementById('equipmentFilter').addEventListener('change', applyFilters);
 
 </script>
-When a filter is applied 
-
-I want to grab the value of each of the filter options
-using the value, filter out all that are included
-
-then call the function to
-
-I want to call a function that clears the list
-Then it will populate the list with the filtered results
-
-
-<!-- <script>
-const allExercises = JSON.parse(document.getElementById('exercise-data').textContent);
-
-  const exerciseListEl = document.querySelector('.exercise-list');
-
-  function renderExercises(exercises) {
-    exerciseListEl.innerHTML = '';
-    exercises.forEach(ex => {
-      const item = document.createElement('a');
-      item.href = `/addExercise?exercise=${encodeURIComponent(ex.name)}`;
-      item.innerHTML = `
-        <div class="exercise-item">
-          <div class="exercise-name">${ex.name}</div>
-          <div class="exercise-add">
-              <img src="/images/plus.png" class="plus-icon">
-          </div>
-        </div>
-      `;
-      exerciseListEl.appendChild(item);
-    });
-  }
-
-  function applyFilters() {
-    const category = document.getElementById('categoryFilter').value;
-    const muscle = document.getElementById('muscleGroupFilter').value;
-    const equipment = document.getElementById('equipmentFilter').value;
-
-    const filtered = allExercises.filter(ex => {
-      return (!category || ex.category === category)
-        && (!muscle || ex.muscleGroup === muscle)
-        && (equipment === "" || String(ex.equipmentRequired) === equipment);
-    });
-
-    renderExercises(filtered);
-  }
-
-  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-  document.getElementById('muscleGroupFilter').addEventListener('change', applyFilters);
-  document.getElementById('equipmentFilter').addEventListener('change', applyFilters);
-
-  // Initial render
-  renderExercises(allExercises);
-</script> -->
-
 </body>
 </html>
