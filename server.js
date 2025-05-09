@@ -282,32 +282,36 @@ app.get('/api/location', async (req, res) => {
 app.get('/api/weather', async (req, res) => {
   try {
     const ipAddress = (req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').replace('::1', '8.8.8.8');
+    console.log("IP Address:", ipAddress);  // Log IP address for debugging
+
     const locationData = await getGeoLocation(ipAddress);
-    console.log("Location Data hit", locationData)
+    console.log("Location Data:", locationData);  // Log the fetched geolocation
+
     const { latitude, longitude } = locationData;
 
     const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
       params: {
-        lat: latitude, //give the user's latitude as lat to the api
-        lon: longitude, //give the user's longitude as lon to the api
-        appid: WEATHER_API_KEY, //give the api key from .env
-        units: 'metric' //tell the API that you want the response in metric
+        lat: latitude,
+        lon: longitude,
+        appid: WEATHER_API_KEY,
+        units: 'metric'
       }
     });
 
-    const weather = weatherRes.data;
-    console.log("Weather data", weather)
+    console.log("Weather Data:", weatherRes.data);  // Log the weather data response
+
     res.json({
-      temperature: weather.main.temp,
-      description: weather.weather[0].description,
-      icon: weather.weather[0].icon,
-      location: weather.name
+      temperature: weatherRes.data.main.temp,
+      description: weatherRes.data.weather[0].description,
+      icon: weatherRes.data.weather[0].icon,
+      location: weatherRes.data.name
     });
   } catch (err) {
     console.error('Weather fetch error:', err.message);
     res.status(500).json({ error: 'Failed to fetch weather data' });
   }
 });
+
 
 
 // app.get('/', (request, response) => {
