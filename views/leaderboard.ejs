@@ -49,14 +49,37 @@
                         </table>
                   </div>
             </div>
+
+
+
+
             <!-- pagination template and button templates for now... -->
-            <div class="container mt-4">
+            <!-- <div class="container mt-4">
                   <ul class="pagination justify-content-center">
                         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">2</a></li>
                         <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                  </ul>
+            </div> -->
+
+
+
+            <div class="container mt-4">
+                  <ul class="pagination justify-content-center">
+                        <% if (hasPrevPage) { %>
+                              <li class="page-item">
+                                    <a class="page-link" href="/leaderboard?page=<%= currentPage - 1 %>">Back</a>
+                              </li>
+                              <% } %>
+
+                                    <% if (hasNextPage) { %>
+                                          <li class="page-item">
+                                                <a class="page-link"
+                                                      href="/leaderboard?page=<%= currentPage + 1 %>">Next</a>
+                                          </li>
+                                          <% } %>
                   </ul>
             </div>
 </body>

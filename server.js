@@ -194,16 +194,44 @@ app.get('/profile', (req, res) => {
 });
 
 // use async to get the email
+// app.get('/leaderboard', async (req, res) => {
+//   const data = await User.find().select('email');
+//   res.render('leaderboard', { usersList: data });
+// try {
+//   const data = await User.find().select('email');
+//   res.render('leaderboard', { usersList: data });
+// } catch (err) {
+//   console.error(err);
+//   res.status(500).send("Error retrieving users");
+// }
+// });
+
+
+// this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
-  const data = await User.find().select('email');
-  res.render('leaderboard', { usersList: data });
-  // try {
-  //   const data = await User.find().select('email');
-  //   res.render('leaderboard', { usersList: data });
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).send("Error retrieving users");
-  // }
+  const page = parseInt(req.query.page) || 1; // Default to page 1
+  const limit = 5; // 5 users per page
+
+  try {
+    const totalUsers = await User.countDocuments();
+    const usersList = await User.find()
+      .select('email')
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const hasNextPage = page * limit < totalUsers;
+    const hasPrevPage = page > 1;
+
+    res.render('leaderboard', {
+      usersList,
+      currentPage: page,
+      hasNextPage,
+      hasPrevPage
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving users");
+  }
 });
 
 // about page 
