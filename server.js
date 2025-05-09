@@ -314,15 +314,15 @@ app.get('/api/weather', async (req, res) => {
 
 
 
-// app.get('/ip', (request, response) => {
-//   const ip =
-//     request.headers['x-real-ip'] ||
-//     request.headers['x-forwarded-for'] ||
-//     request.socket.remoteAddress || '';
+app.get('/ip', (request, response) => {
+  const ip =
+    request.headers['x-real-ip'] ||
+    request.headers['x-forwarded-for'] ||
+    request.socket.remoteAddress || '';
 
-//   return response.json({
-//     ip,
-//   })
-// });
+  return response.json({
+    ip,
+  })
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
