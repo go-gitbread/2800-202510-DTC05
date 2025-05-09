@@ -75,7 +75,7 @@
 
 /* below css for small screen was aided by chatgpt */
 /* Responsive for small screens */
-@media (max-width: 576px) {
+@media (max-width: 769px) {
       .widget-container {
             position: absolute;
             right: 60px;
