@@ -65,6 +65,108 @@
         </div>
     </div>
 </div>
+  
+<script id="exercise-data" type="application/json">
+  <%- JSON.stringify(exercises) %>
+</script>
+
+<script>
+  //Read all of the exercises and store them as a JSON for sorting
+  const allExercises = JSON.parse(document.getElementById('exercise-data').textContent)
+  
+  //Set the exercise list as a variable so we can dynamically manipulate it's contents
+  const exerciseList = document.querySelector('.exercise-list');
+
+
+  function renderExercises(exercises){
+    exerciseList.innerHTML = ''
+    exercises.forEach( exercise => {
+      const exerciseElement = document.createElement('a');
+      exerciseElement.href = `/addExercise?exercise=${encodeURIComponent(exercise.name)}`
+      exerciseElement.innerHTML = 
+      `
+      <div class="exercise-item">
+                  <div class="exercise-name">${exercise.name}</div>
+                  <div class="exercise-add">
+                      <img src="/images/plus.png" class="plus-icon">
+                  </div>
+              </div>
+      `
+      exerciseList.appendChild(exerciseElement);
+    });
+
+  }
+
+  function applyFilters(){
+    const category = document.getElementById('categoryFilter').value;
+    const filteredResults = allExercises.filter(exercise =>{
+        return exercise.category == category
+      });
+
+      renderExercises(filteredResults)
+    }
+    
+  
+// If any of the filter categories are selected, call the applyFilters function
+  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+  document.getElementById('muscleGroupFilter').addEventListener('change', applyFilters);
+  document.getElementById('equipmentFilter').addEventListener('change', applyFilters);
+
+</script>
+When a filter is applied 
+
+I want to grab the value of each of the filter options
+using the value, filter out all that are included
+
+then call the function to
+
+I want to call a function that clears the list
+Then it will populate the list with the filtered results
+
+
+<!-- <script>
+const allExercises = JSON.parse(document.getElementById('exercise-data').textContent);
+
+  const exerciseListEl = document.querySelector('.exercise-list');
+
+  function renderExercises(exercises) {
+    exerciseListEl.innerHTML = '';
+    exercises.forEach(ex => {
+      const item = document.createElement('a');
+      item.href = `/addExercise?exercise=${encodeURIComponent(ex.name)}`;
+      item.innerHTML = `
+        <div class="exercise-item">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-add">
+              <img src="/images/plus.png" class="plus-icon">
+          </div>
+        </div>
+      `;
+      exerciseListEl.appendChild(item);
+    });
+  }
+
+  function applyFilters() {
+    const category = document.getElementById('categoryFilter').value;
+    const muscle = document.getElementById('muscleGroupFilter').value;
+    const equipment = document.getElementById('equipmentFilter').value;
+
+    const filtered = allExercises.filter(ex => {
+      return (!category || ex.category === category)
+        && (!muscle || ex.muscleGroup === muscle)
+        && (equipment === "" || String(ex.equipmentRequired) === equipment);
+    });
+
+    renderExercises(filtered);
+  }
+
+  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+  document.getElementById('muscleGroupFilter').addEventListener('change', applyFilters);
+  document.getElementById('equipmentFilter').addEventListener('change', applyFilters);
+
+  // Initial render
+  renderExercises(allExercises);
+</script> -->
 
 </body>
 </html>
