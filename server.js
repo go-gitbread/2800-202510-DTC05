@@ -262,7 +262,8 @@ async function getGeoLocation(ipAddress) {
 // Endpoint: Get IP-based location
 app.get('/api/location', async (req, res) => {
   try {
-    const locationData = await getGeoLocation();
+    const ipAddress = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const locationData = await getGeoLocation(ipAddress);
     res.json({
       ip: locationData.ip,
       city: locationData.city,
@@ -307,5 +308,16 @@ app.get('/api/weather', async (req, res) => {
   }
 });
 
+
+// app.get('/', (request, response) => {
+//   const ip =
+//     request.headers['x-real-ip'] ||
+//     request.headers['x-forwarded-for'] ||
+//     request.socket.remoteAddress || '';
+
+//   return response.json({
+//     ip,
+//   })
+// });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
