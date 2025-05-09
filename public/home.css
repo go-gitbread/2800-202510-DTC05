@@ -42,6 +42,52 @@ body {
             justify-content: center;
             color: #666;
         }
+
+        table.level-system {
+            width: 100%;
+            position: fixed;
+            bottom: 55.6px;
+            background-color: #ccc;
+            font-size: 14px;
+        }
+
+        #level-display {
+            border: #666 1px solid;
+            padding: 5px;
+        }
+
+        #level-xp {
+            border: #666 1px solid;
+            width: 40%;
+            padding: 5px;
+        }
+
+        #level-multiplier {
+            border: #666 1px solid;
+            padding: 5px;
+        }
+
+        #level-bar {
+            border: #666 1px solid;
+            padding: 5px;
+            font-size: medium;
+        }
+
+        #level-bar-container {
+            display: inline-block;
+            margin-left: 10px;
+            margin-bottom: 3px;
+            width: 85%;
+            height: 20px;
+            border: 1px solid black;
+            vertical-align: middle;
+        }
+
+        #level-bar-fill {
+            background-color: black;
+            width: 0%;
+            height: 20px;
+        }
         
         .bottom-nav {
             display: flex;
