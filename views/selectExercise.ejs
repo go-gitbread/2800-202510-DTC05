@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="/selectExercise.css">
+  <link rel="stylesheet" href="/navbar.css">
+  <link rel="stylesheet" href="/weather.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div class="container"><%- include('partials/navbar') %> </div>
+
+  <div class="main-content">
+    <a href="/back" class="back-button">
+      <img src="/images/back.png" alt="Back" class="back-icon">
+    </a>
+    <div class="welcome-text">Select An Exercise</div>
+
+
+
+    <div class="routine-container">
+    <div class="filters">
+  <select id="categoryFilter" class="filter-dropdown">
+    <option value="">All Categories</option>
+    <option value="Strength">Strength</option>
+    <option value="Cardio">Cardio</option>
+  </select>
+
+  <select id="muscleGroupFilter" class="filter-dropdown">
+    <option value="">All Muscle Groups</option>
+    <option value="Arms">Arms</option>
+    <option value="Back">Back</option>
+    <option value="Chest">Chest</option>
+    <option value="Core">Core</option>
+    <option value="Full Body">Full Body</option>
+    <option value="Legs">Legs</option>
+    <option value="Shoulders">Shoulders</option>
+  </select>
+
+  <select id="equipmentFilter" class="filter-dropdown">
+    <option value="">All Equipment</option>
+    <option value="true">Requires Equipment</option>
+    <option value="false">No Equipment</option>
+  </select>
+</div>
+      <div class="routine-list-container">
+        <div class="exercise-list">
+          <% exercises.forEach(function(exercise) { %>
+            <a href="/addExercise?exercise=<%= encodeURIComponent(exercise.name) %>">
+              <div class="exercise-item">
+                <div class="exercise-name">
+                  <%= exercise.name %>
+                </div>
+                <div class="exercise-add">
+                  <img src="/images/plus.png" class="plus-icon">
+                </div>
+              </div>
+            </a>
+            <% }); %>
+
+        </div>
+      </div>
+    </div>
+
+<script id="exercise-data" type="application/json">
+  <%- JSON.stringify(exercises) %>
+</script>
+
+<script>
+  //Read all of the exercises and store them as a JSON for sorting
+  const allExercises = JSON.parse(document.getElementById('exercise-data').textContent)
+  //Set the exercise list as a variable so we can dynamically update it's contents
+  const exerciseList = document.querySelector('.exercise-list');
+  //This function populates the exerciseList with the filtered results
+  function renderExercises(exercises){
+    exerciseList.innerHTML = '' //clear the list whenever a filter is applied
+    exercises.forEach( exercise => {   //for every exercise in the filtered results...
+      const exerciseElement = document.createElement('a'); //create a new <a> element
+      exerciseElement.href = `/addExercise?exercise=${encodeURIComponent(exercise.name)}` //link the element to the /addExercise route with the exercise name as a URL parameter
+      exerciseElement.innerHTML = //Insert the standardized styling into the element
+      `<div class="exercise-item">
+                  <div class="exercise-name">${exercise.name}</div>
+                  <div class="exercise-add">
+                      <img src="/images/plus.png" class="plus-icon">
+                  </div>
+              </div>`
+      exerciseList.appendChild(exerciseElement); //Append the element to the exerciseList
+    });
+
+  }
+  //This function applies the selected filters to the exercise list. 
+  // It then passes the filtered results to renderExercises to render
+  // the list on the page. 
+  function applyFilters(){
+    const category = document.getElementById('categoryFilter').value; //grab the value of the filter
+    const muscle = document.getElementById('muscleGroupFilter').value; //grab the value of the filter
+    const equipment = document.getElementById('equipmentFilter').value; //grab the value of the filter
+    const filteredResults = allExercises.filter(exercise =>{
+      //if a filter category has been selected, filter by that value, otherwise don't filter it at all
+      return (!category || exercise.category === category)
+        && (!muscle || exercise.muscleGroup === muscle)
+        && (equipment === "" || String(exercise.equipmentRequired) === equipment);
+      });
+
+      renderExercises(filteredResults)
+    }
+    
+  
+// If any of the filter categories are selected, call the applyFilters function
+  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+  document.getElementById('muscleGroupFilter').addEventListener('change', applyFilters);
+  document.getElementById('equipmentFilter').addEventListener('change', applyFilters);
+
+</script>
+</body>
+
+</html>

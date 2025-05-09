@@ -6,46 +6,56 @@
   <title>Login</title>
   <link rel="stylesheet" href="/index.css">
   <link rel="stylesheet" href="/navbar.css">
+  <link rel="stylesheet" href="/weather.css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet">
+    rel="stylesheet">
 </head>
 
 <body class="container">
   <%- include('partials/navbar') %>
-  <div class="dashboard-header">
+    <div class="dashboard-header">
 
-    <h2>Welcome back, <%= username %>!</h2>
-    <p>Your progress today:</p>
-  </div>
+      <h2>Welcome back, <%= username %>!</h2>
 
-  <div class="container stat-grid">
-    <div class="row">
-      <div class="col-sm-6 col-md-3 stat-card">
-        <span class="stat-icon">🐾</span>
-        8,550<br><small>Steps</small>
+      <div class="quote-box">
+        <p>
+          <%= quote %>
+        </p>
       </div>
-      <div class="col-sm-6 col-md-3 stat-card">
-        <span class="stat-icon">📍</span>
-        4.2 km<br><small>Distance</small>
-      </div>
-      <div class="col-sm-6 col-md-3 stat-card">
-        <span class="stat-icon">🔥</span>
-        510<br><small>Calories</small>
-      </div>
-      <div class="col-sm-6 col-md-3 stat-card">
-        <span class="stat-icon">📆</span>
-        7<br><small>Streak</small>
-      </div>
+
+      <p>Your progress today:</p>
     </div>
 
-    <div class="text-center mt-4">
-      <a href="/logout" class="btn-logout">Logout</a>
+    <div class="container stat-grid">
+      <div class="row">
+        <div class="col-sm-6 col-md-3 stat-card">
+          <span class="stat-icon">🐾</span>
+          8,550<br><small>Steps</small>
+        </div>
+        <div class="col-sm-6 col-md-3 stat-card">
+          <span class="stat-icon">📍</span>
+          4.2 km<br><small>Distance</small>
+        </div>
+        <div class="col-sm-6 col-md-3 stat-card">
+          <span class="stat-icon">🔥</span>
+          510<br><small>Calories</small>
+        </div>
+        <div class="col-sm-6 col-md-3 stat-card">
+          <span class="stat-icon">📆</span>
+          7<br><small>Streak</small>
+        </div>
+        <div class="button-row mb-4">
+          <a href="/logout" class="btn-logout">Logout</a>
+          <a href="/home" class="btn-home">Proceed</a>
+        </div>
+      </div>
+
+
     </div>
-  </div>
 </body>
 
 </html>

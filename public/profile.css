@@ -1,0 +1,77 @@
+.profile-card {
+    background-color: #FFFFFC;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 420px;
+    margin: 100px auto;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  }
+  
+  .section-title {
+    color: #303C58;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .username {
+    font-size: 22px;
+    color: #303C58;
+    margin-bottom: 5px;
+  }
+  
+  .email, .joined {
+    color: #555;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .stats {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #303C58;
+  }
+  
+  .button-row {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Winky Rough', sans-serif;
+  }
+  
+  /* 🔧 Override Bootstrap’s .btn default colors */
+  .settings-btn {
+    background-color: #303C58 !important;
+    color: #fff !important;
+  }
+  
+  .logout-btn {
+    background-color: #EB7C69 !important;
+    color: #fff !important;
+  }
+  
+  .settings-btn:hover {
+    background-color: #1e2940 !important;
+  }
+  
+  .logout-btn:hover {
+    background-color: #d45a4a !important;
+  }
+  

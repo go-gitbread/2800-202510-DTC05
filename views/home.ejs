@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/home.css">
+    <link rel="stylesheet" href="/navbar.css">
+    <link rel="stylesheet" href="/weather.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container"><%- include('partials/navbar') %> </div>
+
+    <div class="main-content">
+        <div class="welcome-text">Welcome back, cool cat <%= username %>
+        </div>
+        <div class="cat-name">Cat Name</div>
+
+        <div class="avatar-container">
+            <div class="cat-avatar">Cat Avatar</div>
+        </div>
+    </div>
+    <!-- Level related code-->
+    <table class="level-system">
+        <tr>
+            <th id="level-display">Level 1</th>
+            <th id="level-xp">XP: 0/1000</th>
+            <th id="level-multiplier">XP Multiplier: x1</th>
+        </tr>
+        <tr>
+            <th id="level-bar" colspan="3">XP:
+                <div id="level-bar-container">
+                    <div id="level-bar-fill"></div>
+                </div>
+            </th>
+        </tr>
+    </table>
+    <!-- comment: maybe we can make the bottom-nav into a partial (as it will need to open other pages/do things) -->
+    <div class="bottom-nav">
+        <a href="/routines" class="bottom-nav-item">Workout</a>
+        <div class="bottom-nav-item">Swole Stats</div>
+    </div>
+
+</body>
+
+</html>
