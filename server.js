@@ -314,7 +314,7 @@ app.get('/api/weather', async (req, res) => {
 
 
 
-// app.get('/', (request, response) => {
+// app.get('/ip', (request, response) => {
 //   const ip =
 //     request.headers['x-real-ip'] ||
 //     request.headers['x-forwarded-for'] ||
