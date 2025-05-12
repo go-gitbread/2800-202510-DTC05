@@ -15,64 +15,59 @@
 
   <%- include('partials/navbar') %>
 
-    <div class="container mt-5 pt-5 text-center">
-      <h2 class="mb-4">Exercise Session</h2>
+  <div class="container mt-5 pt-5 text-center">
+    <h2 class="mb-4">Exercise Session: <%= routine.routineName %></h2>
 
-      <button id="show-form-btn" class="btn btn-dark mb-4">+ Add Workout Record</button>
+    <button id="show-form-btn" class="btn btn-dark mb-4">+ Add Workout Record</button>
 
-      <form id="exercise-form" action="/exerciseSession" method="POST" style="display: none;"
-        class="exercise-form mx-auto">
-        <div class="form-group">
-          <label for="exercise">Exercise</label>
-          <select name="exercise" id="exercise" class="form-control" required>
-            <option value="">-- Select --</option>
-            <option value="Push-ups">Push-ups</option>
-            <option value="Squats">Squats</option>
-            <option value="Plank">Plank</option>
-            <option value="Running">Running</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Sets</label>
-          <input type="number" name="sets" class="form-control" min="1">
-        </div>
-        <div class="form-group">
-          <label>Reps</label>
-          <input type="number" name="reps" class="form-control" min="1">
-        </div>
-        <div class="form-group">
-          <label>Duration (min)</label>
-          <input type="number" name="duration" class="form-control" min="1">
-        </div>
-        <button type="submit" class="btn btn-primary w-100 mt-3">Add Record</button>
-      </form>
-
-      <div class="workout-log mt-5">
-        <h4>Workout Log</h4>
-        <% if (workouts.length===0) { %>
-          <p>No records yet.</p>
-          <% } else { %>
-            <ul class="list-group">
-              <% workouts.forEach(w=> { %>
-                <li class="list-group-item">
-                  <strong>
-                    <%= w.exercise %>
-                  </strong> —
-                  <%= w.sets || '–' %> sets × <%= w.reps || '–' %> reps,
-                      <%= w.duration || '0' %> min
-                </li>
-                <% }); %>
-            </ul>
-            <% } %>
+    <form id="exercise-form" action="/exerciseSession" method="POST" style="display: none;" class="exercise-form mx-auto">
+      <div class="form-group">
+        <label for="exercise">Exercise</label>
+        <select name="exercise" id="exercise" class="form-control" required>
+          <option value="">-- Select --</option>
+          <% routine.exercises.forEach(exercise => { %>
+            <option value="<%= exercise %>"><%= exercise %></option>
+          <% }); %>
+        </select>
       </div>
-    </div>
+      <div class="form-group">
+        <label>Sets</label>
+        <input type="number" name="sets" class="form-control" min="1">
+      </div>
+      <div class="form-group">
+        <label>Reps</label>
+        <input type="number" name="reps" class="form-control" min="1">
+      </div>
+      <div class="form-group">
+        <label>Duration (min)</label>
+        <input type="number" name="duration" class="form-control" min="1">
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mt-3">Add Record</button>
+    </form>
 
-    <script>
-      document.getElementById("show-form-btn").addEventListener("click", () => {
-        document.getElementById("exercise-form").style.display = "block";
-      });
-    </script>
+    <div class="workout-log mt-5">
+      <h4>Workout Log</h4>
+      <% if (workouts.length === 0) { %>
+        <p>No records yet.</p>
+      <% } else { %>
+        <ul class="list-group">
+          <% workouts.forEach(w => { %>
+            <li class="list-group-item">
+              <strong><%= w.exercise %></strong> —
+              <%= w.sets || '–' %> sets × <%= w.reps || 'explainer"> <%= w.reps || '–' %> reps,
+              <%= w.duration || '0' %> min
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("show-form-btn").addEventListener("click", () => {
+      document.getElementById("exercise-form").style.display = "block";
+    });
+  </script>
 
 </body>
-
 </html>
