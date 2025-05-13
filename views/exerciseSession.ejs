@@ -5,158 +5,10 @@
   <title>Exercise Session</title>
   <link rel="stylesheet" href="/navbar.css">
   <link rel="stylesheet" href="/weather.css">
-  <link rel="stylesheet" href="/exerciseSession.css">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Winky+Rough&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Winky Rough', sans-serif;
-      background-color: #CAD5E1;
-      padding: 20px;
-      max-width: 500px;
-      margin: auto;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      margin: 45px 0 20px;
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    .header-item {
-      text-align: center;
-      flex: 1;
-      border-right: 1px solid #ccc;
-    }
-
-    .header-item:last-child {
-      border-right: none;
-    }
-
-    .header-item h4 {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .header-item p {
-      margin: 5px 0 0;
-      font-weight: bold;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .exercise {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
-
-    .icon {
-      width: 40px;
-      height: 40px;
-      background: #ddd;
-      margin-right: 10px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-
-    .exercise-name {
-      flex-grow: 1;
-      font-size: 1rem;
-    }
-
-    .arrow {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .finish-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: #4CAF50;
-      color: white;
-      text-align: center;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 30px;
-    }
-
-    .finish-btn:hover {
-      background: #45a049;
-    }
-
-    .set-entry {
-      display: flex;
-      justify-content: space-between;
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    .set-entry div {
-      flex: 1;
-      text-align: center;
-    }
-
-    .set-entry input {
-      width: 50px;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 12px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .btn-add {
-      background: #2196F3;
-      color: white;
-    }
-
-    .btn-finish {
-      background: #4CAF50;
-      color: white;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-    }
-  </style>
+  <link rel="stylesheet" href="/exerciseSession.css">
 </head>
 <body>
 
@@ -200,25 +52,30 @@
       <div><input type="number" value="20"> lbs</div>
     </div>
 
-    <div class="set-entry">
-      <div>Set 2</div>
-      <div><input type="number" value="10"> reps</div>
-      <div><input type="number" value="25"> lbs</div>
-    </div>
-
-    <div class="set-entry">
-      <div>Set 3</div>
-      <div><input type="number" value="9"> reps</div>
-      <div><input type="number" value="20"> lbs</div>
-    </div>
-
     <div class="buttons">
-      <button class="btn btn-add">+ New Set</button>
+      <button class="btn btn-add" onclick="addSet()">+ New Set</button>
       <button class="btn btn-finish" onclick="finishExercise()">Finish Exercise</button>
     </div>
   </div>
 
   <script>
+function addSet() {
+    const detailSection = document.getElementById('exercise-detail');
+    const existingSets = detailSection.querySelectorAll('.set-entry');
+    const setNumber = existingSets.length + 1;
+
+    const newSet = document.createElement('div');
+    newSet.className = 'set-entry';
+    newSet.innerHTML = `
+      <div>Set ${setNumber}</div>
+      <div><input type="number" value="10"> reps</div>
+      <div><input type="number" value="20"> lbs</div>
+    `;
+
+    const buttons = detailSection.querySelector('.buttons');
+    detailSection.insertBefore(newSet, buttons);
+  }
+
     function startExercise(name) {
       document.getElementById('exercise-title').textContent = name;
       document.getElementById('exercise-list').style.display = 'none';
