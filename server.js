@@ -405,4 +405,58 @@ app.post('/routine/:id/session', async (req, res) => {
     res.status(500).send('Error saving workout');
   }
 });
+
+//Ai assisted routes for linking routines together in a single session
+// Route for fetching a routine to add in the exercise session page
+app.get('/api/routine/:id', async (req, res) => {
+  console.log('Fetching routine with ID:', req.params.id);
+  const routine = await Routine.findById(req.params.id);
+  if (!routine) return res.status(404).json({ error: 'Not found' });
+  res.json(routine);
+});
+//Route for fetching all routines associated with the user to select
+app.get('/api/routines', async (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).json({ error: 'User not logged in' });
+  }
+  try {
+    const routines = await Routine.find({ userId });
+    res.json(routines);
+  } catch (err) {
+    console.error('Error fetching routines:', err);
+    res.status(500).json({ error: 'Error fetching routines' });
+  }
+});
+//Route for retrieving the exercises from the selected routine
+app.post('/api/add-exercises/:id', async (req, res) => {
+  const { exercises } = req.body;
+  const routineId = req.params.id;
+  if (!req.session.tempExercises) req.session.tempExercises = {};
+  if (!req.session.tempExercises[routineId]) req.session.tempExercises[routineId] = [];
+  req.session.tempExercises[routineId] = [...new Set([...req.session.tempExercises[routineId], ...exercises])];
+  res.status(200).json({ message: 'Exercises added to session' });
+});
+//Route for merging the exercises from a selected routine into the current routine
+app.get('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const routineId = req.params.id;
+  const userId = req.session.userId;
+  try {
+    const routine = await Routine.findOne({ _id: routineId, userId });
+    if (!routine) return res.status(404).send('Routine not found');
+    const workouts = workoutLogs[routineId] || [];
+    const tempExercises = (req.session.tempExercises && req.session.tempExercises[routineId]) || [];
+    const allExercises = [...new Set([...routine.exercises, ...tempExercises])]; // Merge and deduplicate
+    res.render('exerciseSession', {
+      routine: { ...routine.toObject(), exercises: allExercises },
+      workouts
+    });
+  } catch (err) {
+    console.error('Error loading exercise session:', err);
+    res.status(500).send('Error fetching routine details');
+  }
+});
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
