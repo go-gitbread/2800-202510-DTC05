@@ -336,113 +336,73 @@ app.get('/api/weather', async (req, res) => {
 //   })
 // });
 
-
-// Route to handle showing a specific routine and its exercises
-app.get('/routine/:id', async (req, res) => {
-  const routineId = req.params.id;
-  const userId = req.session.userId;
+//Route linking routine to session page after clicking a routine
+app.get('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+  const userId = req.session.userId; //Grab the userID from the session
   try {
     // Find the specific routine by ID and ensure it belongs to the current user
     const routine = await Routine.findOne({ _id: routineId, userId: userId });
-    
     if (!routine) {
       return res.status(404).send('Routine not found');
     }
-
-    // // Fetch workouts for the workout log (assuming you have a Workout model)
-    // const workouts = await Workout.find({ userId: userId }); // Adjust this based on your schema
-
-    // Render the exerciseSession.ejs template, passing the routine and workouts
+    const workouts = []; //Initialize workouts as an empty array
+    
+    // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
     res.render('exerciseSession', {
       routine: routine,
-      workouts: workouts || []
+      workouts: workouts
     });
   } catch (err) {
-    console.error(err);
+    console.error('Error loading exercise session:', err);
     res.status(500).send('Error fetching routine details');
   }
 });
 
-app.get('/exerciseSession', (req, res) => {
-  const currentRoutine = req.session.currentRoutine;
-  console.log("Current Routine being passed to EJS:", currentRoutine);
-  res.render('exerciseSession', { currentRoutine, workouts: [] }); // Add workouts if needed
+const workoutLogs = {}; // e.g., { routineId1: [workout1, workout2], routineId2: [...] }
+
+//Route for logging an exercise (Submitting the form)
+app.post('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+  const userId = req.session.userId;//Grab the userID from the session
+  const { exercise, sets, reps, duration } = req.body; //Grab the workout details from the form submission
+
+ 
+  try {
+    // Find the specific routine by ID and ensure it belongs to the current user 
+    const routine = await Routine.findOne({ _id: routineId, userId });
+    if (!routine) {
+      return res.status(404).send('Routine not found');
+    }
+    // Create a new workout entry using the form data
+    const newWorkout = {
+      exercise,
+      sets,
+      reps,
+      duration
+    };
+    // If no workouts have been logged yet, initialize an empty array
+    if (!workoutLogs[routineId]) {
+      workoutLogs[routineId] = [];
+    }
+    //Add the new workout entry to the workout log 
+    workoutLogs[routineId].push(newWorkout);
+
+    // Re-render the session page with updated workout log
+    res.render('exerciseSession', {
+      routine: routine,
+      workouts: workoutLogs[routineId] || []
+    });
+  } catch (err) {
+    console.error('Error saving workout:', err);
+    res.status(500).send('Error saving workout');
+  }
 });
-
-// Route to get the exercise session page
-// app.get('/exerciseSession', async (req, res) => {
-//   try {
-//     // Check if we have an ExerciseSession model defined
-//     let workouts = [];
-//     if (global.mongoose.models.ExerciseSession) {
-//       const ExerciseSession = global.mongoose.model('ExerciseSession');
-//       // Fetch workouts for the current user
-//       workouts = await ExerciseSession.find({ userId: req.session.userId }).sort({ date: -1 });
-//     }
-    
-//     // Get the current routine from the session (if it exists)
-//     const currentRoutine = req.session.currentRoutine || null;
-//     console.log(currentRoutine)
-//     // Render the exercise session page with workouts and the current routine
-//     res.render('exerciseSession', { 
-//       workouts,
-//       currentRoutine
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Error fetching exercise data');
-//   }
-// });
-
-
-
-
-
-
-
-
-// Route to add a new exercise record
-// app.post('/exerciseSession', async (req, res) => {
-//   if (!req.session.userId) {
-//     return res.status(401).send('User not logged in');
-//   }
-
-//   try {
-//     // Check if we have an ExerciseSession model defined
-//     if (!global.mongoose.models.ExerciseSession) {
-//       // If no model exists, create a simple schema for exercise sessions
-//       const exerciseSessionSchema = new mongoose.Schema({
-//         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-//         exercise: { type: String, required: true },
-//         sets: { type: Number },
-//         reps: { type: Number },
-//         duration: { type: Number },
-//         date: { type: Date, default: Date.now }
-//       });
-      
-//       mongoose.model('ExerciseSession', exerciseSessionSchema);
-//     }
-    
-//     const ExerciseSession = mongoose.model('ExerciseSession');
-//     const { exercise, sets, reps, duration } = req.body;
-    
-//     const exerciseSession = new ExerciseSession({
-//       userId: req.session.userId,
-//       exercise,
-//       sets: sets || null,
-//       reps: reps || null,
-//       duration: duration || null,
-//       date: new Date()
-//     });
-    
-//     await exerciseSession.save();
-//     res.redirect('/exerciseSession');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Error saving exercise data');
-//   }
-// });
-
-
-
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
