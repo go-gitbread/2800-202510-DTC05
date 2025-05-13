@@ -67,9 +67,9 @@ app.get('/', (req, res) => {
 //register.ejs
 app.get('/register', (req, res) => res.render('register'));
 app.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { name, catName, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  const user = new User({ email, password: hashed });
+  const user = new User({ name, catName, email, password: hashed });
   await user.save();
   res.redirect('/login');
 });
@@ -350,7 +350,7 @@ app.get('/routine/:id/session', async (req, res) => {
       return res.status(404).send('Routine not found');
     }
     const workouts = []; //Initialize workouts as an empty array
-    
+
     // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
     res.render('exerciseSession', {
       routine: routine,
@@ -374,7 +374,7 @@ app.post('/routine/:id/session', async (req, res) => {
   const userId = req.session.userId;//Grab the userID from the session
   const { exercise, sets, reps, duration } = req.body; //Grab the workout details from the form submission
 
- 
+
   try {
     // Find the specific routine by ID and ensure it belongs to the current user 
     const routine = await Routine.findOne({ _id: routineId, userId });
