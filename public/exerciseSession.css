@@ -254,12 +254,16 @@
 }
 
 .btn-link{
-
+      background-color: #CAD5E1;
       flex: 1;
-      padding: 12px;
+      padding: 5px;
       margin: 0 5px;
       border: none;
       border-radius: 10px;
       font-size: 10px;
       cursor: pointer;
+    }
+
+    .btn-link:hover{
+            background-color: #959595;
     }
