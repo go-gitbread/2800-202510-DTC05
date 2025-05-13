@@ -20,7 +20,7 @@
 
     <button id="show-form-btn" class="btn btn-dark mb-4">+ Add Workout Record</button>
 
-    <form id="exercise-form" action="/routine/<%= routine._id %>/session" method="POST" style="display: none;" class="exercise-form mx-auto">
+    <form id="exercise-form" action="/routine/<%= routine._id || '000000000000000000000000' %>/session" method="POST" style="display: none;" class="exercise-form mx-auto">
       <div class="form-group">
         <label for="exercise">Exercise</label>
         <select name="exercise" id="exercise" class="form-control" required>
