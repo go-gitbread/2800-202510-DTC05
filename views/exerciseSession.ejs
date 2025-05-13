@@ -29,18 +29,19 @@
     </div>
   </div>
 
-   <h2 class="mb-4"><%= routine.routineName %> 
-    <button id="link-routine-btn" class="btn-link">
-  <img src="/images/link.png" alt="Link Routine" style="width: 24px; height: 24px;" />
-</button>
-          <div class="modal" id="routineModal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">×</span>
-    <h3>Link another routine:</h3>
-    <ul id="routineList"></ul>
+<h2 id="title-container" class="mb-4">
+  <%= routine.routineName %> 
+  <button id="link-routine-btn" class="btn-link">
+    <img src="/images/link.png" alt="Link Routine" style="width: 24px; height: 24px;" />
+  </button>
+  <div class="modal" id="routineModal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <h3>Link another routine:</h3>
+      <ul id="routineList"></ul>
+    </div>
   </div>
-</div>
-          </h2>
+</h2>
 
 <div id="exercise-list">
   <% routine.exercises.forEach(exercise => { %>
@@ -156,18 +157,49 @@ async function addRoutineExercises(routineId) {
     detailSection.insertBefore(newSet, buttons);
   }
 
-  function startExercise(name) {
-    document.getElementById('exercise-title').textContent = name;
-    document.getElementById('exercise-list').style.display = 'none';
-    document.getElementById('exercise-detail').style.display = 'block';
-  }
 
-  function finishExercise() {
-    document.getElementById('exercise-detail').style.display = 'none';
-    document.getElementById('exercise-list').style.display = 'block';
-  }
 
   document.getElementById('link-routine-btn').addEventListener('click', loadRoutines);
+
+function startExercise(name) {
+  // Set up exercise detail view
+  document.getElementById('exercise-title').style.display = 'none'; // Hide this title
+  
+  // Replace the main title with just the exercise name
+  const titleContainer = document.getElementById('title-container');
+  // Store the original HTML to restore it later
+  if(!titleContainer.getAttribute('data-original-html')) {
+    titleContainer.setAttribute('data-original-html', titleContainer.innerHTML);
+  }
+  // Set just the exercise name without the link button
+  titleContainer.innerHTML = name;
+  
+  // Hide exercise list and show detail view
+  document.getElementById('exercise-list').style.display = 'none';
+  document.getElementById('exercise-detail').style.display = 'block';
+}
+
+function finishExercise() {
+  // Restore the original title with routine name and link button
+  const titleContainer = document.getElementById('title-container');
+  const originalHtml = titleContainer.getAttribute('data-original-html');
+  if(originalHtml) {
+    titleContainer.innerHTML = originalHtml;
+    // Re-bind the event listener to the link button
+    const linkButton = document.getElementById('link-routine-btn');
+    if(linkButton) {
+      linkButton.addEventListener('click', loadRoutines);
+    }
+  }
+  
+  // Show the exercise title again for next exercise
+  document.getElementById('exercise-title').style.display = 'block';
+  
+  // Hide detail view and show exercise list
+  document.getElementById('exercise-detail').style.display = 'none';
+  document.getElementById('exercise-list').style.display = 'block';
+}
+
 </script>
 
 </body>

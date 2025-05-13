@@ -212,7 +212,7 @@
 }
 
 .modal-content .close:hover {
-  color: #2196F3; /* Matches .btn-add color */
+  color: #2196F3; 
 }
 
 /* Modal Heading */
@@ -250,7 +250,7 @@
 }
 
 .modal-content ul li:hover {
-  background: #e0f7fa; /* Light blue hover effect, inspired by .btn-add */
+  background: #e0f7fa; 
 }
 
 .btn-link{
