@@ -29,6 +29,7 @@
     </div>
   </div>
 
+<!-- Main page view for Exercise session -->
 <h2 id="title-container" class="mb-4">
   <%= routine.routineName %> 
   <button id="link-routine-btn" class="btn-link">
@@ -42,7 +43,7 @@
     </div>
   </div>
 </h2>
-
+<!--Exercises are populated from user's routine here-->
 <div id="exercise-list">
   <% routine.exercises.forEach(exercise => { %>
     <div class="exercise" onclick="startExercise('<%= exercise %>')">
@@ -55,7 +56,7 @@
     <button class="finish-btn" id="finish-workout-btn">Finish Workout</button>
 
 </div>
-
+<!-- Exercise Log view -->
 <div id="exercise-detail" style="display: none;">
   <h2 id="exercise-title">Exercise</h2>
   
@@ -69,7 +70,8 @@
   </div>
 </div>
 
-
+<!--Script to make routine variables usable in exerciseSession.js-->
+<!-- The Red underlines are just VScode being confused about the EJS syntax. Code works as intended-->
 <script>
   window.routineData = {
     routineName: '<%= routine.routineName %>',
