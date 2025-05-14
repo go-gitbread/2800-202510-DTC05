@@ -261,7 +261,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
         alert('No exercise data to save. Please log at least one set.');
         return;
     }
-        isPaused = true;
+    isPaused = true;
     //Variables for logging the time
     const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
     const seconds = (totalSeconds % 60).toString().padStart(2, '0');
@@ -271,7 +271,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     const payload = {
         date: new Date().toISOString(),
         routines: routinesData,
-        duration : workoutDuration         
+        duration: workoutDuration
         //userID?? :                         <<
         //xp gained:                         <<
 
@@ -307,16 +307,16 @@ let totalSeconds = 0;
 // Function to update the time
 function updateTimer() {
     if (!isPaused) {
-    totalSeconds++; // Increase the timer by 1 second
-    let minutes = Math.floor(totalSeconds / 60);
-    let seconds = totalSeconds % 60;
+        totalSeconds++; // Increase the timer by 1 second
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = totalSeconds % 60;
 
-    // Format minutes and seconds to always show 2 digits
-    if (seconds < 10) {
-        seconds = '0' + seconds;
+        // Format minutes and seconds to always show 2 digits
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        document.querySelector('.header-item p').textContent = `${minutes}:${seconds}`; // Update the time displayed on the page
     }
-    document.querySelector('.header-item p').textContent = `${minutes}:${seconds}`; // Update the time displayed on the page
-}
 }
 setInterval(updateTimer, 1000); // Call updateTimer every 1000ms (1 second)
 
@@ -324,62 +324,76 @@ setInterval(updateTimer, 1000); // Call updateTimer every 1000ms (1 second)
 document.getElementById("pauseBtn").addEventListener("click", () => {
     isPaused = !isPaused;
 
-  // Toggle emoji
-  const btn = document.getElementById("pauseBtn");
-  btn.textContent = isPaused ? "▶️" : "⏸️";
+    // Toggle emoji
+    const btn = document.getElementById("pauseBtn");
+    btn.textContent = isPaused ? "▶️" : "⏸️";
 
     console.log("Paused:", isPaused);
 });
 
 //Rest Timer functions
-let restTime = 60;
+let defaultRestTime = 60
+let restTime = defaultRestTime;
 let isResting = false;
 let restInterval = null;
 
 // Function to update the rest timer every second
 function updateRestTimer() {
-  if (restTime > 0) {
-    restTime--;
+    if (restTime > 0) {
+        restTime--;
 
-    const minutes = Math.floor(restTime / 60);
-    const seconds = restTime % 60;
+        const minutes = Math.floor(restTime / 60);
+        const seconds = restTime % 60;
 
-    const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-    document.getElementById('restTimer').textContent = displayTime;
-  } else {
-    // Auto-stop when it reaches 0
-    clearInterval(restInterval);
-    restInterval = null;
-    isResting = false;
-    restTime=60;
-    const minutes = Math.floor(restTime / 60);
-    const seconds = restTime % 60;
-    const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-    document.getElementById('restTimer').textContent = displayTime;
-    document.getElementById('rest-toggle-Btn').textContent = "▶️";
-  }
+        const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        document.getElementById('restTimer').textContent = displayTime;
+    } else {
+        // Auto-stop when it reaches 0
+        clearInterval(restInterval);
+        restInterval = null;
+        isResting = false;
+        restTime = defaultRestTime;
+        const minutes = Math.floor(restTime / 60);
+        const seconds = restTime % 60;
+        const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        document.getElementById('restTimer').textContent = displayTime;
+        document.getElementById('rest-toggle-Btn').textContent = "▶️";
+    }
 }
 
 // Event listener for rest play/pause toggle button
 document.getElementById("rest-toggle-Btn").addEventListener("click", () => {
-  isResting = !isResting;
+    isResting = !isResting;
 
-  const btn = document.getElementById("rest-toggle-Btn");
-  btn.textContent = isResting ? "⏸️" : "▶️";
+    const btn = document.getElementById("rest-toggle-Btn");
+    btn.textContent = isResting ? "⏸️" : "▶️";
 
-  if (isResting) {
-    // Start the countdown
-    if (!restInterval) {
-      restInterval = setInterval(updateRestTimer, 1000);
+    if (isResting) {
+        // Start the countdown
+        if (!restInterval) {
+            restInterval = setInterval(updateRestTimer, 1000);
+        }
+    } else {
+        // Pause the countdown
+        clearInterval(restInterval);
+        restInterval = null;
     }
-  } else {
+
+    console.log("User is resting:", isResting);
+});
+
+// // Event listener for rest reset button
+document.getElementById("rest-restart-Btn").addEventListener("click", () => {
+    isResting = false;
+    console.log("User is resting:", isResting)
+    const btn = document.getElementById("rest-toggle-Btn");
+    btn.textContent = isResting ? "⏸️" : "▶️";
+    restTime = defaultRestTime
+    const minutes = Math.floor(restTime / 60);
+    const seconds = restTime % 60;
     // Pause the countdown
     clearInterval(restInterval);
     restInterval = null;
-  }
-
-  console.log("User is resting:", isResting);
+    const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    document.getElementById('restTimer').textContent = displayTime;
 });
-
-// // Event listener for rest play/pause toggle button
-// document.getElementById("rest-toggle-Btn").addEventListener("click", () => {
