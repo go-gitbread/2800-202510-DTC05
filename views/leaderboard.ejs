@@ -19,6 +19,8 @@
 
 <body>
       <%- include('partials/navbar') %>
+
+
             <div class="container mt-4">
 
                   <div class="table">
@@ -31,6 +33,18 @@
                                           <th>Level</th>
                                           <th>Streak</th>
                                           <th>Profile Link</th>
+                                          <th>
+
+                                                <label for="">Sort by:</label>
+
+                                                <select name="" id="">
+                                                      <option value="ascending level">ascending level</option>
+                                                      <option value="descending level">descending level</option>
+                                                      <option value="ascending streak">ascending streak</option>
+                                                      <option value="descending streak">descending streak</option>
+                                                </select>
+
+                                          </th>
                                     </tr>
                               </thead>
                               <tbody>
@@ -61,20 +75,6 @@
 
 
 
-
-            <!-- pagination template and button templates for now... -->
-            <!-- <div class="container mt-4">
-                  <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                  </ul>
-            </div> -->
-
-
-
             <div class="container mt-4">
                   <ul class="pagination justify-content-center">
                         <% if (hasPrevPage) { %>
@@ -91,6 +91,8 @@
                                           <% } %>
                   </ul>
             </div>
+
+
 </body>
 
 </html>
