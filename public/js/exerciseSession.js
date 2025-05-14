@@ -5,20 +5,6 @@
   
   // Track which routine each exercise belongs to
   const exerciseToRoutineMap = {};
-  
-  // Initialize with the main routine
-//   const mainRoutineName = '<%= routine.routineName %>';
-//   const mainRoutineId = '<%= routine._id %>';
-
-  // Initialize workout data with empty arrays for each exercise
-  // This red underline is a VSCode thing, the code still works, it's just confused about the EJS syntax. 
-//   <% routine.exercises.forEach(exercise => { %>
-//     workoutData['<%= exercise %>'] = [];
-//     exerciseToRoutineMap['<%= exercise %>'] = {
-//       routineName: mainRoutineName,
-//       routineId: mainRoutineId
-//     };
-//   <% }); %>
 
 const mainRoutineName = window.routineData.routineName;
 const mainRoutineId = window.routineData.routineId;
