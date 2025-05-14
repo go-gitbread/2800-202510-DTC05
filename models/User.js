@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   level: { type: Number, default: 1 },
   exp: { type: Number, default: 0 },
-  streak: { type: Number, default: 0 }
+  streak: { type: Number, default: 0 },
+  friendsList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 
 }, { timestamps: true });
 
