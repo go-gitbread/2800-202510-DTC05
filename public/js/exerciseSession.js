@@ -75,9 +75,8 @@ window.routineData.exercises.forEach(exercise => {
         exerciseList.insertBefore(div, document.querySelector('.finish-btn')); //Add the new exercise to the end of the list
       });
 
-      // Save new exercises to session
+      // Save new exercises to session to ve logged
       if (newExercises.length > 0) {
-        // Use mainRoutineId instead of the EJS template expression
         await fetch(`/api/add-exercises/${mainRoutineId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -136,7 +135,7 @@ window.routineData.exercises.forEach(exercise => {
       addSetToDisplay(1, '', '');
     }
   }
-  //Function to display a new set in the exercise log
+  //Function to display a new set on the page
   function addSetToDisplay(setNumber, repsValue = '', weightValue = '') { //***We can replace these empty values with Target values
     const setsContainer = document.getElementById('sets-container');
     
@@ -190,7 +189,7 @@ window.routineData.exercises.forEach(exercise => {
       
       workoutData[currentExercise].push({ reps, weight }); //Add the data for the current exercise to workoutData
     });
-    //Log each save - useful!
+    //Log each time anything is save - useful for keeping track of what's being logged & when!
     console.log('Saved data for', currentExercise, workoutData[currentExercise]);
   }
 //Function to return the user from their current exercise back to the list of exercises in the session
@@ -224,6 +223,7 @@ window.routineData.exercises.forEach(exercise => {
   // Event listener for "Link routine" button
   document.getElementById('link-routine-btn').addEventListener('click', loadRoutines); //Call loadRoutines function on click
   //Event listener for "Finish workout" Button
+  //This event listener manages the saving & presentation of the user's logged data 
   document.getElementById('finish-workout-btn').addEventListener('click', async () => {
     if (currentExercise) {
       saveCurrentExerciseData();    // Save any current exercise data
@@ -294,3 +294,21 @@ window.routineData.exercises.forEach(exercise => {
     //   alert('Failed to save workout. Please try again.');
     // }
   });
+
+  //Timer functions
+
+    let totalSeconds = 0;
+  
+  // Function to update the time
+  function updateTimer() {
+    totalSeconds++; // Increase the timer by 1 second
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
+    
+    // Format minutes and seconds to always show 2 digits
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+    document.querySelector('.header-item p').textContent = `${minutes}:${seconds}`; // Update the time displayed on the page
+  }
+  setInterval(updateTimer, 1000); // Call updateTimer every 1000ms (1 second)
