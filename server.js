@@ -86,6 +86,10 @@ app.post('/login', async (req, res) => {
     });
   }  
 
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.render('login', { error: 'Incorrect password. Try again.' });
+  }
 
   req.session.userId = user._id;
   req.session.userEmail = user.email;
