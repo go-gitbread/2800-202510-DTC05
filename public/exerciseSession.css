@@ -267,3 +267,21 @@
     .btn-link:hover{
             background-color: #959595;
     }
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#pauseBtn{
+  background: none;
+  border: none;
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+#timer{
+  padding-bottom: 5px;
+}
