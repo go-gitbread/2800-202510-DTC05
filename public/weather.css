@@ -10,20 +10,11 @@
       justify-content: center;
       margin: 0 10px;
       font-size: 14px;
+      color: rgb(255, 255, 255);
 }
 
 .widget-container:hover {
       background: #b0d6f7;
-      padding-left: 15px;
-      padding-top: 16px;
-      border-radius: 8px;
-      width: 225px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 10px;
-      font-size: 14px;
 }
 
 #weather-location {
@@ -39,7 +30,6 @@
       align-items: center;
       border-radius: 6px;
       gap: 5px;
-      row-gap: 0;
 }
 
 #temperature {
@@ -48,15 +38,6 @@
       color: #323131;
       margin: 0;
       padding: 2px;
-}
-
-.widget-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 10px;
-      color: rgb(255, 255, 255);
-      font-size: 14px;
 }
 
 .temp-icon img {
@@ -68,25 +49,18 @@
       font-size: 0.7rem;
       font-weight: bold;
       color: #323131;
-
 }
 
-
-
-/* below css for small screen was aided by chatgpt */
-/* Responsive for small screens */
-@media (max-width: 769px) {
+/* Responsive for medium and small screens (≤991px) */
+@media (max-width: 991px) {
       .widget-container {
             position: absolute;
             right: 60px;
-            background: #9bc5ea;
-
             top: 8px;
-            /* adjust top as needed */
+            background: #9bc5ea;
             width: auto;
             padding: 2px 6px;
             height: auto;
-
             margin: 0;
       }
 
