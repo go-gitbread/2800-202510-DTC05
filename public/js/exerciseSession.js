@@ -1,5 +1,4 @@
-
-  // Global object to store all exercise data
+// Global object to store all exercise data
   const workoutData = {};
   let currentExercise = '';
   
@@ -78,7 +77,8 @@ window.routineData.exercises.forEach(exercise => {
 
       // Save new exercises to session
       if (newExercises.length > 0) {
-        await fetch(`/api/add-exercises/<%= routine._id %>`, {
+        // Use mainRoutineId instead of the EJS template expression
+        await fetch(`/api/add-exercises/${mainRoutineId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ exercises: newExercises })
@@ -277,7 +277,8 @@ window.routineData.exercises.forEach(exercise => {
     
     // try {
     //   // This is where we will send the data to the backend
-    //   const response = await fetch(`/api/log-workout/<%= routine._id %>`, {
+    //   // Use mainRoutineId instead of the EJS template expression
+    //   const response = await fetch(`/api/log-workout/${mainRoutineId}`, {
     //     method: 'POST',
     //     headers: { 'Content-Type': 'application/json' },
     //     body: JSON.stringify(payload)
