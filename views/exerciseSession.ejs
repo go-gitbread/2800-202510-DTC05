@@ -200,6 +200,55 @@ function finishExercise() {
   document.getElementById('exercise-list').style.display = 'block';
 }
 
+ const exerciseData = {};
+
+function showExerciseDetail(name) {
+  const exerciseList = document.getElementById("exercise-list");
+  const exerciseDetail = document.getElementById("exercise-detail");
+  const exerciseTitle = document.getElementById("exercise-title");
+  const setList = document.getElementById("set-list");
+
+  exerciseList.classList.add("d-none");
+  exerciseDetail.classList.remove("d-none");
+
+  exerciseTitle.textContent = name;
+  exerciseTitle.setAttribute("data-current-exercise", name);
+
+  setList.innerHTML = "";
+
+  const sets = exerciseData[name] || [];
+  sets.forEach((set, index) => {
+    const li = document.createElement("li");
+    li.textContent = `Set ${index + 1}: ${set.reps} reps @ ${set.weight} lbs`;
+    setList.appendChild(li);
+  });
+}
+
+document.getElementById("add-set").addEventListener("click", () => {
+  const reps = document.getElementById("reps").value;
+  const weight = document.getElementById("weight").value;
+  const setList = document.getElementById("set-list");
+  const currentExercise = document.getElementById("exercise-title").getAttribute("data-current-exercise");
+
+  if (!reps || !weight) return;
+
+  const set = { reps: parseInt(reps), weight: parseFloat(weight) };
+
+  // Store set for the correct exercise
+  if (!exerciseData[currentExercise]) {
+    exerciseData[currentExercise] = [];
+  }
+  exerciseData[currentExercise].push(set);
+
+  // Update DOM
+  const li = document.createElement("li");
+  li.textContent = `Set ${exerciseData[currentExercise].length}: ${set.reps} reps @ ${set.weight} lbs`;
+  setList.appendChild(li);
+
+  // Reset inputs
+  document.getElementById("reps").value = "";
+  document.getElementById("weight").value = "";
+});
 </script>
 
 </body>
