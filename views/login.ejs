@@ -21,6 +21,13 @@
 
         <div class="form-container">
             <h2>Login</h2>
+
+            <% if (error) { %>
+                <div class="alert alert-danger" role="alert">
+                  <%- error %>
+                </div>
+              <% } %>                        
+              
             <form action="/login" method="POST">
 
                 <div class="form-group">

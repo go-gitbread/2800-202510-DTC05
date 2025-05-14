@@ -75,17 +75,21 @@ app.post('/register', async (req, res) => {
 });
 
 //login.ejs
-app.get('/login', (req, res) => res.render('login'));
+app.get('/login', (req, res) => res.render('login', { error: null }));
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (user && await bcrypt.compare(password, user.password)) {
-    req.session.userId = user._id;
-    req.session.userEmail = user.email;
-    res.redirect('/');
-  } else {
-    res.send('Login failed');
-  }
+
+  if (!user) {
+    return res.render('login', {
+      error: `No account found with that email. <a href="/register" class="alert-link">Sign up here</a>.`
+    });
+  }  
+
+
+  req.session.userId = user._id;
+  req.session.userEmail = user.email;
+  res.redirect('/');
 });
 
 
