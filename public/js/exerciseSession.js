@@ -219,7 +219,7 @@ function finishExercise() {
     // Clear current exercise
     currentExercise = '';
 }
-
+let isPaused = false;
 // Event listener for "Link routine" button
 document.getElementById('link-routine-btn').addEventListener('click', loadRoutines); //Call loadRoutines function on click
 //Event listener for "Finish workout" Button
@@ -230,7 +230,6 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     }
     // Organize data by routine
     const routinesData = {};
-
     // Filter out empty sets and organize by routine
     Object.keys(workoutData).forEach(exercise => {
         // Only include exercises that have at least one set with data
@@ -262,12 +261,17 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
         alert('No exercise data to save. Please log at least one set.');
         return;
     }
+        isPaused = true;
+    //Variables for logging the time
+    const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    const workoutDuration = `${minutes}:${seconds}`;
 
     // Create final payload (This payload is what we will be saving to the database)
     const payload = {
         date: new Date().toISOString(),
-        routines: routinesData
-        //duration : workoutDuration         << to be added still
+        routines: routinesData,
+        duration : workoutDuration         
         //userID?? :                         <<
         //xp gained:                         <<
 
@@ -298,7 +302,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
 //Timer functions
 
 let totalSeconds = 0;
-let isPaused = false;
+
 
 // Function to update the time
 function updateTimer() {
