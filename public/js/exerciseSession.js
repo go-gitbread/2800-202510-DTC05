@@ -331,3 +331,55 @@ document.getElementById("pauseBtn").addEventListener("click", () => {
     console.log("Paused:", isPaused);
 });
 
+//Rest Timer functions
+let restTime = 60;
+let isResting = false;
+let restInterval = null;
+
+// Function to update the rest timer every second
+function updateRestTimer() {
+  if (restTime > 0) {
+    restTime--;
+
+    const minutes = Math.floor(restTime / 60);
+    const seconds = restTime % 60;
+
+    const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    document.getElementById('restTimer').textContent = displayTime;
+  } else {
+    // Auto-stop when it reaches 0
+    clearInterval(restInterval);
+    restInterval = null;
+    isResting = false;
+    restTime=60;
+    const minutes = Math.floor(restTime / 60);
+    const seconds = restTime % 60;
+    const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    document.getElementById('restTimer').textContent = displayTime;
+    document.getElementById('rest-toggle-Btn').textContent = "▶️";
+  }
+}
+
+// Event listener for rest play/pause toggle button
+document.getElementById("rest-toggle-Btn").addEventListener("click", () => {
+  isResting = !isResting;
+
+  const btn = document.getElementById("rest-toggle-Btn");
+  btn.textContent = isResting ? "⏸️" : "▶️";
+
+  if (isResting) {
+    // Start the countdown
+    if (!restInterval) {
+      restInterval = setInterval(updateRestTimer, 1000);
+    }
+  } else {
+    // Pause the countdown
+    clearInterval(restInterval);
+    restInterval = null;
+  }
+
+  console.log("User is resting:", isResting);
+});
+
+// // Event listener for rest play/pause toggle button
+// document.getElementById("rest-toggle-Btn").addEventListener("click", () => {
