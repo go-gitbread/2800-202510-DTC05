@@ -195,25 +195,36 @@ app.get('/profile', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   res.render('profile', {
+    isOwnProfile: true,
     username: req.session.userEmail.split('@')[0],
     email: req.session.userEmail,
-    joinedDate: new Date().toDateString()
+    // joinedDate: new Date().toDateString()
   });
 });
 
-// use async to get the email
-// app.get('/leaderboard', async (req, res) => {
-//   const data = await User.find().select('email');
-//   res.render('leaderboard', { usersList: data });
-// try {
-//   const data = await User.find().select('email');
-//   res.render('leaderboard', { usersList: data });
-// } catch (err) {
-//   console.error(err);
-//   res.status(500).send("Error retrieving users");
-// }
-// });
 
+
+// Route for another user's profile page
+app.get('/profile/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.render('profile', {
+      isOwnProfile: false,
+      username: user.name,
+      email: user.email,
+      // joinedDate: user.createdAt.toDateString()
+    });
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {

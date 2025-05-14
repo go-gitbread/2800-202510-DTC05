@@ -17,7 +17,10 @@
   <%- include('partials/navbar') %>
 
     <div class="profile-card">
-      <h2 class="section-title">Profile</h2>
+      <h2 class="section-title">
+        <%= isOwnProfile ? "Your Profile" : username + "'s Profile" %>
+      </h2>
+
       <img src="/images/profile.jpg" alt="Avatar" class="avatar">
 
       <h3 class="username">
@@ -26,18 +29,22 @@
       <p class="email">
         <%= email %>
       </p>
-      <p class="joined">Joined <%= joinedDate %>
+
       </p>
 
       <div class="stats">
         <p><strong>Level:</strong> 5</p>
         <p><strong>XP:</strong> 1,240</p>
-        <p><strong>Days Active:</strong> 12</p>
+        <p><strong>Streaks/Days Active:</strong> 12</p>
       </div>
 
       <div class="button-row">
-        <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
-        <a href="/logout" class="btn logout-btn">Logout</a>
+        <% if (isOwnProfile) { %>
+          <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
+          <a href="/logout" class="btn logout-btn">Logout</a>
+          <% } else { %>
+            <a href="/addFriend/<%= username %>" class="btn btn-primary">Add User</a>
+            <% } %>
       </div>
     </div>
 

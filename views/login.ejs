@@ -24,27 +24,28 @@
 
             <% if (error) { %>
                 <div class="alert alert-danger" role="alert">
-                  <%- error %>
+                    <%- error %>
                 </div>
-              <% } %>                        
-              
-            <form action="/login" method="POST">
+                <% } %>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" placeholder="Enter email here" required>
-                </div>
+                    <form action="/login" method="POST">
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter password here" required>
-                </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" id="email" name="email" placeholder="Enter email here" required>
+                        </div>
 
-                <button type="submit" class="submit-btn">Login</button>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter password here"
+                                required>
+                        </div>
 
-                <p>No Account? <a href="/register">Sign up</a></p>
+                        <button type="submit" class="submit-btn">Login</button>
 
-            </form>
+                        <p>No Account? <a href="/register">Sign up</a></p>
+
+                    </form>
         </div>
 
 </body>
