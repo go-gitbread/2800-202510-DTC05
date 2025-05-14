@@ -82,13 +82,13 @@ app.post('/login', async (req, res) => {
 
   if (!user) {
     return res.render('login', {
-      error: `No account found with that email. <a href="/register" class="alert-link">Sign up here</a>.`
+      error: `😿 No account found with that email. Purrhaps try <a href="/register" class="alert-link">signing up</a>?`
     });
   }  
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.render('login', { error: 'Incorrect password. Try again.' });
+    return res.render('login', { error: '🙀 Hiss! That password doesn\'t match our records. Try again.' });
   }
 
   req.session.userId = user._id;
