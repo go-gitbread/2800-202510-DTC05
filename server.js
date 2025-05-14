@@ -84,7 +84,7 @@ app.post('/login', async (req, res) => {
     return res.render('login', {
       error: `😿 No account found with that email. Purrhaps try <a href="/register" class="alert-link">signing up</a>?`
     });
-  }  
+  }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
@@ -218,12 +218,14 @@ app.get('/profile', (req, res) => {
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1
-  const limit = 5; // 5 users per page
+  const limit = 8; // 8 users per page
 
   try {
     const totalUsers = await User.countDocuments();
     const usersList = await User.find()
-      .select('email')
+      .select('name')
+      .select('level')
+      .select('streak')
       .skip((page - 1) * limit)
       .limit(limit);
 

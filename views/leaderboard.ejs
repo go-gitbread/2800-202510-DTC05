@@ -28,14 +28,23 @@
                               <thead>
                                     <tr>
                                           <th>Username</th>
-                                          <th>Profile Links</th>
+                                          <th>Level</th>
+                                          <th>Streak</th>
+                                          <th>Profile Link</th>
                                     </tr>
                               </thead>
                               <tbody>
                                     <% usersList.forEach(user=> { %>
                                           <tr>
                                                 <td>
-                                                      <%= user.email %>
+                                                      <%= user.name %>
+                                                </td>
+
+                                                <td>
+                                                      <%= user.level %>
+                                                </td>
+                                                <td>
+                                                      <%= user.streak %>
                                                 </td>
                                                 <td>
                                                       <a type="/profile/<%= user._id %>" class="profile_btn"> View
