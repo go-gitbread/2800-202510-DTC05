@@ -152,10 +152,32 @@ function addSetToDisplay(setNumber, repsValue = '', weightValue = '') { //***We 
     // Add event listeners to new inputs to save data whenever it has been altered
     const inputs = newSet.querySelectorAll('input');
     inputs.forEach(input => {
-        input.addEventListener('change', () => saveCurrentExerciseData()); //Save whenever the value is changed
-        input.addEventListener('input', () => saveCurrentExerciseData()); //Save whenever a value is inputted
+        input.addEventListener('change', () => { saveCurrentExerciseData(); calculateXP(workoutData); });
+        input.addEventListener('input', () => { saveCurrentExerciseData(); });
     });
 }
+//Function to calculate the XP gained throughout the session
+function calculateXP(workoutData) {
+    let totalReps = 0;
+    for (const exercise in workoutData) {
+        const sets = workoutData[exercise];
+        for (const set of sets) {
+            const reps = parseInt(set.reps);
+            if (!isNaN(reps)) {
+                totalReps += reps;
+            }
+        }
+    }
+    xpGained = totalReps * 10
+    console.log("XP gained: ", xpGained)
+    displayXP(xpGained)
+    return xpGained;
+
+}
+function displayXP(xpGained) {
+    document.getElementById('xpGained').textContent = xpGained
+}
+
 //Function to add a new set in the exercise log
 function addSet() {
     const setsContainer = document.getElementById('sets-container');
