@@ -87,6 +87,7 @@
       window.routineData = {
         routineName: '<%= routine.routineName %>',
         routineId: '<%= routine._id %>',
+        userId: '<%= routine.userId%>',
         exercises: [
       <% routine.exercises.forEach((exercise, index) => { %>
           '<%= exercise %>' <%= index < routine.exercises.length - 1 ? ',' : '' %>

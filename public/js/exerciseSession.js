@@ -1,7 +1,7 @@
 // Global object to store all exercise data
 const workoutData = {};
 let currentExercise = '';
-
+let currentUserId = window.routineData.userId;
 // Track which routine each exercise belongs to
 const exerciseToRoutineMap = {};
 
@@ -289,36 +289,38 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     const seconds = (totalSeconds % 60).toString().padStart(2, '0');
     const workoutDuration = `${minutes}:${seconds}`;
 
-    // Create final payload (This payload is what we will be saving to the database)
+console.log('currentUserId:', currentUserId);
+
+    // Create final payload with userId included
     const payload = {
+        userId: currentUserId,           // Add the userId here
         date: new Date().toISOString(),
         routines: routinesData,
-        duration: workoutDuration
-        //userID?? :                         <<
-        //xp gained:                         <<
-
+        duration: workoutDuration,
+        xpGained: xpGained
     };
 
     console.log('Workout complete! Full payload to save:', JSON.stringify(payload, null, 2));
 
-    // try {
-    //   // This is where we will send the data to the backend
-    //   // Use mainRoutineId instead of the EJS template expression
-    //   const response = await fetch(`/api/log-workout/${mainRoutineId}`, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(payload)
-    //   });
+    try {
+        // Send the data to the backend
+        const response = await fetch(`/api/log-workout/${mainRoutineId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    //   if (!response.ok) throw new Error('Failed to save workout data');
+        if (!response.ok) throw new Error('Failed to save workout data');
 
-    //   alert('Workout saved successfully!');
-    //   // Redirect to workout history or home page
-    //   window.location.href = '/workout-history';
-    // } catch (err) {
-    //   console.error('Error saving workout:', err);
-    //   alert('Failed to save workout. Please try again.');
-    // }
+        const result = await response.json();
+        alert('Workout saved successfully!');
+        
+        // Redirect to workout history or home page
+        window.location.href = '/home';
+    } catch (err) {
+        console.error('Error saving workout:', err);
+        alert('Failed to save workout. Please try again.');
+    }
 });
 
 //Timer functions
