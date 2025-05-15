@@ -62,7 +62,10 @@ app.get('/', (req, res) => {
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
-  res.render('index', { quote: randomQuote });
+  res.render('index', {
+    quote: randomQuote,
+    username: req.session.userName
+  });  
 });
 
 //register.ejs
@@ -94,6 +97,7 @@ app.post('/login', async (req, res) => {
 
   req.session.userId = user._id;
   req.session.userEmail = user.email;
+  req.session.userName = user.name;
   res.redirect('/');
 });
 
