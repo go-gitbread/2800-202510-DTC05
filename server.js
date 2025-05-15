@@ -208,8 +208,8 @@ app.get('/profile', (req, res) => {
     isOwnProfile: true,
     username: req.session.userName,
     email: req.session.userEmail,
-    // joinedDate: new Date().toDateString()
-  });
+    showToast: req.query.updated === '1'
+  });  
 });
 
 // Show the edit settings form in profile page
@@ -229,7 +229,7 @@ app.post('/profile/edit', async (req, res) => {
     const user = await User.findByIdAndUpdate(req.session.userId, { name, email }, { new: true });
     req.session.userEmail = user.email;
     req.session.userName = user.name;
-    res.redirect('/profile');
+    res.redirect('/profile?updated=1');
   } catch (err) {
     console.error('Update failed:', err);
     res.status(500).send('Error updating profile');

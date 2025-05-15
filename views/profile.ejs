@@ -17,6 +17,23 @@
 
   <%- include('partials/navbar') %>
 
+  <% if (showToast) { %>
+    <div id="toast" class="toast-message">
+      ✅ Profile updated successfully!
+    </div>
+    <script>
+      setTimeout(() => {
+        const toast = document.getElementById('toast');
+        if (toast) toast.classList.add('fade-out');
+      }, 2500);
+      setTimeout(() => {
+        const toast = document.getElementById('toast');
+        if (toast) toast.remove();
+      }, 3000);
+    </script>
+  <% } %>
+  
+
     <div class="profile-card">
       <h2 class="section-title">
         <%= isOwnProfile ? "Your Profile" : username + "'s Profile" %>
