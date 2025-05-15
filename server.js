@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
   res.render('index', {
     quote: randomQuote,
     username: req.session.userName
-  });  
+  });
 });
 
 //register.ejs
@@ -80,6 +80,7 @@ app.post('/register', async (req, res) => {
 
 //login.ejs
 app.get('/login', (req, res) => res.render('login', { error: null }));
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -98,6 +99,10 @@ app.post('/login', async (req, res) => {
   req.session.userId = user._id;
   req.session.userEmail = user.email;
   req.session.userName = user.name;
+  req.session.catName = user.catName;
+  req.session.level = user.level;
+  req.session.exp = user.exp;
+  req.session.catAvatar = user.catAvatar;
   res.redirect('/');
 });
 
@@ -217,7 +222,7 @@ app.get('/profile/edit', async (req, res) => {
 // Handle the form submission
 app.post('/profile/edit', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
-  
+
   const { name, email } = req.body;
 
   try {
@@ -369,20 +374,6 @@ app.get('/api/weather', async (req, res) => {
 });
 
 
-
-// app.get('/ip', (request, response) => {
-//   const ip =
-//     request.headers['x-real-ip'] ||
-//     request.headers['x-forwarded-for'] ||
-//     request.socket.remoteAddress || '';
-
-//   ipArray = ip.split(",")
-//   ipFirst = ipArray[0]
-
-//   return response.json({
-//     ipFirst
-//   })
-// });
 
 //Route linking routine to session page after clicking a routine
 app.get('/routine/:id/session', async (req, res) => {
@@ -539,5 +530,23 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
     res.status(500).json({ error: 'Failed to save workout log' });
   }
 });
+
+
+
+//Route for coach Office page
+app.get('/coachOffice', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  console.log('catName from session:', req.session.catName); // Debug line
+
+  res.render('coachOffice', {
+    username: req.session.userName,
+    catName: req.session.catName,
+    level: req.session.level,
+    email: req.session.userEmail,
+    catAvatar: req.session.catAvatar
+    // joinedDate: new Date().toDateString()
+  });
+});
+
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

@@ -1,0 +1,36 @@
+.avatar-container {
+    width: 100%;
+    max-width: 300px;
+    /* ⬅️ Smaller than 200px */
+    margin: 0 auto;
+    position: relative;
+}
+
+
+.cat-avatar {
+    width: 100%;
+    /* Fill container but cap at 200px from parent */
+    height: auto;
+    max-height: 400px;
+    background-color: #ffffff;
+    border-radius: 10%;
+    display: block;
+    object-fit: contain;
+}
+
+
+.welcome-text {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-family: 'Winky Rough', sans-serif;
+    font-size: 20px;
+    color: #333;
+}
+
+.main-content {
+    padding: 10px;
+    text-align: center;
+    margin-top: 80px;
+
+}
