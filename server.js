@@ -201,13 +201,35 @@ app.get('/profile', (req, res) => {
 
   res.render('profile', {
     isOwnProfile: true,
-    username: req.session.userEmail.split('@')[0],
+    username: req.session.userName,
     email: req.session.userEmail,
     // joinedDate: new Date().toDateString()
   });
 });
 
+// Show the edit settings form in profile page
+app.get('/profile/edit', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const user = await User.findById(req.session.userId);
+  res.render('editProfile', { name: user.name, email: user.email });
+});
 
+// Handle the form submission
+app.post('/profile/edit', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  
+  const { name, email } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(req.session.userId, { name, email }, { new: true });
+    req.session.userEmail = user.email;
+    req.session.userName = user.name;
+    res.redirect('/profile');
+  } catch (err) {
+    console.error('Update failed:', err);
+    res.status(500).send('Error updating profile');
+  }
+});
 
 // Route for another user's profile page
 app.get('/profile/:id', async (req, res) => {
