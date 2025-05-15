@@ -547,6 +547,56 @@ app.get('/coachOffice', (req, res) => {
     // joinedDate: new Date().toDateString()
   });
 });
-
-
+//AI CHAT BOT: API call to get the AI coach's response
+app.post('/api/chat', async (req, res) => {
+  try {
+    const userMessage = req.body.message;
+    
+    if (!userMessage) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+    
+    // Get API key from environment variable
+    const apiKey = process.env.OPENAI_API_KEY;
+    
+    if (!apiKey) {
+      console.error('OpenAI API key is missing');
+      return res.status(500).json({ error: 'Server configuration error' });
+    }
+    
+    console.log('Sending message to OpenAI:', userMessage);
+    
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { 
+            role: "system", 
+            content: "You are a helpful, pun-loving cat-themed fitness coach. Keep your responses concise and fun. Always include at least one cat pun." 
+          },
+          { role: "user", content: userMessage }
+        ]
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('OpenAI API error:', response.status, errorData);
+      return res.status(500).json({ error: 'Failed to get response from AI service' });
+    }
+    
+    const data = await response.json();
+    console.log('Received response from OpenAI');
+    
+    res.json({ response: data.choices[0].message.content });
+  } catch (error) {
+    console.error('Server error in /api/chat:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
