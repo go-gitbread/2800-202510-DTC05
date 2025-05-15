@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Exercise Session</title>
@@ -10,78 +11,92 @@
   <link href="https://fonts.googleapis.com/css2?family=Winky+Rough&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/exerciseSession.css">
 </head>
+
 <body>
 
   <%- include('partials/navbar') %>
 
-  <div class="header">
-    <div class="header-item">
-      <h4>Total Duration</h4>
-      <p>00:12</p>
+    <div class="header">
+      <div class="header-item">
+        <h4>Total Duration</h4>
+        <div class="timer-controls">
+          <button id="pauseBtn">⏸️</button>
+          <p id="timer">00:00</p>
+        </div>
+      </div>
+      <div class="header-item">
+        <h4>XP Gained</h4>
+        <p id="xpGained">0</p>
+      </div>
+      <div class="header-item">
+        <h4>Rest Timer</h4>
+        <div class="rest-timer-controls">
+          <button id="rest-toggle-Btn">▶️</button>
+          <button id="rest-restart-Btn">🔄</button>
+          <p1 id="restTimer">1:00</p1>
+        </div>
+      </div>
     </div>
-    <div class="header-item">
-      <h4>XP Gained</h4>
-      <p>100</p>
+
+    <!-- Main page view for Exercise session -->
+    <h2 id="title-container" class="mb-4">
+      <%= routine.routineName %>
+        <button id="link-routine-btn" class="btn-link">
+          <img src="/images/link.png" alt="Link Routine" style="width: 24px; height: 24px;" />
+        </button>
+        <div class="modal" id="routineModal" style="display:none;">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h3>Link another routine:</h3>
+            <ul id="routineList"></ul>
+          </div>
+        </div>
+    </h2>
+    <!--Exercises are populated from user's routine here-->
+    <div id="exercise-list">
+      <% routine.exercises.forEach(exercise=> { %>
+        <div class="exercise" onclick="startExercise('<%= exercise %>')">
+          <div class="icon">🏋️‍♂️</div>
+          <div class="exercise-name">
+            <%= exercise %>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+        <% }); %>
+
+          <button class="finish-btn" id="finish-workout-btn">Finish Workout</button>
+
     </div>
-    <div class="header-item">
-      <h4>Rest Timer</h4>
-      <p>01:00</p>
+    <!-- Exercise Log view -->
+    <div id="exercise-detail" style="display: none;">
+      <h2 id="exercise-title">Exercise</h2>
+
+      <div id="sets-container">
+        <!-- Sets will be dynamically added here -->
+      </div>
+
+      <div class="buttons">
+        <button class="btn btn-add" onclick="addSet()">+ Add Set</button>
+        <button class="btn btn-finish" onclick="finishExercise()">Back to Exercises</button>
+      </div>
     </div>
-  </div>
 
-<h2 id="title-container" class="mb-4">
-  <%= routine.routineName %> 
-  <button id="link-routine-btn" class="btn-link">
-    <img src="/images/link.png" alt="Link Routine" style="width: 24px; height: 24px;" />
-  </button>
-  <div class="modal" id="routineModal" style="display:none;">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">×</span>
-      <h3>Link another routine:</h3>
-      <ul id="routineList"></ul>
-    </div>
-  </div>
-</h2>
-
-<div id="exercise-list">
-  <% routine.exercises.forEach(exercise => { %>
-    <div class="exercise" onclick="startExercise('<%= exercise %>')">
-      <div class="icon">🏋️‍♂️</div>
-      <div class="exercise-name"><%= exercise %></div>
-      <div class="arrow">›</div>
-    </div>
-  <% }); %>
-
-    <button class="finish-btn" id="finish-workout-btn">Finish Workout</button>
-
-</div>
-
-<div id="exercise-detail" style="display: none;">
-  <h2 id="exercise-title">Exercise</h2>
-  
-  <div id="sets-container">
-    <!-- Sets will be dynamically added here -->
-  </div>
-
-  <div class="buttons">
-    <button class="btn btn-add" onclick="addSet()">+ Add Set</button>
-    <button class="btn btn-finish" onclick="finishExercise()">Back to Exercises</button>
-  </div>
-</div>
-
-
-<script>
-  window.routineData = {
-    routineName: '<%= routine.routineName %>',
-    routineId: '<%= routine._id %>',
-    exercises: [
+    <!--Script to make routine variables usable in exerciseSession.js-->
+    <!-- The Red underlines are just VScode being confused about the EJS syntax. Code works as intended-->
+    <script>
+      window.routineData = {
+        routineName: '<%= routine.routineName %>',
+        routineId: '<%= routine._id %>',
+        userId: '<%= routine.userId%>',
+        exercises: [
       <% routine.exercises.forEach((exercise, index) => { %>
-        '<%= exercise %>'<%= index < routine.exercises.length - 1 ? ',' : '' %>
+          '<%= exercise %>' <%= index < routine.exercises.length - 1 ? ',' : '' %>
       <% }); %>
     ]
-  };
-</script>
-<script src="/js/exerciseSession.js"></script>
+      };
+    </script>
+    <script src="/js/exerciseSession.js"></script>
 
 </body>
+
 </html>

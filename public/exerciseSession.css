@@ -56,6 +56,11 @@
       font-weight: bold;
     }
 
+    .header-item p1 {
+      margin: 5px 0 0;
+      font-weight: bold;
+    }
+
     h2 {
       text-align: center;
       margin-bottom: 20px;
@@ -267,3 +272,45 @@
     .btn-link:hover{
             background-color: #959595;
     }
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#pauseBtn{
+  background: none;
+  border: none;
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+#timer{
+  padding-bottom: 5px;
+}
+
+#rest-toggle-Btn{
+  background: none;
+  border: none;
+  padding: 0;
+  padding-left: 2px;
+  cursor: pointer;
+}
+#restTimer{
+  padding-bottom: 5px;
+}
+
+#rest-restart-Btn{
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  padding-right: 5px
+}
+
+.rest-timer-controls {
+  display: flex;
+  align-items: center;
+}

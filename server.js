@@ -8,6 +8,7 @@ const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modul
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
 const axios = require('axios');
+const WorkoutLog = require('./models/WorkoutLog');
 
 dotenv.config();
 
@@ -374,7 +375,8 @@ app.get('/routine/:id/session', async (req, res) => {
     // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
     res.render('exerciseSession', {
       routine: routine,
-      workouts: workouts
+      workouts: workouts,
+      userId: userId
     });
   } catch (err) {
     console.error('Error loading exercise session:', err);
@@ -481,6 +483,35 @@ app.get('/routine/:id/session', async (req, res) => {
   }
 });
 
+//Route for saving workout to the database
+app.post('/api/log-workout/:routineId', async (req, res) => {
+  try {
+    const { userId, date, routines, duration, xpGained } = req.body;
+    const mainRoutineId = req.params.routineId;
 
+    // Validate required fields
+    if (!userId || !date || !routines || !duration || xpGained === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Create new workout log
+    const workoutLog = new WorkoutLog({
+      userId,
+      date: new Date(date),
+      routines, // Store routines object as-is
+      duration,
+      xpGained
+    });
+
+    // Save to database
+    await workoutLog.save();
+
+    // Send success response
+    res.status(201).json({ message: 'Workout logged successfully', workoutLog });
+  } catch (error) {
+    console.error('Error saving workout log:', error);
+    res.status(500).json({ error: 'Failed to save workout log' });
+  }
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
