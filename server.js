@@ -515,7 +515,7 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
     const workoutLog = new WorkoutLog({
       userId,
       date: new Date(date),
-      routines, // Store routines object as-is
+      routines, // Routines object holds the sets & reps from each exercise
       duration,
       xpGained
     });
@@ -547,26 +547,20 @@ app.get('/coachOffice', (req, res) => {
     // joinedDate: new Date().toDateString()
   });
 });
+
 //AI CHAT BOT: API call to get the AI coach's response
-app.post('/api/chat', async (req, res) => {
-  try {
-    const userMessage = req.body.message;
-    
-    if (!userMessage) {
-      return res.status(400).json({ error: 'Message is required' });
-    }
-    
-    // Get API key from environment variable
-    const apiKey = process.env.OPENAI_API_KEY;
-    
-    if (!apiKey) {
-      console.error('OpenAI API key is missing');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
-    
-    console.log('Sending message to OpenAI:', userMessage);
-    
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+app.post('/api/chat', async (req, res) =>{
+  const userMessage = req.body.message
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!userMessage){
+    console.log('Message is required')
+  }
+  if (!apiKey){
+    console.log("API Key not found")
+  }
+  console.log('Sending message to OpenAI:', userMessage);
+  //AI assisted API Fetch call    
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
@@ -583,20 +577,14 @@ app.post('/api/chat', async (req, res) => {
         ]
       })
     });
-    
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.error('OpenAI API error:', response.status, errorData);
       return res.status(500).json({ error: 'Failed to get response from AI service' });
     }
-    
-    const data = await response.json();
+
+    const data = await response.json() // Wait to receive a response & store it as a JSON 
     console.log('Received response from OpenAI');
-    
-    res.json({ response: data.choices[0].message.content });
-  } catch (error) {
-    console.error('Server error in /api/chat:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+    res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
+})
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
