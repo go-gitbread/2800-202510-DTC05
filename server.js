@@ -56,15 +56,19 @@ app.get('/', (req, res) => {
     "Stay pawsitive. Gains are just a stretch away.",
     "Consistency builds fur-titude.",
     "The road to swole is paved with paw prints.",
-    "No more kitten around, it's go time. ",
+    "No more kitten around, it's go time.",
     "It's never too late to pounce on your goals.",
   ];
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
-  res.render('index', {
+  res.render('dashboard', {
     quote: randomQuote,
-    username: req.session.userName
+    username: req.session.userName,
+    catName: req.session.catName,
+    catAvatar: req.session.catAvatar,
+    level: req.session.level,
+    exp: req.session.exp
   });
 });
 
