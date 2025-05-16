@@ -19,6 +19,8 @@
 
 <body>
       <%- include('partials/navbar') %>
+
+
             <div class="container mt-4">
 
                   <div class="table">
@@ -28,18 +30,39 @@
                               <thead>
                                     <tr>
                                           <th>Username</th>
-                                          <th>Profile Links</th>
+                                          <th>Level</th>
+                                          <th>Streak</th>
+                                          <th>Profile Link</th>
+                                          <th>
+
+                                                <label for="">Sort by:</label>
+
+                                                <select name="" id="">
+                                                      <option value="ascending level">ascending level</option>
+                                                      <option value="descending level">descending level</option>
+                                                      <option value="ascending streak">ascending streak</option>
+                                                      <option value="descending streak">descending streak</option>
+                                                </select>
+
+                                          </th>
                                     </tr>
                               </thead>
                               <tbody>
                                     <% usersList.forEach(user=> { %>
                                           <tr>
                                                 <td>
-                                                      <%= user.email %>
+                                                      <%= user.name %>
+                                                </td>
+
+                                                <td>
+                                                      <%= user.level %>
                                                 </td>
                                                 <td>
-                                                      <a type="/profile/<%= user._id %>" class="profile_btn"> View
-                                                            Profile</a>
+                                                      <%= user.streak %>
+                                                </td>
+                                                <td>
+                                                      <a href="/profile/<%= user._id %>" class="profile_btn"> View
+                                                            User's Profile</a>
 
                                                 </td>
                                           </tr>
@@ -49,20 +72,6 @@
                         </table>
                   </div>
             </div>
-
-
-
-
-            <!-- pagination template and button templates for now... -->
-            <!-- <div class="container mt-4">
-                  <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                  </ul>
-            </div> -->
 
 
 
@@ -82,6 +91,8 @@
                                           <% } %>
                   </ul>
             </div>
+
+
 </body>
 
 </html>

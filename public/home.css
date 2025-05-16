@@ -43,7 +43,7 @@ body {
     justify-content: center;
     color: #666;
 }
-
+/* table.level-system is the level UI with your level, xp, multiplier, and xp bar */
 table.level-system {
     width: 100%;
     position: fixed;
@@ -51,43 +51,59 @@ table.level-system {
     background-color: #ccc;
     font-size: 14px;
 }
-
+/* level-display is the cell that displays level */
 #level-display {
     border: #666 1px solid;
     padding: 5px;
+    background-color: #cad5e1;
+    text-align: center;
+    width: 50%;
 }
-
+/* level-xp is the cell that displays xp amount */
 #level-xp {
     border: #666 1px solid;
-    width: 40%;
+    width: 50%;
     padding: 5px;
+    background-color: #cad5e1;
+    text-align: center;
 }
-
-#level-multiplier {
+/* level-multiplier is the cell that displays xp multiplier (removed xp multiplier cell)*/
+/* #level-multiplier {
     border: #666 1px solid;
     padding: 5px;
-}
-
+    background-color: #cad5e1;
+    text-align: center;
+} */
+/* level-bar is the cell that displays xp bar */
 #level-bar {
     border: #666 1px solid;
     padding: 5px;
     font-size: medium;
+    background-color: #111;
+    color: white;
 }
 
+/* level-bar-container is the empty xp bar that holds xp progress */
 #level-bar-container {
     display: inline-block;
     margin-left: 10px;
     margin-bottom: 3px;
     width: 85%;
     height: 20px;
-    border: 1px solid black;
+    border: 2px solid white;
     vertical-align: middle;
+    border-radius: 20px;
+    background-color: #333;
 }
-
+/* level-bar-fill is the xp progess inside the empty xp bar */
 #level-bar-fill {
-    background-color: black;
+    /* background-color: green; */
+    /* background-image: linear-gradient(to right, green, rgb(0, 255, 0)); */
+    background-color: #303c58;
+    background-image: linear-gradient(to right, #303c58, #cad5e1);
     width: 0%;
-    height: 20px;
+    height: 18px;
+    border-radius: 20px;
 }
 
 .bottom-nav {

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="/profile.css">
+  <link rel="stylesheet" href="/navbar.css">
+  <link rel="stylesheet" href="/weather.css">
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background-color: #CAD5E1; font-family: 'Winky Rough', sans-serif;">
+  <%- include('partials/navbar') %>
+
+  <div class="profile-card">
+    <h2 class="section-title">Edit Profile</h2>
+
+    <form method="POST" action="/profile/edit">
+      <div class="form-group text-left">
+        <label for="name"><strong>Name</strong></label>
+        <input class="form-control" type="text" id="name" name="name" value="<%= name %>" required>
+      </div>
+
+      <div class="form-group text-left mt-3">
+        <label for="email"><strong>Email</strong></label>
+        <input class="form-control" type="email" id="email" name="email" value="<%= email %>" required>
+      </div>
+
+      <div class="button-row mt-4">
+        <button type="submit" class="btn settings-btn">Save</button>
+        <a href="#" class="btn logout-btn" onclick="confirmCancel(event)">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function confirmCancel(event) {
+      event.preventDefault();
+      if (confirm("Are you sure you want to cancel your changes?")) {
+        window.location.href = "/profile";
+      }
+    }
+  </script>
+  
+</body>
+</html>

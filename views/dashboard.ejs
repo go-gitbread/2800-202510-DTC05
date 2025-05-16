@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/dashboard.css"/>
+  <link rel="stylesheet" href="/navbar.css"/>
+  <link rel="stylesheet" href="/weather.css"/>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet"/>
+</head>
+
+<body class="container">
+  <%- include('partials/navbar') %>
+
+  <div class="welcome-banner">
+    <h2>Welcome back, <%= username %>!</h2>
+  </div>
+
+  <div class="header-top">
+    <div class="avatar-container">
+      <div class="cat-avatar">
+        <img src="<%= catAvatar %>" alt="Cat Avatar" />
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    <p><%= quote %></p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="row">
+      <div class="stat-card">
+        <span class="stat-icon">🐾</span>
+        8,550<br><small>Steps</small>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📍</span>
+        4.2 km<br><small>Distance</small>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🔥</span>
+        510<br><small>Calories</small>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📆</span>
+        7<br><small>Streak</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <a href="/routines" class="quick-btn">🏋️ Workout</a>
+    <a href="/coachOffice" class="quick-btn">📊 Swole Stats</a>
+  </div>
+
+  <table class="level-system">
+    <tr>
+      <th id="level-display">Level <%= level %></th>
+      <th id="level-xp">XP: <%= exp %>/1000</th>
+    </tr>
+    <tr>
+      <th id="level-bar" colspan="2">
+        <div id="level-bar-container">
+          <div id="level-bar-fill" style="width: <%= Math.min(100, (exp / 1000) * 100) %>%"></div>
+        </div>
+      </th>
+    </tr>
+  </table>
+</body>
+</html>

@@ -8,6 +8,7 @@ const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modul
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
 const axios = require('axios');
+const WorkoutLog = require('./models/WorkoutLog');
 
 dotenv.config();
 
@@ -38,10 +39,58 @@ app.use((req, res, next) => {
 // Mount the exercise session routes at /exerciseSession
 app.use('/exerciseSession', exerciseSessionRoutes);
 
-// Route: Dashboard (index)
+// Route: Dashboard
 // If user is logged in, display dashboard with a random motivational quote
 // Otherwise, redirect to login page
+// Root route: Redirect to dashboard or login
 app.get('/', (req, res) => {
+  if (req.session.userId) {
+    return res.redirect('/dashboard');
+  } else {
+    return res.redirect('/login');
+  }
+});
+
+
+//register.ejs
+app.get('/register', (req, res) => res.render('register'));
+app.post('/register', async (req, res) => {
+  const { name, catName, email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  const user = new User({ name, catName, email, password: hashed });
+  await user.save();
+  res.redirect('/login');
+});
+
+//login.ejs
+app.get('/login', (req, res) => res.render('login', { error: null }));
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.render('login', {
+      error: `😿 No account found with that email. Purrhaps try <a href="/register" class="alert-link">signing up</a>?`
+    });
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.render('login', { error: '🙀 Hiss! That password doesn\'t match our records. Try again.' });
+  }
+
+  req.session.userId = user._id;
+  req.session.userEmail = user.email;
+  req.session.userName = user.name;
+  req.session.catName = user.catName;
+  req.session.level = user.level;
+  req.session.exp = user.exp;
+  req.session.catAvatar = user.catAvatar;
+  res.redirect('/dashboard');
+});
+
+app.get('/dashboard', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   const quotes = [
@@ -55,37 +104,20 @@ app.get('/', (req, res) => {
     "Stay pawsitive. Gains are just a stretch away.",
     "Consistency builds fur-titude.",
     "The road to swole is paved with paw prints.",
-    "No more kitten around, it's go time. ",
+    "No more kitten around, it's go time.",
     "It's never too late to pounce on your goals.",
   ];
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
-  res.render('index', { quote: randomQuote });
-});
-
-//register.ejs
-app.get('/register', (req, res) => res.render('register'));
-app.post('/register', async (req, res) => {
-  const { email, password } = req.body;
-  const hashed = await bcrypt.hash(password, 10);
-  const user = new User({ email, password: hashed });
-  await user.save();
-  res.redirect('/login');
-});
-
-//login.ejs
-app.get('/login', (req, res) => res.render('login'));
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user && await bcrypt.compare(password, user.password)) {
-    req.session.userId = user._id;
-    req.session.userEmail = user.email;
-    res.redirect('/');
-  } else {
-    res.send('Login failed');
-  }
+  res.render('dashboard', {
+    quote: randomQuote,
+    username: req.session.userName,
+    catName: req.session.catName,
+    catAvatar: req.session.catAvatar,
+    level: req.session.level,
+    exp: req.session.exp
+  });
 });
 
 
@@ -93,14 +125,6 @@ app.post('/login', async (req, res) => {
 app.get('/weather', (req, res) => res.render('weather.ejs'));
 
 
-// home.ejs
-app.get('/home', (req, res) => res.render('home.ejs'));
-
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
-  });
-});
 // //Route to go to the Routines page
 // app.get('/routines', (req, res) => res.render('routines'));
 //Route to go to the Create New Routine page
@@ -111,7 +135,7 @@ app.get('/newRoutine', (req, res) => {
 //Route to go to the Exercise Selection page
 app.get('/selectExercise', (req, res) => { res.render('selectExercise', { exercises }) }); // Second argument loads the exercises array so the page can access it
 //Route for the back button
-app.get('/back', (req, res) => res.redirect('home'));
+app.get('/back', (req, res) => res.redirect('dashboard'));
 
 //Route to Add an Exercise to a new routine
 app.get('/addExercise', (req, res) => {
@@ -187,35 +211,70 @@ app.get('/profile', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   res.render('profile', {
-    username: req.session.userEmail.split('@')[0],
+    isOwnProfile: true,
+    username: req.session.userName,
     email: req.session.userEmail,
-    joinedDate: new Date().toDateString()
-  });
+    showToast: req.query.updated === '1'
+  });  
 });
 
-// use async to get the email
-// app.get('/leaderboard', async (req, res) => {
-//   const data = await User.find().select('email');
-//   res.render('leaderboard', { usersList: data });
-// try {
-//   const data = await User.find().select('email');
-//   res.render('leaderboard', { usersList: data });
-// } catch (err) {
-//   console.error(err);
-//   res.status(500).send("Error retrieving users");
-// }
-// });
+// Show the edit settings form in profile page
+app.get('/profile/edit', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const user = await User.findById(req.session.userId);
+  res.render('editProfile', { name: user.name, email: user.email });
+});
 
+// Handle the form submission
+app.post('/profile/edit', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+
+  const { name, email } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(req.session.userId, { name, email }, { new: true });
+    req.session.userEmail = user.email;
+    req.session.userName = user.name;
+    res.redirect('/profile?updated=1');
+  } catch (err) {
+    console.error('Update failed:', err);
+    res.status(500).send('Error updating profile');
+  }
+});
+
+// Route for another user's profile page
+app.get('/profile/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.render('profile', {
+      isOwnProfile: false,
+      username: user.name,
+      email: user.email,
+      // joinedDate: user.createdAt.toDateString()
+    });
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1
-  const limit = 5; // 5 users per page
+  const limit = 8; // 8 users per page
 
   try {
     const totalUsers = await User.countDocuments();
     const usersList = await User.find()
-      .select('email')
+      .select('name')
+      .select('level')
+      .select('streak')
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -322,18 +381,227 @@ app.get('/api/weather', async (req, res) => {
 
 
 
-// app.get('/ip', (request, response) => {
-//   const ip =
-//     request.headers['x-real-ip'] ||
-//     request.headers['x-forwarded-for'] ||
-//     request.socket.remoteAddress || '';
+//Route linking routine to session page after clicking a routine
+app.get('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+  const userId = req.session.userId; //Grab the userID from the session
+  try {
+    // Find the specific routine by ID and ensure it belongs to the current user
+    const routine = await Routine.findOne({ _id: routineId, userId: userId });
+    if (!routine) {
+      return res.status(404).send('Routine not found');
+    }
+    const workouts = []; //Initialize workouts as an empty array
+    // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
+    res.render('exerciseSession', {
+      routine: routine,
+      workouts: workouts,
+      userId: userId
+    });
+  } catch (err) {
+    console.error('Error loading exercise session:', err);
+    res.status(500).send('Error fetching routine details');
+  }
+});
 
-//   ipArray = ip.split(",")
-//   ipFirst = ipArray[0]
 
-//   return response.json({
-//     ipFirst
-//   })
-// });
 
+const workoutLogs = {}; // e.g., { routineId1: [workout1, workout2], routineId2: [...] }
+
+//Route for logging an exercise (Submitting the form)
+app.post('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+  const userId = req.session.userId;//Grab the userID from the session
+  const { exercise, sets, reps, duration } = req.body; //Grab the workout details from the form submission
+
+
+  try {
+    // Find the specific routine by ID and ensure it belongs to the current user 
+    const routine = await Routine.findOne({ _id: routineId, userId });
+    if (!routine) {
+      return res.status(404).send('Routine not found');
+    }
+    // Create a new workout entry using the form data
+    const newWorkout = {
+      exercise,
+      sets,
+      reps,
+      duration
+    };
+    // If no workouts have been logged yet, initialize an empty array
+    if (!workoutLogs[routineId]) {
+      workoutLogs[routineId] = [];
+    }
+    //Add the new workout entry to the workout log 
+    workoutLogs[routineId].push(newWorkout);
+
+    // Re-render the session page with updated workout log
+    res.render('exerciseSession', {
+      routine: routine,
+      workouts: workoutLogs[routineId] || []
+    });
+  } catch (err) {
+    console.error('Error saving workout:', err);
+    res.status(500).send('Error saving workout');
+  }
+});
+
+//Ai assisted routes for linking routines together in a single session
+// Route for fetching a routine to add in the exercise session page
+app.get('/api/routine/:id', async (req, res) => {
+  console.log('Fetching routine with ID:', req.params.id);
+  const routine = await Routine.findById(req.params.id);
+  if (!routine) return res.status(404).json({ error: 'Not found' });
+  res.json(routine);
+});
+//Route for fetching all routines associated with the user to select
+app.get('/api/routines', async (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) {
+    return res.status(401).json({ error: 'User not logged in' });
+  }
+  try {
+    const routines = await Routine.find({ userId });
+    res.json(routines);
+  } catch (err) {
+    console.error('Error fetching routines:', err);
+    res.status(500).json({ error: 'Error fetching routines' });
+  }
+});
+//Route for retrieving the exercises from the selected routine
+app.post('/api/add-exercises/:id', async (req, res) => {
+  const { exercises } = req.body;
+  const routineId = req.params.id;
+  if (!req.session.tempExercises) req.session.tempExercises = {};
+  if (!req.session.tempExercises[routineId]) req.session.tempExercises[routineId] = [];
+  req.session.tempExercises[routineId] = [...new Set([...req.session.tempExercises[routineId], ...exercises])];
+  res.status(200).json({ message: 'Exercises added to session' });
+});
+//Route for merging the exercises from a selected routine into the current routine
+app.get('/routine/:id/session', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+  const userId = req.session.userId; //Grab the userID from the session
+  try {
+    const routine = await Routine.findOne({ _id: routineId, userId });
+    // Find the specific routine by ID and ensure it belongs to the current user
+    if (!routine) return res.status(404).send('Routine not found');
+    const workouts = workoutLogs[routineId] || []; //Initialize workouts as an empty array if none are logged yet
+    const tempExercises = (req.session.tempExercises && req.session.tempExercises[routineId]) || [];
+    const allExercises = [...new Set([...routine.exercises, ...tempExercises])]; // Merge all exercises and deduplicate
+    res.render('exerciseSession', {
+      routine: { ...routine.toObject(), exercises: allExercises },
+      workouts
+    });
+  } catch (err) {
+    console.error('Error loading exercise session:', err);
+    res.status(500).send('Error fetching routine details');
+  }
+});
+
+//Route for saving workout to the database
+app.post('/api/log-workout/:routineId', async (req, res) => {
+  try {
+    const { userId, date, routines, duration, xpGained } = req.body;
+    const mainRoutineId = req.params.routineId;
+
+    // Validate required fields
+    if (!userId || !date || !routines || !duration || xpGained === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Create new workout log
+    const workoutLog = new WorkoutLog({
+      userId,
+      date: new Date(date),
+      routines, // Routines object holds the sets & reps from each exercise
+      duration,
+      xpGained
+    });
+
+    // Save to database
+    await workoutLog.save();
+
+    // Send success response
+    res.status(201).json({ message: 'Workout logged successfully', workoutLog });
+  } catch (error) {
+    console.error('Error saving workout log:', error);
+    res.status(500).json({ error: 'Failed to save workout log' });
+  }
+});
+
+
+
+//Route for coach Office page
+app.get('/coachOffice', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  console.log('catName from session:', req.session.catName); // Debug line
+
+  res.render('coachOffice', {
+    username: req.session.userName,
+    catName: req.session.catName,
+    level: req.session.level,
+    email: req.session.userEmail,
+    catAvatar: req.session.catAvatar
+    // joinedDate: new Date().toDateString()
+  });
+});
+
+//Log out
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).send('Failed to log out');
+    }
+    res.redirect('/login');
+  });
+});
+
+//AI CHAT BOT: API call to get the AI coach's response
+app.post('/api/chat', async (req, res) =>{
+  const userMessage = req.body.message
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!userMessage){
+    console.log('Message is required')
+  }
+  if (!apiKey){
+    console.log("API Key not found")
+  }
+  console.log('Sending message to OpenAI:', userMessage);
+  //AI assisted API Fetch call    
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { 
+            role: "system", 
+            content: "You are Whiskers, a smart, sassy, and pun-loving cat-themed fitness coach inside a gamified fitness app called SwoleCat. Your goal is to help users build healthy habits and get stronger, one paw at a time. You give real fitness tips, advice, and beginner-friendly workout routines when asked—whether it’s about cardio, strength training, stretching, nutrition, or staying consistent. You also offer motivation and cat puns to keep things light and fun. Keep your answers practical and specific. Be concise, but include clear recommendations, lists, or routines when appropriate. Always sneak in at least one clever cat pun or feline-themed encouragement." 
+          },
+          { role: "user", content: userMessage }
+        ]
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('OpenAI API error:', response.status, errorData);
+      return res.status(500).json({ error: 'Failed to get response from AI service' });
+    }
+
+    const data = await response.json() // Wait to receive a response & store it as a JSON 
+    console.log('Received response from OpenAI');
+    res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
+})
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
