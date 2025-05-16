@@ -39,38 +39,18 @@ app.use((req, res, next) => {
 // Mount the exercise session routes at /exerciseSession
 app.use('/exerciseSession', exerciseSessionRoutes);
 
-// Route: Dashboard (index)
+// Route: Dashboard
 // If user is logged in, display dashboard with a random motivational quote
 // Otherwise, redirect to login page
+// Root route: Redirect to dashboard or login
 app.get('/', (req, res) => {
-  if (!req.session.userId) return res.redirect('/login');
-
-  const quotes = [
-    "Unleash your inner beast. There's a lion inside every cat.",
-    "Don't stop until you're feline fine.",
-    "You're making good pawgress. Keep it up!",
-    "Fuel your purrformance with a little tuna.",
-    "What are you waiting for? The time is meow.",
-    "One smol step for cat, one swole leap for catkind.",
-    "It's a purrfect day to be swole.",
-    "Stay pawsitive. Gains are just a stretch away.",
-    "Consistency builds fur-titude.",
-    "The road to swole is paved with paw prints.",
-    "No more kitten around, it's go time.",
-    "It's never too late to pounce on your goals.",
-  ];
-
-  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-
-  res.render('dashboard', {
-    quote: randomQuote,
-    username: req.session.userName,
-    catName: req.session.catName,
-    catAvatar: req.session.catAvatar,
-    level: req.session.level,
-    exp: req.session.exp
-  });
+  if (req.session.userId) {
+    return res.redirect('/dashboard');
+  } else {
+    return res.redirect('/login');
+  }
 });
+
 
 //register.ejs
 app.get('/register', (req, res) => res.render('register'));
@@ -107,7 +87,37 @@ app.post('/login', async (req, res) => {
   req.session.level = user.level;
   req.session.exp = user.exp;
   req.session.catAvatar = user.catAvatar;
-  res.redirect('/');
+  res.redirect('/dashboard');
+});
+
+app.get('/dashboard', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+
+  const quotes = [
+    "Unleash your inner beast. There's a lion inside every cat.",
+    "Don't stop until you're feline fine.",
+    "You're making good pawgress. Keep it up!",
+    "Fuel your purrformance with a little tuna.",
+    "What are you waiting for? The time is meow.",
+    "One smol step for cat, one swole leap for catkind.",
+    "It's a purrfect day to be swole.",
+    "Stay pawsitive. Gains are just a stretch away.",
+    "Consistency builds fur-titude.",
+    "The road to swole is paved with paw prints.",
+    "No more kitten around, it's go time.",
+    "It's never too late to pounce on your goals.",
+  ];
+
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  res.render('dashboard', {
+    quote: randomQuote,
+    username: req.session.userName,
+    catName: req.session.catName,
+    catAvatar: req.session.catAvatar,
+    level: req.session.level,
+    exp: req.session.exp
+  });
 });
 
 
@@ -115,14 +125,6 @@ app.post('/login', async (req, res) => {
 app.get('/weather', (req, res) => res.render('weather.ejs'));
 
 
-// home.ejs
-app.get('/home', (req, res) => res.render('home.ejs'));
-
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
-  });
-});
 // //Route to go to the Routines page
 // app.get('/routines', (req, res) => res.render('routines'));
 //Route to go to the Create New Routine page
@@ -133,7 +135,7 @@ app.get('/newRoutine', (req, res) => {
 //Route to go to the Exercise Selection page
 app.get('/selectExercise', (req, res) => { res.render('selectExercise', { exercises }) }); // Second argument loads the exercises array so the page can access it
 //Route for the back button
-app.get('/back', (req, res) => res.redirect('home'));
+app.get('/back', (req, res) => res.redirect('dashboard'));
 
 //Route to Add an Exercise to a new routine
 app.get('/addExercise', (req, res) => {
@@ -551,6 +553,18 @@ app.get('/coachOffice', (req, res) => {
     // joinedDate: new Date().toDateString()
   });
 });
+
+//Log out
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).send('Failed to log out');
+    }
+    res.redirect('/login');
+  });
+});
+
 
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
