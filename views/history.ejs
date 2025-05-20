@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,74 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
     <!-- <link rel="stylesheet" href="/coachOffice.css"> -->
+    <style>
+        .body {
+            background-color: #CAD5E1;
+        }
+        .container {
+            max-width: 720px;
+        }
+    </style>
 </head>
 
 <body class="body">
-    History Please
+    <div class="container">
+        <%- include('partials/navbar') %>
+
+            <div class="container my-5">
+                <h1 class="text-center mb-5">Workout History</h1>
+
+                <!-- Workout Card -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <!--Workout Card Header-->
+                        <div class="d-flex justify-content-between">
+                            <span><i class="far fa-calendar-alt mr-2"></i>Thu, May 16, 2025</span>
+                            <span>
+                                <i class="far fa-clock mr-1"></i> 1h 15m |
+                                <i class="fas fa-award ml-3 mr-1"></i> 250 XP
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--Routine Name-->
+                        <h5 class="mb-3"><i class="fas fa-dumbbell mr-2"></i>Upper Body</h5>
+                        <!--Workout Details table-->
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Sets</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Bench Press</strong></td>
+                                    <td>3</td>
+                                    <td>
+                                        <span class="badge badge-secondary mr-1">10 reps × 135 lbs</span>
+                                        <span class="badge badge-secondary mr-1">8 reps × 145 lbs</span>
+                                        <span class="badge badge-secondary">6 reps × 155 lbs</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bicep Curls</strong></td>
+                                    <td>2</td>
+                                    <td>
+                                        <span class="badge badge-secondary mr-1">12 reps × 25 lbs</span>
+                                        <span class="badge badge-secondary">10 reps × 30 lbs</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
 </body>
 
-</body>
 </html>
