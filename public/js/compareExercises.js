@@ -1,4 +1,4 @@
-export const exercises = [
+const exercises = [
   {
     name: "Pushups",
     category: "Strength",
@@ -270,4 +270,5 @@ export const exercises = [
     equipmentRequired: false
   },
 ];
-  
+
+window.exercises = exercises;

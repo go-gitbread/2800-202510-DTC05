@@ -135,17 +135,28 @@ function refreshSetsDisplay() {
         addSetToDisplay(1, '', '');
     }
 }
-//Function to display a new set on the page
-function addSetToDisplay(setNumber, repsValue = '0', weightValue = '0') { //***We can replace these values with Target values
-    const setsContainer = document.getElementById('sets-container');
 
+//Function to display a new set on the page
+function addSetToDisplay(setNumber, repsValue = '', weightValue = '') {
+    const setsContainer = document.getElementById('sets-container');
+    const exercise = exercises.find(ex => ex.name === currentExercise);
+    const isCardio = exercise.category === 'Cardio';
     const newSet = document.createElement('div');
     newSet.className = 'set-entry';
-    newSet.innerHTML = `
-      <div>Set ${setNumber}</div>
-      <div><input type="number" class="rep-input" value="${repsValue}" placeholder="0"  min="0" step="1"> reps</div>
-      <div><input type="number" class="weight-input" value="${weightValue}" placeholder="0"  min="0" step="1"> lbs</div>
-    `;
+
+    if (isCardio) {
+        newSet.innerHTML = `
+          <div>Cardio Set ${setNumber}</div>
+          <div><input type="number" class="duration-input" placeholder="Duration (min)" min="0"> min</div>
+          <div><input type="number" class="distance-input" placeholder="Distance (km)" min="0" step="0.1"> km</div>
+        `;
+    } else {
+        newSet.innerHTML = `
+          <div>Set ${setNumber}</div>
+          <div><input type="number" class="rep-input" value="${repsValue}" placeholder="Reps" min="0" step="1"> reps</div>
+          <div><input type="number" class="weight-input" value="${weightValue}" placeholder="Weight" min="0" step="1"> lbs</div>
+        `;
+    }
 
     setsContainer.appendChild(newSet);
 
