@@ -59,12 +59,12 @@
   <table class="level-system">
     <tr>
       <th id="level-display">Level <%= level %></th>
-      <th id="level-xp">XP: <%= exp %>/1000</th>
+      <th id="level-xp">XP: <%= exp %> / <%= xpForNextLevel %></th>
     </tr>
     <tr>
       <th id="level-bar" colspan="2">
         <div id="level-bar-container">
-          <div id="level-bar-fill" style="width: <%= Math.min(100, (exp / 1000) * 100) %>%"></div>
+        <div id="level-bar-fill" style="width: <%= progressPercent %>%;"></div>
         </div>
       </th>
     </tr>

@@ -87,12 +87,12 @@ app.post('/login', async (req, res) => {
   req.session.level = user.level;
   req.session.exp = user.exp;
   req.session.catAvatar = user.catAvatar;
-  calculateTotalUserXP(req.session.userId)
+  
   res.redirect('/dashboard');
 
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   const quotes = [
@@ -112,13 +112,24 @@ app.get('/dashboard', (req, res) => {
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
+  // Wait for XP and level to be calculated
+  const { totalXP, userLevel, xpProgress } = await calculateTotalUserXP(req.session.userId);
+
+
+  req.session.level = userLevel;
+  req.session.exp = totalXP;
+
   res.render('dashboard', {
     quote: randomQuote,
     username: req.session.userName,
     catName: req.session.catName,
     catAvatar: req.session.catAvatar,
-    level: req.session.level,
-    exp: req.session.exp
+    level: userLevel,
+    exp: totalXP,
+    progressPercent: xpProgress.progressPercent,
+    xpToNextLevel: xpProgress.xpToNextLevel,
+    xpForCurrentLevel: xpProgress.xpForCurrentLevel,
+    xpForNextLevel: xpProgress.xpForNextLevel
   });
 });
 
@@ -650,7 +661,11 @@ async function calculateTotalUserXP(userId) {
   console.log("Progress this level:", xpProgress.progressPercent + "%");
   console.log("total Xp required to reach current level", xpProgress.xpForCurrentLevel)
   console.log("Total Xp needed for Next level", xpProgress.xpForNextLevel)
-  return totalXP
+return {
+  totalXP,
+  userLevel,
+  xpProgress
+};
 }
 
 //Calculate User Level
