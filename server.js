@@ -87,7 +87,9 @@ app.post('/login', async (req, res) => {
   req.session.level = user.level;
   req.session.exp = user.exp;
   req.session.catAvatar = user.catAvatar;
+  calculateTotalUserXP(req.session.userId)
   res.redirect('/dashboard');
+
 });
 
 app.get('/dashboard', (req, res) => {
@@ -612,8 +614,8 @@ app.get('/history', async (req, res) => {
   if (!req.session.userId) {
     return res.redirect('/login');
   }
-  totalExp = await calculateTotalUserXP(req.session.userId)
-  console.log(totalExp)
+
+
   // Retrieve user's workout history data from DB 
   const workouts = await WorkoutLog.find({ userId: req.session.userId }) //Find all workout logs tied to userID
     .sort({ date: -1 }) // Sort by date (newest first)
@@ -632,9 +634,32 @@ async function calculateTotalUserXP(userId){
   console.log("bonjour")
     const workoutLogs = await WorkoutLog.find({ userId });
     const totalXP = workoutLogs.reduce((sum, log) => sum + (log.xpGained || 0), 0);
+    const userLevel = await calculateUserLevel(totalXP)
     console.log(`You're total xp: ${totalXP}`);
+    console.log("user level",userLevel)
+    //Update the user's XP & Level in the database  
+    await User.findByIdAndUpdate(userId, {
+      exp: totalXP,
+      level: userLevel
+    });
+    console.log("Database Updated: XP = ",totalXP)
+    console.log("Database Updated: Level = ",userLevel)
     return totalXP
 }
 
+//Calculate User Level
+async function calculateUserLevel(totalXP){
+  let level = 1;
+  let xpSum = 0;
+  while (totalXP >= xpSum + getXPForLevel(level)) {
+    xpSum += getXPForLevel(level);
+    level++;
+  }
+  return level;
+}
 
+// Calculate XP required for a given level (Small Exponential)
+function getXPForLevel(level) {
+  return Math.round(1000 * Math.pow(1.25, level - 1));
+}
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
