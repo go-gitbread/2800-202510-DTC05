@@ -215,7 +215,7 @@ app.get('/profile', (req, res) => {
     username: req.session.userName,
     email: req.session.userEmail,
     showToast: req.query.updated === '1'
-  });  
+  });
 });
 
 // Show the edit settings form in profile page
@@ -566,42 +566,63 @@ app.get('/logout', (req, res) => {
 });
 
 //AI CHAT BOT: API call to get the AI coach's response
-app.post('/api/chat', async (req, res) =>{
+app.post('/api/chat', async (req, res) => {
   const userMessage = req.body.message
   const apiKey = process.env.OPENAI_API_KEY
-  if (!userMessage){
+  if (!userMessage) {
     console.log('Message is required')
   }
-  if (!apiKey){
+  if (!apiKey) {
     console.log("API Key not found")
   }
   console.log('Sending message to OpenAI:', userMessage);
   //AI assisted API Fetch call    
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { 
-            role: "system", 
-            content: "You are Whiskers, a smart, sassy, and pun-loving cat-themed fitness coach inside a gamified fitness app called SwoleCat. Your goal is to help users build healthy habits and get stronger, one paw at a time. You give real fitness tips, advice, and beginner-friendly workout routines when asked—whether it’s about cardio, strength training, stretching, nutrition, or staying consistent. You also offer motivation and cat puns to keep things light and fun. Keep your answers practical and specific. Be concise, but include clear recommendations, lists, or routines when appropriate. Always sneak in at least one clever cat pun or feline-themed encouragement." 
-          },
-          { role: "user", content: userMessage }
-        ]
-      })
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('OpenAI API error:', response.status, errorData);
-      return res.status(500).json({ error: 'Failed to get response from AI service' });
-    }
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are Whiskers, a smart, sassy, and pun-loving cat-themed fitness coach inside a gamified fitness app called SwoleCat. Your goal is to help users build healthy habits and get stronger, one paw at a time. You give real fitness tips, advice, and beginner-friendly workout routines when asked—whether it’s about cardio, strength training, stretching, nutrition, or staying consistent. You also offer motivation and cat puns to keep things light and fun. Keep your answers practical and specific. Be concise, but include clear recommendations, lists, or routines when appropriate. Always sneak in at least one clever cat pun or feline-themed encouragement."
+        },
+        { role: "user", content: userMessage }
+      ]
+    })
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    console.error('OpenAI API error:', response.status, errorData);
+    return res.status(500).json({ error: 'Failed to get response from AI service' });
+  }
 
-    const data = await response.json() // Wait to receive a response & store it as a JSON 
-    console.log('Received response from OpenAI');
-    res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
+  const data = await response.json() // Wait to receive a response & store it as a JSON 
+  console.log('Received response from OpenAI');
+  res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
 })
+
+//Workout history page route
+app.get('/history', async (req, res) => {
+
+  // Check if user is logged in
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  // Retrieve user's workout history data from DB 
+  const workouts = await WorkoutLog.find({ userId: req.session.userId }) //Find all workout logs tied to userID
+    .sort({ date: -1 }) // Sort by date (newest first)
+    .lean(); // Convert Mongoose documents to plain JavaScript objects (Strips away unnecessary fields)
+            // Use lean if you want to only read from the db 
+
+  // Render the history page with the workout data
+  res.render('history', {
+    userId: req.session.userId,
+    workouts: workouts
+  });
+});
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

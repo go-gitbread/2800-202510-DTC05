@@ -316,7 +316,7 @@ console.log('currentUserId:', currentUserId);
         alert('Workout saved successfully!');
         
         // Redirect to workout history or home page
-        window.location.href = '/home';
+        window.location.href = '/history';
     } catch (err) {
         console.error('Error saving workout:', err);
         alert('Failed to save workout. Please try again.');
