@@ -620,7 +620,7 @@ app.get('/history', async (req, res) => {
   const workouts = await WorkoutLog.find({ userId: req.session.userId }) //Find all workout logs tied to userID
     .sort({ date: -1 }) // Sort by date (newest first)
     .lean(); // Convert Mongoose documents to plain JavaScript objects (Strips away unnecessary fields)
-            // Use lean if you want to only read from the db 
+  // Use lean if you want to only read from the db 
 
   // Render the history page with the workout data
   res.render('history', {
@@ -630,25 +630,31 @@ app.get('/history', async (req, res) => {
 });
 
 //Calculate user's total XP
-async function calculateTotalUserXP(userId){
+async function calculateTotalUserXP(userId) {
   console.log("bonjour")
-    const workoutLogs = await WorkoutLog.find({ userId });
-    const totalXP = workoutLogs.reduce((sum, log) => sum + (log.xpGained || 0), 0);
-    const userLevel = await calculateUserLevel(totalXP)
-    console.log(`You're total xp: ${totalXP}`);
-    console.log("user level",userLevel)
-    //Update the user's XP & Level in the database  
-    await User.findByIdAndUpdate(userId, {
-      exp: totalXP,
-      level: userLevel
-    });
-    console.log("Database Updated: XP = ",totalXP)
-    console.log("Database Updated: Level = ",userLevel)
-    return totalXP
+  const workoutLogs = await WorkoutLog.find({ userId });
+  const totalXP = workoutLogs.reduce((sum, log) => sum + (log.xpGained || 0), 0);
+  const userLevel = await calculateUserLevel(totalXP)
+  console.log(`You're total xp: ${totalXP}`);
+  console.log("user level", userLevel)
+  //Update the user's XP & Level in the database  
+  await User.findByIdAndUpdate(userId, {
+    exp: totalXP,
+    level: userLevel
+  });
+  console.log("Database Updated: XP = ", totalXP)
+  console.log("Database Updated: Level = ", userLevel)
+  const xpProgress = getXPProgress(totalXP, userLevel);
+  console.log("Level:", xpProgress.level);
+  console.log("XP Remaining until next level:", xpProgress.xpToNextLevel);
+  console.log("Progress this level:", xpProgress.progressPercent + "%");
+  console.log("total Xp required to reach current level", xpProgress.xpForCurrentLevel)
+  console.log("Total Xp needed for Next level", xpProgress.xpForNextLevel)
+  return totalXP
 }
 
 //Calculate User Level
-async function calculateUserLevel(totalXP){
+async function calculateUserLevel(totalXP) {
   let level = 1;
   let xpSum = 0;
   while (totalXP >= xpSum + getXPForLevel(level)) {
@@ -662,6 +668,33 @@ async function calculateUserLevel(totalXP){
 function getXPForLevel(level) {
   return Math.round(1000 * Math.pow(1.25, level - 1));
 }
+
+//Function to determine XP progress for front end UI visualization
+function getXPProgress(totalXP, level) {
+  let xpSum = 0;
+
+//Calculate the total XP required to reach the start of the user's current level
+for (let previousLevel = 1; previousLevel < level; previousLevel++) {
+  xpSum += getXPForLevel(previousLevel);
+}
+
+  const xpForCurrentLevel = xpSum; // Total XP required to reach the the current level
+  const xpForNextLevel = xpSum + getXPForLevel(level); //Total xp required to reach the next level
+  const xpIntoLevel = totalXP - xpForCurrentLevel; // How much XP the user has earned within their current level
+  const xpToNextLevel = xpForNextLevel - totalXP; // How much XP the user needs to gain until next level 
+  const progressPercent = Math.floor((xpIntoLevel / (xpForNextLevel - xpForCurrentLevel)) * 100); // Percentage of progress made through the current level
+
+  return {
+    level,
+    xpForCurrentLevel, // Total XP required to reach the the current level
+    xpForNextLevel,   // Total xp required to reach the next level
+    xpIntoLevel,     // How much XP the user has earned within their current level
+    xpToNextLevel,   // How much XP the user needs to gain until next level 
+    progressPercent  // Percentage of progress made through the current level
+  };
+}
+
+
 
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
