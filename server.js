@@ -23,7 +23,12 @@ app.use(express.static("public"));
 app.use(session({
   secret: 'secretKey',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {
+    maxAge: null,
+    httpOnly: true,
+    secure: false
+  }
 }));
 
 mongoose.connect(process.env.MONGO_URI)
@@ -66,7 +71,7 @@ app.post('/register', async (req, res) => {
 app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, remember } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -87,7 +92,13 @@ app.post('/login', async (req, res) => {
   req.session.level = user.level;
   req.session.exp = user.exp;
   req.session.catAvatar = user.catAvatar;
-  
+
+  if (remember) {
+    req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+  } else {
+    req.session.cookie.expires = false; // Session expires on browser close
+  }
+
   res.redirect('/dashboard');
 
 });
@@ -215,9 +226,9 @@ app.get('/routines', async (req, res) => {
     req.session.sessionMessage = null; // Clear the message after use
 
     // Render the routines page and pass the routines data and message to the template
-    res.render('routines', { 
+    res.render('routines', {
       routines,
-      sessionMessage 
+      sessionMessage
     });
   } catch (err) {
     console.error(err);
@@ -508,10 +519,10 @@ app.get('/routine/:id/session', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
   const userId = req.session.userId; //Grab the userID from the session
-  
+
   // Set this as the active routine in the session 
   req.session.activeRoutineId = routineId;
-  
+
   try {
     const routine = await Routine.findOne({ _id: routineId, userId });
     // Find the specific routine by ID and ensure it belongs to the current user
@@ -519,7 +530,7 @@ app.get('/routine/:id/session', async (req, res) => {
     const workouts = workoutLogs[routineId] || []; //Initialize workouts as an empty array if none are logged yet
     const tempExercises = (req.session.tempExercises && req.session.tempExercises[routineId]) || [];
     const allExercises = [...new Set([...routine.exercises, ...tempExercises])]; // Merge all exercises and deduplicate
-    
+
     // Pass activeRoutineId to the template so we can show it's an active session
     res.render('exerciseSession', {
       routine: { ...routine.toObject(), exercises: allExercises },
@@ -554,7 +565,7 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
 
     // Save to database
     await workoutLog.save();
-    
+
     // Clear the active routine since workout is completed
     req.session.activeRoutineId = null;
 
@@ -677,11 +688,11 @@ async function calculateTotalUserXP(userId) {
   console.log("Progress this level:", xpProgress.progressPercent + "%");
   console.log("total Xp required to reach current level", xpProgress.xpForCurrentLevel)
   console.log("Total Xp needed for Next level", xpProgress.xpForNextLevel)
-return { //Return as an object to pass to the front end
-  totalXP,
-  userLevel,
-  xpProgress
-};
+  return { //Return as an object to pass to the front end
+    totalXP,
+    userLevel,
+    xpProgress
+  };
 }
 
 //Calculate User Level
@@ -704,10 +715,10 @@ function getXPForLevel(level) {
 function getXPProgress(totalXP, level) {
   let xpSum = 0;
 
-//Calculate the total XP required to reach the start of the user's current level
-for (let previousLevel = 1; previousLevel < level; previousLevel++) {
-  xpSum += getXPForLevel(previousLevel);
-}
+  //Calculate the total XP required to reach the start of the user's current level
+  for (let previousLevel = 1; previousLevel < level; previousLevel++) {
+    xpSum += getXPForLevel(previousLevel);
+  }
 
   const xpForCurrentLevel = xpSum; // Total XP required to reach the the current level
   const xpForNextLevel = xpSum + getXPForLevel(level); //Total xp required to reach the next level
