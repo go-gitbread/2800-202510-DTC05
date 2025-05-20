@@ -210,8 +210,15 @@ app.get('/routines', async (req, res) => {
     // Fetch routines associated with the current user from the database
     const routines = await Routine.find({ userId });
 
-    // Render the routines page and pass the routines data to the template
-    res.render('routines', { routines });
+    // Get any session message and clear it after use
+    const sessionMessage = req.session.sessionMessage || null;
+    req.session.sessionMessage = null; // Clear the message after use
+
+    // Render the routines page and pass the routines data and message to the template
+    res.render('routines', { 
+      routines,
+      sessionMessage 
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching routines');
@@ -393,31 +400,31 @@ app.get('/api/weather', async (req, res) => {
 
 
 
-//Route linking routine to session page after clicking a routine
-app.get('/routine/:id/session', async (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect('/login');
-  }
-  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
-  const userId = req.session.userId; //Grab the userID from the session
-  try {
-    // Find the specific routine by ID and ensure it belongs to the current user
-    const routine = await Routine.findOne({ _id: routineId, userId: userId });
-    if (!routine) {
-      return res.status(404).send('Routine not found');
-    }
-    const workouts = []; //Initialize workouts as an empty array
-    // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
-    res.render('exerciseSession', {
-      routine: routine,
-      workouts: workouts,
-      userId: userId
-    });
-  } catch (err) {
-    console.error('Error loading exercise session:', err);
-    res.status(500).send('Error fetching routine details');
-  }
-});
+// //Route linking routine to session page after clicking a routine
+// app.get('/routine/:id/session', async (req, res) => {
+//   if (!req.session.userId) {
+//     return res.redirect('/login');
+//   }
+//   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+//   const userId = req.session.userId; //Grab the userID from the session
+//   try {
+//     // Find the specific routine by ID and ensure it belongs to the current user
+//     const routine = await Routine.findOne({ _id: routineId, userId: userId });
+//     if (!routine) {
+//       return res.status(404).send('Routine not found');
+//     }
+//     const workouts = []; //Initialize workouts as an empty array
+//     // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
+//     res.render('exerciseSession', {
+//       routine: routine,
+//       workouts: workouts,
+//       userId: userId
+//     });
+//   } catch (err) {
+//     console.error('Error loading exercise session:', err);
+//     res.status(500).send('Error fetching routine details');
+//   }
+// });
 
 
 
@@ -501,6 +508,10 @@ app.get('/routine/:id/session', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
   const userId = req.session.userId; //Grab the userID from the session
+  
+  // Set this as the active routine in the session 
+  req.session.activeRoutineId = routineId;
+  
   try {
     const routine = await Routine.findOne({ _id: routineId, userId });
     // Find the specific routine by ID and ensure it belongs to the current user
@@ -508,9 +519,12 @@ app.get('/routine/:id/session', async (req, res) => {
     const workouts = workoutLogs[routineId] || []; //Initialize workouts as an empty array if none are logged yet
     const tempExercises = (req.session.tempExercises && req.session.tempExercises[routineId]) || [];
     const allExercises = [...new Set([...routine.exercises, ...tempExercises])]; // Merge all exercises and deduplicate
+    
+    // Pass activeRoutineId to the template so we can show it's an active session
     res.render('exerciseSession', {
       routine: { ...routine.toObject(), exercises: allExercises },
-      workouts
+      workouts,
+      activeRoutineId: routineId
     });
   } catch (err) {
     console.error('Error loading exercise session:', err);
@@ -540,6 +554,9 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
 
     // Save to database
     await workoutLog.save();
+    
+    // Clear the active routine since workout is completed
+    req.session.activeRoutineId = null;
 
     // Send success response
     res.status(201).json({ message: 'Workout logged successfully', workoutLog });
@@ -708,7 +725,17 @@ for (let previousLevel = 1; previousLevel < level; previousLevel++) {
   };
 }
 
-
+app.get('/trackSession', (req, res) => {
+  // Check if there's an active session in progress
+  if (req.session.activeRoutineId) {
+    // If there is, redirect to that session
+    res.redirect(`/routine/${req.session.activeRoutineId}/session`);
+  } else {
+    // If not, redirect to routines page with a small message
+    req.session.sessionMessage = "Please select a routine to begin a workout session";
+    res.redirect('/routines');
+  }
+});
 
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
