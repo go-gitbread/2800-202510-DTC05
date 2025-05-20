@@ -612,7 +612,8 @@ app.get('/history', async (req, res) => {
   if (!req.session.userId) {
     return res.redirect('/login');
   }
-
+  totalExp = await calculateTotalUserXP(req.session.userId)
+  console.log(totalExp)
   // Retrieve user's workout history data from DB 
   const workouts = await WorkoutLog.find({ userId: req.session.userId }) //Find all workout logs tied to userID
     .sort({ date: -1 }) // Sort by date (newest first)
@@ -625,4 +626,15 @@ app.get('/history', async (req, res) => {
     workouts: workouts
   });
 });
+
+//Calculate user's total XP
+async function calculateTotalUserXP(userId){
+  console.log("bonjour")
+    const workoutLogs = await WorkoutLog.find({ userId });
+    const totalXP = workoutLogs.reduce((sum, log) => sum + (log.xpGained || 0), 0);
+    console.log(`You're total xp: ${totalXP}`);
+    return totalXP
+}
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
