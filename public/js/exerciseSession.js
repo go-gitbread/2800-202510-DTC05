@@ -136,15 +136,15 @@ function refreshSetsDisplay() {
     }
 }
 //Function to display a new set on the page
-function addSetToDisplay(setNumber, repsValue = '', weightValue = '') { //***We can replace these empty values with Target values
+function addSetToDisplay(setNumber, repsValue = '0', weightValue = '0') { //***We can replace these values with Target values
     const setsContainer = document.getElementById('sets-container');
 
     const newSet = document.createElement('div');
     newSet.className = 'set-entry';
     newSet.innerHTML = `
       <div>Set ${setNumber}</div>
-      <div><input type="number" class="rep-input" value="${repsValue}" placeholder="Reps"> reps</div>
-      <div><input type="number" class="weight-input" value="${weightValue}" placeholder="Weight"> lbs</div>
+      <div><input type="number" class="rep-input" value="${repsValue}" placeholder="0"  min="0" step="1"> reps</div>
+      <div><input type="number" class="weight-input" value="${weightValue}" placeholder="0"  min="0" step="1"> lbs</div>
     `;
 
     setsContainer.appendChild(newSet);
@@ -152,7 +152,31 @@ function addSetToDisplay(setNumber, repsValue = '', weightValue = '') { //***We 
     // Add event listeners to new inputs to save data whenever it has been altered
     const inputs = newSet.querySelectorAll('input');
     inputs.forEach(input => {
-        input.addEventListener('change', () => { saveCurrentExerciseData(); calculateXP(workoutData); });
+        input.addEventListener('change', () => {
+            const value = parseFloat(input.value);
+            //Invalid input handling for rep input
+            if (input.classList.contains('rep-input')) {
+            if (!Number.isInteger(value)) {
+                input.value = Math.floor(value); //Restrict float inputs
+            }
+            if (value < 0) {                    //Restrict negative inputs
+                input.value = 0;
+            }
+            if (value > 50) {                  //Restrict inputs >50
+                input.value = 50;
+            }
+        }
+            //Invalid input handling for weight input
+        if (input.classList.contains('weight-input')) {
+            if (value < 0) {                   //Only restrict negative inputs
+                input.value = 0;
+            }
+        }
+            else {
+                saveCurrentExerciseData();
+                calculateXP(workoutData);
+            }
+        });
         input.addEventListener('input', () => { saveCurrentExerciseData(); });
     });
 }
@@ -289,7 +313,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     const seconds = (totalSeconds % 60).toString().padStart(2, '0');
     const workoutDuration = `${minutes}:${seconds}`;
 
-console.log('currentUserId:', currentUserId);
+    console.log('currentUserId:', currentUserId);
 
     // Create final payload with userId included
     const payload = {
@@ -314,7 +338,7 @@ console.log('currentUserId:', currentUserId);
 
         const result = await response.json();
         alert('Workout saved successfully!');
-        
+
         // Redirect to workout history or home page
         window.location.href = '/history';
     } catch (err) {
