@@ -74,7 +74,11 @@
                                                 <td>
                                                     <% sets.forEach(function(set) { %>
                                                         <span class="badge badge-secondary mr-1">
-                                                            <%= set.reps %> reps × <%= set.weight || 0 %> lbs
+                                                            <% if (set.duration !== undefined) { %>
+                                                                <%= set.duration || 0 %> min<%= set.distance ? `, ${set.distance} km` : '' %>
+                                                            <% } else { %>
+                                                                <%= set.reps || 0 %> reps × <%= set.weight || 0 %> lbs
+                                                            <% } %>
                                                         </span>
                                                     <% }); %>
                                                 </td>
@@ -86,6 +90,8 @@
                         </div>
                     </div>
                 <% }); %>
+            <% } else { %>
+                <p class="text-center">No workouts found.</p>
             <% } %>
         </div>
     </div>
