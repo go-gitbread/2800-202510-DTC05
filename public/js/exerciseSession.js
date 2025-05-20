@@ -124,11 +124,16 @@ function refreshSetsDisplay() {
 
     // Get the saved sets for this exercise or initialize with one empty set
     const sets = workoutData[currentExercise];
+    const isCardio = exercises.find(ex => ex.name === currentExercise)?.category === 'Cardio';
 
     if (sets && sets.length > 0) {
         // Display all saved sets
         sets.forEach((set, index) => {
-            addSetToDisplay(index + 1, set.reps, set.weight);
+            if (isCardio) {
+                addSetToDisplay(index + 1, set.duration, set.distance);
+            } else {
+                addSetToDisplay(index + 1, set.reps, set.weight);
+            }
         });
     } else {
         // Add a single empty set if none exist
@@ -137,24 +142,24 @@ function refreshSetsDisplay() {
 }
 
 //Function to display a new set on the page
-function addSetToDisplay(setNumber, repsValue = '', weightValue = '') {
+function addSetToDisplay(setNumber, value1 = '', value2 = '') {
     const setsContainer = document.getElementById('sets-container');
     const exercise = exercises.find(ex => ex.name === currentExercise);
-    const isCardio = exercise.category === 'Cardio';
+    const isCardio = exercise?.category === 'Cardio';
     const newSet = document.createElement('div');
     newSet.className = 'set-entry';
 
     if (isCardio) {
         newSet.innerHTML = `
           <div>Set ${setNumber}</div>
-          <div><input type="number" class="duration-input" placeholder="Duration (min)" min="0"> min</div>
-          <div><input type="number" class="distance-input" placeholder="Distance (km)" min="0" step="0.1"> km</div>
+          <div><input type="number" class="duration-input" placeholder="Duration (min)" min="0" value="${value1}"> min</div>
+          <div><input type="number" class="distance-input" placeholder="Distance (km)" min="0" step="0.1" value="${value2}"> km</div>
         `;
     } else {
         newSet.innerHTML = `
           <div>Set ${setNumber}</div>
-          <div><input type="number" class="rep-input" value="${repsValue}" placeholder="Reps" min="0" step="1"> reps</div>
-          <div><input type="number" class="weight-input" value="${weightValue}" placeholder="Weight" min="0" step="1"> lbs</div>
+          <div><input type="number" class="rep-input" value="${value1}" placeholder="Reps" min="0" step="1"> reps</div>
+          <div><input type="number" class="weight-input" value="${value2}" placeholder="Weight" min="0" step="1"> lbs</div>
         `;
     }
 
@@ -207,21 +212,27 @@ function addSetToDisplay(setNumber, repsValue = '', weightValue = '') {
 }
 //Function to calculate the XP gained throughout the session
 function calculateXP(workoutData) {
-    let totalReps = 0;
+    let totalXP = 0;
     for (const exercise in workoutData) {
         const sets = workoutData[exercise];
+        const isCardio = exercises.find(ex => ex.name === exercise)?.category === 'Cardio';
         for (const set of sets) {
-            const reps = parseInt(set.reps);
-            if (!isNaN(reps)) {
-                totalReps += reps;
+            if (isCardio) {
+                const duration = parseFloat(set.duration);
+                if (!isNaN(duration)) {
+                    totalXP += duration * 15; // 15 XP per minute for cardio
+                }
+            } else {
+                const reps = parseInt(set.reps);
+                if (!isNaN(reps)) {
+                    totalXP += reps * 10; // 10 XP per rep for strength
+                }
             }
         }
     }
-    xpGained = totalReps * 10
-    console.log("XP gained: ", xpGained)
-    displayXP(xpGained)
-    return xpGained;
-
+    console.log("XP gained: ", totalXP);
+    displayXP(totalXP);
+    return totalXP;
 }
 function displayXP(xpGained) {
     document.getElementById('xpGained').textContent = xpGained
@@ -310,74 +321,61 @@ document.getElementById('link-routine-btn').addEventListener('click', loadRoutin
 //This event listener manages the saving & presentation of the user's logged data 
 document.getElementById('finish-workout-btn').addEventListener('click', async () => {
     if (currentExercise) {
-        saveCurrentExerciseData();    // Save any current exercise data
+        saveCurrentExerciseData();
     }
-    // Organize data by routine
     const routinesData = {};
-    // Filter out empty sets and organize by routine
     Object.keys(workoutData).forEach(exercise => {
-        // Only include exercises that have at least one set with data
-        const validSets = workoutData[exercise].filter(set =>
-            (set.reps !== '' && set.reps !== null) ||
-            (set.weight !== '' && set.weight !== null)
-        );
+        const isCardio = exercises.find(ex => ex.name === exercise)?.category === 'Cardio';
+        const validSets = workoutData[exercise].filter(set => {
+            if (isCardio) {
+                return (set.duration !== '' && set.duration !== null) ||
+                       (set.distance !== '' && set.distance !== null);
+            } else {
+                return (set.reps !== '' && set.reps !== null) ||
+                       (set.weight !== '' && set.weight !== null);
+            }
+        });
 
         if (validSets.length > 0) {
             const routineInfo = exerciseToRoutineMap[exercise];
             const routineName = routineInfo.routineName;
             const routineId = routineInfo.routineId;
-
-            // Initialize routine in results if it doesn't exist
             if (!routinesData[routineName]) {
                 routinesData[routineName] = {
                     routineId: routineId,
                     exercises: {}
                 };
             }
-
-            // Add exercise data to its routine
             routinesData[routineName].exercises[exercise] = validSets;
         }
     });
 
-    // Check if there is any data to save
     if (Object.keys(routinesData).length === 0) {
         alert('No exercise data to save. Please log at least one set.');
         return;
     }
     isPaused = true;
-    //Variables for logging the time
     const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
     const seconds = (totalSeconds % 60).toString().padStart(2, '0');
     const workoutDuration = `${minutes}:${seconds}`;
-
     console.log('currentUserId:', currentUserId);
-
-    // Create final payload with userId included
     const payload = {
-        userId: currentUserId,           // Add the userId here
+        userId: currentUserId,
         date: new Date().toISOString(),
         routines: routinesData,
         duration: workoutDuration,
-        xpGained: xpGained
+        xpGained: calculateXP(workoutData)
     };
-
     console.log('Workout complete! Full payload to save:', JSON.stringify(payload, null, 2));
-
     try {
-        // Send the data to the backend
         const response = await fetch(`/api/log-workout/${mainRoutineId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-
         if (!response.ok) throw new Error('Failed to save workout data');
-
         const result = await response.json();
         alert('Workout saved successfully!');
-
-        // Redirect to workout history or home page
         window.location.href = '/history';
     } catch (err) {
         console.error('Error saving workout:', err);
