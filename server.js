@@ -112,7 +112,6 @@ app.get('/dashboard', async (req, res) => {
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
-  // Wait for XP and level to be calculated
   const { totalXP, userLevel, xpProgress } = await calculateTotalUserXP(req.session.userId);
 
 
@@ -661,7 +660,7 @@ async function calculateTotalUserXP(userId) {
   console.log("Progress this level:", xpProgress.progressPercent + "%");
   console.log("total Xp required to reach current level", xpProgress.xpForCurrentLevel)
   console.log("Total Xp needed for Next level", xpProgress.xpForNextLevel)
-return {
+return { //Return as an object to pass to the front end
   totalXP,
   userLevel,
   xpProgress
