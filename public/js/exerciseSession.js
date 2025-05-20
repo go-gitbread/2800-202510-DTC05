@@ -146,7 +146,7 @@ function addSetToDisplay(setNumber, repsValue = '', weightValue = '') {
 
     if (isCardio) {
         newSet.innerHTML = `
-          <div>Cardio Set ${setNumber}</div>
+          <div>Set ${setNumber}</div>
           <div><input type="number" class="duration-input" placeholder="Duration (min)" min="0"> min</div>
           <div><input type="number" class="distance-input" placeholder="Distance (km)" min="0" step="0.1"> km</div>
         `;
@@ -167,26 +167,40 @@ function addSetToDisplay(setNumber, repsValue = '', weightValue = '') {
             const value = parseFloat(input.value);
             //Invalid input handling for rep input
             if (input.classList.contains('rep-input')) {
-            if (!Number.isInteger(value)) {
-                input.value = Math.floor(value); //Restrict float inputs
+                if (!Number.isInteger(value)) {
+                    input.value = Math.floor(value); //Restrict float inputs
+                }
+                if (value < 0) {                    //Restrict negative inputs
+                    input.value = 0;
+                }
+                if (value > 50) {                  //Restrict inputs >50
+                    input.value = 50;
+                }
             }
-            if (value < 0) {                    //Restrict negative inputs
-                input.value = 0;
-            }
-            if (value > 50) {                  //Restrict inputs >50
-                input.value = 50;
-            }
-        }
             //Invalid input handling for weight input
-        if (input.classList.contains('weight-input')) {
-            if (value < 0) {                   //Only restrict negative inputs
-                input.value = 0;
+            else if (input.classList.contains('weight-input')) {
+                if (value < 0) {                   //Only restrict negative inputs
+                    input.value = 0;
+                }
             }
-        }
-            else {
-                saveCurrentExerciseData();
-                calculateXP(workoutData);
+            //For Cardio inputs
+            else if (input.classList.contains('duration-input')) {
+                if (value < 0) {
+                    input.value = 0; // Restrict negative inputs
+                }
+                if (value > 300) {
+                    input.value = 300; // Restrict to max 5 hours
+                }
+            } else if (input.classList.contains('distance-input')) {
+                if (value < 0) {
+                    input.value = 0; // Restrict negative inputs
+                }
+                if (value > 100) {
+                    input.value = 100; //Restrict to max 100km 
+                }
             }
+            saveCurrentExerciseData();
+            calculateXP(workoutData);
         });
         input.addEventListener('input', () => { saveCurrentExerciseData(); });
     });
@@ -232,20 +246,33 @@ function addSet() {
 function saveCurrentExerciseData() {
     const setsContainer = document.getElementById('sets-container');
     const setEntries = setsContainer.querySelectorAll('.set-entry');
-
+    const exercise = exercises.find(ex => ex.name === currentExercise);
+    const isCardio = exercise && exercise.category === 'Cardio';
     // Clear any existing data from an earlier save
     workoutData[currentExercise] = [];
 
     // Save data from each set
     setEntries.forEach(setEntry => { //For each set...
-        const repInput = setEntry.querySelector('.rep-input'); //Grab the inputted reps 
-        const weightInput = setEntry.querySelector('.weight-input'); //Grab the inputted weight
 
-        const reps = repInput.value.trim() ? parseInt(repInput.value) : ''; //If the input is empty, set as an empty string
-        const weight = weightInput.value.trim() ? parseFloat(weightInput.value) : ''; //If the input is empty, set as an empty string
+        if (isCardio) {
+            // Handle cardio exercise inputs
+            const durationInput = setEntry.querySelector('.duration-input');
+            const distanceInput = setEntry.querySelector('.distance-input');
 
-        workoutData[currentExercise].push({ reps, weight }); //Add the data for the current exercise to workoutData
-    });
+            const duration = durationInput && durationInput.value.trim() ? parseFloat(durationInput.value) : '';
+            const distance = distanceInput && distanceInput.value.trim() ? parseFloat(distanceInput.value) : '';
+
+            workoutData[currentExercise].push({ duration, distance });
+        } else {
+            const repInput = setEntry.querySelector('.rep-input'); //Grab the inputted reps 
+            const weightInput = setEntry.querySelector('.weight-input'); //Grab the inputted weight
+
+            const reps = repInput.value.trim() ? parseInt(repInput.value) : ''; //If the input is empty, set as an empty string
+            const weight = weightInput.value.trim() ? parseFloat(weightInput.value) : ''; //If the input is empty, set as an empty string
+
+            workoutData[currentExercise].push({ reps, weight }); //Add the data for the current exercise to workoutData
+        }
+        });
     //Log each time anything is save - useful for keeping track of what's being logged & when!
     console.log('Saved data for', currentExercise, workoutData[currentExercise]);
 }
