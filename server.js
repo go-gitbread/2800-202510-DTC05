@@ -662,4 +662,6 @@ async function calculateUserLevel(totalXP){
 function getXPForLevel(level) {
   return Math.round(1000 * Math.pow(1.25, level - 1));
 }
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
