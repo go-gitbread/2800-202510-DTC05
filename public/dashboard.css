@@ -24,23 +24,42 @@ body {
   }
   
   /* Avatar */
-  .avatar-container {
-    width: 150px;
-    height: 150px;
-    margin: 6px auto;
+  .welcome-card {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px 0 12px;
+    margin: 0 auto 16px;
+    max-width: 540px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .welcome-card .avatar-container {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 10px;
     border-radius: 50%;
-    background-color: #cad5e1;
+    background-color: #CAD5E1;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
   
-  .cat-avatar img {
+  .welcome-card .cat-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+  
+  .welcome-card .welcome-banner h2 {
+    color: #303C58;
+    font-size: 20px;
+    margin: 0;
+  }
+  
   
   /* Quote box */
   .quote-box {
