@@ -82,9 +82,12 @@
                 <% if (isOwnProfile) { %>
                   <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
                   <a href="/logout" class="btn logout-btn">Logout</a>
+
+                  <a href="/friends" class="btn btn-primary">Friends List</a>
                   <% } else { %>
-                    <a href="/addFriend/<%= userId %>" class="btn btn-primary">Add User</a>
-                    <a href="/friends" class="btn btn-primary">Go to Friends List</a>
+                    <a href="/addFriend/<%= userId %>" class="btn success-btn">Add User</a>
+
+                    <a href="/friends" class="btn friends-btn">Go to Your Friends List</a>
                     <% } %>
               </div>
             </div>

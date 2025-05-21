@@ -242,6 +242,7 @@ app.get('/routines', async (req, res) => {
 
 //Route for profile page
 app.get('/profile', async (req, res) => {
+  const success = req.query.success;
   if (!req.session.userId) return res.redirect('/login');
 
   const user = await User.findById(req.session.userId).select('name email level exp streak');
@@ -253,6 +254,7 @@ app.get('/profile', async (req, res) => {
     level: user.level || 1,
     exp: user.exp || 0,
     streak: user.streak || 0,
+    success,
     showToast: req.query.updated === '1'
   });
 });
