@@ -132,6 +132,33 @@ app.get('/dashboard', async (req, res) => {
 
   const streak = await calculateWorkoutStreak(req.session.userId);
 
+  // Get today's total workout duration
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const todayLogs = await WorkoutLog.find({
+    userId: req.session.userId,
+    date: { $gte: today }
+  });
+
+  let todayDuration = 0;
+
+  for (const log of todayLogs) {
+    if (log.duration && typeof log.duration === "string") {
+      const [minStr, secStr] = log.duration.split(":");
+      const minutes = parseInt(minStr, 10);
+      const seconds = parseInt(secStr, 10);
+
+      if (!isNaN(minutes) && !isNaN(seconds)) {
+        todayDuration += minutes + seconds / 60;
+      }
+    }
+  }
+
+  // Round to nearest minute
+  todayDuration = Math.round(todayDuration);
+
+
   res.render('dashboard', {
     quote: randomQuote,
     username: req.session.userName,
@@ -143,7 +170,8 @@ app.get('/dashboard', async (req, res) => {
     xpToNextLevel: xpProgress.xpToNextLevel,
     xpForCurrentLevel: xpProgress.xpForCurrentLevel,
     xpForNextLevel: xpProgress.xpForNextLevel,
-    streak: streak
+    streak: streak,
+    todayDuration
   });
 });
 
