@@ -296,6 +296,9 @@ app.get('/profile/:id', async (req, res) => {
       username: user.name,
       email: user.email,
       userId: user._id,
+      level: user.level,
+      exp: user.exp,
+      streak: user.streak,
       showToast: req.query.updated === '0'
 
       // joinedDate: user.createdAt.toDateString()
@@ -824,33 +827,33 @@ app.get('/trackSession', (req, res) => {
   }
 });
 
-async function updateAvatar(userId){
-let avatar;
-const user = await User.findById(userId).select('level');
-const currentCat = await User.findById(userId).select('catAvatar') 
-const level = user.level;
-if (level >= 15){
+async function updateAvatar(userId) {
+  let avatar;
+  const user = await User.findById(userId).select('level');
+  const currentCat = await User.findById(userId).select('catAvatar')
+  const level = user.level;
+  if (level >= 15) {
     avatar = '/images/4ultimateGymMachine.png'
   }
-  else if (level >= 10){
+  else if (level >= 10) {
     avatar = '/images/3gymBro.png'
   }
-  else if (level >= 5){
-      avatar = '/images/2gymAmatuer.png'
-  }  
+  else if (level >= 5) {
+    avatar = '/images/2gymAmatuer.png'
+  }
   else avatar = '/images/1couchPotato.png'
   console.log("Your avatar should be: ", avatar)
   console.log("Your current avatar is: ", currentCat.catAvatar)
 
-  if (avatar != currentCat.catAvatar){
+  if (avatar != currentCat.catAvatar) {
     console.log("Trigger Cat Level Up!!!")
     console.log("I'll update your cat avatar in the Database!")
     await User.findByIdAndUpdate(userId, {
-    catAvatar: avatar
-  });
-  console.log("Database updated, your new cat is", avatar)
+      catAvatar: avatar
+    });
+    console.log("Database updated, your new cat is", avatar)
   }
-  else{
+  else {
     console.log("Your avatar is as it should be.")
   }
   return avatar
