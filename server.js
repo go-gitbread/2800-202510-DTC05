@@ -322,6 +322,7 @@ app.post('/profile/edit', async (req, res) => {
 
 // Route for another user's profile page
 app.get('/profile/:id', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   try {
     const userId = req.params.id;
     const user = await User.findById(userId);
@@ -358,7 +359,7 @@ app.get('/addFriend/:id', async (req, res) => {
     const currentUserId = req.session.userId;
 
     if (!currentUserId) {
-      return res.status(401).send('Please login first');
+      return res.redirect('/login');
     }
 
     if (friendId === currentUserId.toString()) {
@@ -395,7 +396,7 @@ app.get('/friends', async (req, res) => {
     const user = await User.findById(req.session.userId).populate('friendsList', 'name level streak');
 
     if (!user) {
-      return res.status(404).send('User not found');
+      return res.redirect('/login');
     }
 
     res.render('friends', {
@@ -857,14 +858,19 @@ function getXPProgress(totalXP, level) {
 }
 
 app.get('/trackSession', (req, res) => {
-  // Check if there's an active session in progress
-  if (req.session.activeRoutineId) {
-    // If there is, redirect to that session
-    res.redirect(`/routine/${req.session.activeRoutineId}/session`);
+
+  if (!req.session.userId) {
+    return res.redirect('/login');
   } else {
-    // If not, redirect to routines page with a small message
-    req.session.sessionMessage = "Please select a routine to begin a workout session";
-    res.redirect('/routines');
+    // Check if there's an active session in progress
+    if (req.session.activeRoutineId) {
+      // If there is, redirect to that session
+      res.redirect(`/routine/${req.session.activeRoutineId}/session`);
+    } else {
+      // If not, redirect to routines page with a small message
+      req.session.sessionMessage = "Please select a routine to begin a workout session";
+      res.redirect('/routines');
+    }
   }
 });
 
