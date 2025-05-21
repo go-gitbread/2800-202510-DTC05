@@ -279,6 +279,7 @@ app.get('/routines', async (req, res) => {
 
 //Route for profile page
 app.get('/profile', async (req, res) => {
+  const success = req.query.success;
   if (!req.session.userId) return res.redirect('/login');
 
   const user = await User.findById(req.session.userId).select('name email level exp streak');
@@ -290,6 +291,7 @@ app.get('/profile', async (req, res) => {
     level: user.level || 1,
     exp: user.exp || 0,
     streak: user.streak || 0,
+    success,
     showToast: req.query.updated === '1'
   });
 });
@@ -323,6 +325,7 @@ app.get('/profile/:id', async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await User.findById(userId);
+    const success = req.query.success;
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -336,6 +339,7 @@ app.get('/profile/:id', async (req, res) => {
       level: user.level,
       exp: user.exp,
       streak: user.streak,
+      success,
       showToast: req.query.updated === '0'
 
       // joinedDate: user.createdAt.toDateString()
@@ -377,8 +381,8 @@ app.get('/addFriend/:id', async (req, res) => {
 
     currentUser.friendsList.push(friendId);
     await currentUser.save();
-
-    res.redirect(`/profile/${friendId}`);
+    res.redirect(`/profile/${friendId}?success=Friend+added+successfully`);
+    // res.redirect(`/profile/${friendId}`);
   } catch (error) {
     console.error('Error adding friend:', error);
     res.status(500).send('Internal Server Error');

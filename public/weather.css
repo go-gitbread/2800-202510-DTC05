@@ -13,9 +13,9 @@
       color: rgb(255, 255, 255);
 }
 
-.widget-container:hover {
+/* .widget-container:hover {
       background: #b0d6f7;
-}
+} */
 
 #weather-location {
       font-weight: bold;
