@@ -3,7 +3,7 @@ body {
     font-family: 'Winky Rough', sans-serif;
     margin: 0;
     padding-bottom: 110px; /* for XP bar */
-    padding-top: 80px;     /* for fixed navbar */
+    padding-top: 9vh;     /* for fixed navbar */
     max-height: 100vh;
     overflow: hidden;
   }
@@ -11,8 +11,10 @@ body {
   /* Welcome banner */
   .welcome-banner {
     text-align: center;
-    margin-bottom: 4px;
+    /* margin-top: 0.5vh;     */
+    margin-bottom: 1.5vh;    
   }
+  
   
   .welcome-banner h2 {
     font-size: 20px;
@@ -87,16 +89,16 @@ body {
   /* Buttons */
   .quick-actions {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 12px;
     margin: 12px auto;
-    padding: 0 10px;
-    max-width: 500px;
+    max-width: 540px; /* matches stat card and XP bar row */
+    width: 100%;
   }
   
   .quick-btn {
-    flex: 1 1 45%;
-    padding: 8px 12px;
+    flex: 1 1 0;
+    padding: 10px 0;
     background-color: #303c58;
     color: white;
     font-weight: bold;
@@ -107,6 +109,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     transition: all 0.2s ease;
   }
+  
   
   .quick-btn:hover {
     background-color: #1e2a40;
@@ -169,4 +172,11 @@ body {
     border-radius: 6px 0 0 6px;
   }
   
+  .dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-height: calc(100vh - 80px); /* adjusts for navbar */
+    padding: 20px 0;
+  }
   
