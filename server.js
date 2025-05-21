@@ -83,9 +83,9 @@ app.post('/login', async (req, res) => {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
+
     return res.render('login', { error: '🙀 Hiss! That password doesn\'t match our records. Try again.' });
   }
-
   req.session.userId = user._id;
   req.session.userEmail = user.email;
   req.session.userName = user.name;
@@ -130,8 +130,6 @@ app.get('/dashboard', async (req, res) => {
   req.session.level = userLevel;
   req.session.exp = totalXP;
 
-  const streak = await calculateWorkoutStreak(req.session.userId);
-
   // Get today's total workout duration
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -166,8 +164,10 @@ app.get('/dashboard', async (req, res) => {
   }
 
 
+  const user = await User.findById(req.session.userId).select('name email level exp streak');
 
   res.render('dashboard', {
+    streak: user.streak,
     quote: randomQuote,
     username: req.session.userName,
     catName: req.session.catName,
@@ -178,7 +178,6 @@ app.get('/dashboard', async (req, res) => {
     xpToNextLevel: xpProgress.xpToNextLevel,
     xpForCurrentLevel: xpProgress.xpForCurrentLevel,
     xpForNextLevel: xpProgress.xpForNextLevel,
-    streak: streak,
     todayDuration,
     todayXP
   });
@@ -280,10 +279,12 @@ app.get('/routines', async (req, res) => {
 //Route for profile page
 app.get('/profile', async (req, res) => {
   const success = req.query.success;
+
+
   if (!req.session.userId) return res.redirect('/login');
 
-  const user = await User.findById(req.session.userId).select('name email level exp');
-  const streak = await calculateWorkoutStreak(req.session.userId);
+  const user = await User.findById(req.session.userId).select('name email level exp streak');
+
 
 
   res.render('profile', {
@@ -292,7 +293,7 @@ app.get('/profile', async (req, res) => {
     email: user.email,
     level: user.level || 1,
     exp: user.exp || 0,
-    streak: streak || 0,
+    streak: user.streak,
     success,
     showToast: req.query.updated === '1'
   });
@@ -329,7 +330,7 @@ app.get('/profile/:id', async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
     const success = req.query.success;
-    const streak = await calculateWorkoutStreak(req.session.userId);
+
 
 
     if (!user) {
@@ -343,7 +344,7 @@ app.get('/profile/:id', async (req, res) => {
       userId: user._id,
       level: user.level,
       exp: user.exp,
-      streak: streak,
+      streak: user.streak,
       success,
       showToast: req.query.updated === '0'
 
@@ -419,16 +420,12 @@ app.get('/friends', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1
   const limit = 8; // 8 users per page
-  const streak = await calculateWorkoutStreak(req.session.userId);
-
 
   try {
     const totalUsers = await User.countDocuments();
     const usersList = await User.find()
 
-      .select('name')
-      .select('level')
-      .select('streak')
+      .select('name level streak')
 
       .sort({ level: -1 })
       // change to streak if want streak descending
@@ -446,7 +443,6 @@ app.get('/leaderboard', async (req, res) => {
       currentPage: page,
       hasNextPage,
       hasPrevPage,
-      streak: streak
     });
   } catch (err) {
     console.error(err);
