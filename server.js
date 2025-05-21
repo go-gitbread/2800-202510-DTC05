@@ -32,6 +32,7 @@ app.use(session({
   }
 }));
 
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB error:', err));
@@ -56,6 +57,33 @@ app.get('/', (req, res) => {
     return res.redirect('/login');
   }
 });
+
+
+// Calculate streaks
+async function calculateWorkoutStreak(userId) {
+  const logs = await WorkoutLog.find({ userId }).sort({ date: -1 }).lean();
+
+  // Normalize each workout date to just the day
+  const workoutDays = new Set(
+    logs.map(log => {
+      const date = new Date(log.date);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime();
+    })
+  );
+
+  let streak = 0;
+  let currentDay = new Date();
+  currentDay.setHours(0, 0, 0, 0);
+
+  // Loop backwards through days until we hit a day with no workout
+  while (workoutDays.has(currentDay.getTime())) {
+    streak++;
+    currentDay.setDate(currentDay.getDate() - 1);
+  }
+
+  return streak;
+}
 
 
 //register.ejs
@@ -912,30 +940,5 @@ async function updateAvatar(userId) {
   return avatar
 }
 
-// Calculate streaks
-async function calculateWorkoutStreak(userId) {
-  const logs = await WorkoutLog.find({ userId }).sort({ date: -1 }).lean();
-
-  // Normalize each workout date to just the day
-  const workoutDays = new Set(
-    logs.map(log => {
-      const date = new Date(log.date);
-      date.setHours(0, 0, 0, 0);
-      return date.getTime();
-    })
-  );
-
-  let streak = 0;
-  let currentDay = new Date();
-  currentDay.setHours(0, 0, 0, 0);
-
-  // Loop backwards through days until we hit a day with no workout
-  while (workoutDays.has(currentDay.getTime())) {
-    streak++;
-    currentDay.setDate(currentDay.getDate() - 1);
-  }
-
-  return streak;
-}
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
