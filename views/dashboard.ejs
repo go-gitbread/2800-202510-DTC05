@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <link rel="stylesheet" href="/dashboard.css"/>
-  <link rel="stylesheet" href="/navbar.css"/>
-  <link rel="stylesheet" href="/weather.css"/>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/dashboard.css" />
+  <link rel="stylesheet" href="/navbar.css" />
+  <link rel="stylesheet" href="/weather.css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet" />
 </head>
 
 <body class="container">
   <%- include('partials/navbar') %>
 
-  <div class="dashboard-layout">
+    <div class="dashboard-layout">
 
-    <div class="welcome-card">
-      <div class="welcome-banner">
-        <h2>Welcome back, <%= username %>!</h2>
-      </div>
-    
-      <div class="avatar-container">
-        <div class="cat-avatar">
-          <img src="<%= catAvatar %>" alt="Cat Avatar" />
+      <div class="welcome-card">
+        <div class="welcome-banner">
+          <h2>Welcome back, <%= username %>!</h2>
+        </div>
+
+        <div class="avatar-container">
+          <div class="cat-avatar">
+            <img src="<%= catAvatar %>" alt="Cat Avatar" />
+          </div>
         </div>
       </div>
-    </div>
-    
+
 
       <div class="quote-box">
-        <p><%= quote %></p>
+        <p>
+          <%= quote %>
+        </p>
       </div>
 
       <div class="stat-grid">
@@ -53,14 +57,16 @@
       <div class="quick-actions">
         <a href="/routines" class="quick-btn btn-workout">🏆 Workout</a>
         <a href="/history" class="quick-btn btn-history">📊 History</a>
-      </div>      
+      </div>
 
       <div class="level-system-card">
         <div class="level-header">
-          <div class="level-label">Level <%= level %></div>
-          <div class="xp-count">XP: <%= exp %> / <%= xpForNextLevel %></div>
+          <div class="level-label">Level <%= level %>
+          </div>
+          <div class="xp-count">XP: <%= exp %> / <%= xpForNextLevel %>
+          </div>
         </div>
-      
+
         <div class="xp-bar-row">
           <span class="xp-text-label">XP</span>
           <div class="xp-bar-container">
@@ -68,7 +74,8 @@
           </div>
         </div>
       </div>
-  </div>
-  
+    </div>
+
 </body>
+
 </html>
