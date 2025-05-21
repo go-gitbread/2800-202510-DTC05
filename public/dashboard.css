@@ -54,18 +54,19 @@ body {
     position: relative;
   }
   
-  /* Stat Grid - Always 2x2 */
+  /* Stat Grid */
   .stat-grid .row {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap; 
+    justify-content: space-between;
     gap: 12px;
-    max-width: 500px;
+    max-width: 540px;
     margin: 0 auto;
   }
   
   .stat-card {
-    width: 45%;
+    flex: 1 1 30%;
+    max-width: 160px;
     height: 90px;
     display: flex;
     flex-direction: column;

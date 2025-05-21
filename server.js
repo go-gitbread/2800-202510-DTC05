@@ -158,6 +158,14 @@ app.get('/dashboard', async (req, res) => {
   // Round to nearest minute
   todayDuration = Math.round(todayDuration);
 
+  // Today's XP Gained
+  let todayXP = 0;
+
+  for (const log of todayLogs) {
+    todayXP += log.xpGained || 0;
+  }
+
+
 
   res.render('dashboard', {
     quote: randomQuote,
@@ -171,7 +179,8 @@ app.get('/dashboard', async (req, res) => {
     xpForCurrentLevel: xpProgress.xpForCurrentLevel,
     xpForNextLevel: xpProgress.xpForNextLevel,
     streak: streak,
-    todayDuration
+    todayDuration,
+    todayXP
   });
 });
 
