@@ -71,6 +71,11 @@
   color: #fff !important;
 }
 
+.settings-btn {
+  background-color: #303C58 !important;
+  color: #fff !important;
+}
+
 .settings-btn:hover {
   background-color: #1e2940 !important;
 }

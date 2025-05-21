@@ -282,7 +282,9 @@ app.get('/profile', async (req, res) => {
   const success = req.query.success;
   if (!req.session.userId) return res.redirect('/login');
 
-  const user = await User.findById(req.session.userId).select('name email level exp streak');
+  const user = await User.findById(req.session.userId).select('name email level exp');
+  const streak = await calculateWorkoutStreak(req.session.userId);
+
 
   res.render('profile', {
     isOwnProfile: true,

@@ -66,28 +66,22 @@
 
               </p>
 
-              <div class="stats">
-                <p><strong>Level:</strong>
-                  <%= level %>
-                </p>
-                <p><strong>XP:</strong>
-                  <%= exp.toLocaleString() %>
-                </p>
-                <p><strong>Streaks/Days Active:</strong>
-                  <%= streak %>
-                </p>
-              </div>
+          <div class="stats">
+            <p><strong>Level:</strong> <%= level %></p>
+            <p><strong>XP:</strong> <%= exp.toLocaleString() %></p>
+            <p><strong>Current Streak:</strong> <%= streak %></p>
+          </div>          
 
               <div class="button-row">
                 <% if (isOwnProfile) { %>
                   <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
                   <a href="/logout" class="btn logout-btn">Logout</a>
 
-                  <a href="/friends" class="btn btn-primary">Friends List</a>
+                  <!-- <a href="/friends" class="btn btn-primary">Friends List</a> -->
                   <% } else { %>
                     <a href="/addFriend/<%= userId %>" class="btn success-btn">Add User</a>
 
-                    <a href="/friends" class="btn friends-btn">Go to Your Friends List</a>
+                    <a href="/friends" class="btn friends-btn">Your Friends List</a>
                     <% } %>
               </div>
             </div>
