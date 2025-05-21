@@ -368,6 +368,10 @@ app.get('/leaderboard', async (req, res) => {
       .select('name')
       .select('level')
       .select('streak')
+
+      .sort({ level: -1 })
+      // change to streak if want streak descending
+
       .skip((page - 1) * limit)
       .limit(limit);
 
