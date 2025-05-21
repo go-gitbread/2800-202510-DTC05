@@ -84,19 +84,6 @@
         </ul>
         <br>
         <section>
-            <h2>Weekly Workout Routine Generator</h2>
-            <h2>Select Type of Training</h2>
-            <form action="">
-                <input type="checkbox" id="bodybuilding">
-                <label for="bodybuilding"><abbr
-                        title="Bodybuilding is a form of physical training focused on developing muscle size, symmetry, and definition through resistance exercises, typically using weights. It emphasizes muscle hypertrophy and often includes strict nutrition and supplementation to enhance physique.">Bodybuilding</abbr></label>
-                <!-- <input type="checkbox" id="powerlifting">
-                <label for="powerlifting"><abbr title="Powerlifting or strength training is a type of exercise focused on increasing maximal strength in key compound lifts—typically the squat, bench press, and deadlift. It involves lifting heavy weights with low repetitions to build raw power and muscle strength.">Powerlifting/Strength Training</abbr></label>
-                <input type="checkbox" id="cardio">
-                <label for="cardio"><abbr title="Cardio, or cardiovascular exercise, is any activity that raises your heart rate and improves the efficiency of your heart and lungs. It includes exercises like running, cycling, swimming, and brisk walking, and is often used to improve endurance, burn calories, and support heart health.">Cardio</abbr></label> -->
-            </form>
-        </section>
-        <section>
             <h2>Select Your Fitness Level</h2>
             <!-- Build 3 cards with images indicating a beginner cat, intermediate cat, and an advanced cat-->
             <button id="beginner">Beginner</button>
@@ -171,7 +158,9 @@
                 <td id="rest_time"></td>
             </tr>
             </table>
-        
+        <section>
+            <h2>Workout Forms</h2>
+        </section>
     </div>
     </main>
     <!-- comment: maybe we can make the bottom-nav into a partial (as it will need to open other pages/do things) -->
@@ -294,11 +283,6 @@
                     cells.forEach(cell =>{
                         cell.innerText = "";
                     });
-                    let bodybuildingCheckbox = document.getElementById("bodybuilding");
-                    let isBodybuildingChecked = bodybuildingCheckbox.checked;
-                    if (!isBodybuildingChecked){
-                        console.log("Please select training style");
-                    }else{
                         //Fullbody day
                         table.rows[1].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
                         table.rows[1].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
@@ -320,19 +304,13 @@
                         table.rows[5].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
                         table.rows[5].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
                         table.rows[5].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
-                    }
-                })
+                    })
 
             intermediateBtn.addEventListener("click", () =>{
                 let cells = document.querySelectorAll("td");
                 cells.forEach(cell => {
                     cell.innerText = "";
                 });
-                let bodybuildingCheckbox = document.getElementById("bodybuilding");
-                let isBodybuildingChecked = bodybuildingCheckbox.checked;
-                if (!isBodybuildingChecked) {
-                    console.log("Please select training style");
-                } else {
 
                     //upper day
                     table.rows[1].cells[1].innerText = `${intermediateBodybuildingExercises[0].name}`;
@@ -362,19 +340,13 @@
                     table.rows[5].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
                     table.rows[5].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
                     table.rows[5].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
-                }
-            });
+                });
 
             advancedBtn.addEventListener("click", () => {
                 let cells = document.querySelectorAll("td");
                 cells.forEach(cell => {
                     cell.innerText = "";
                 });
-                let bodybuildingCheckbox = document.getElementById("bodybuilding");
-                let isBodybuildingChecked = bodybuildingCheckbox.checked;
-                if (!isBodybuildingChecked) {
-                    console.log("Please select training style");
-                } else {
                     //push day
                     table.rows[1].cells[1].innerText = `${advancedBodybuildingExercises[0].name}`;
                     table.rows[1].cells[2].innerText = `${advancedBodybuildingExercises[0].pushExercises}`;
@@ -416,8 +388,7 @@
                     table.rows[6].cells[3].innerText = `${advancedBodybuildingExercises[2].sets}`;
                     table.rows[6].cells[4].innerText = `${advancedBodybuildingExercises[2].reps}`;
                     table.rows[6].cells[5].innerText = `${advancedBodybuildingExercises[2].rest}`;
-                }
-            });
+                });
 
     </script>
 </body>
