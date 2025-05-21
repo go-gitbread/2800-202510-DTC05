@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 // static file for the style
 app.use(express.static("public"));
 
+
 app.use(session({
   secret: 'secretKey',
   resave: false,
@@ -124,7 +125,7 @@ app.get('/dashboard', async (req, res) => {
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   const { totalXP, userLevel, xpProgress } = await calculateTotalUserXP(req.session.userId);
-
+  console.log("Your avatar ISSSSSS: ", await updateAvatar(req.session.userId))
 
   req.session.level = userLevel;
   req.session.exp = totalXP;
@@ -814,6 +815,39 @@ app.get('/trackSession', (req, res) => {
     res.redirect('/routines');
   }
 });
+
+async function updateAvatar(userId){
+let avatar;
+const user = await User.findById(userId).select('level');
+const currentCat = await User.findById(userId).select('catAvatar') 
+const level = user.level;
+if (level > 15){
+    avatar = '/images/4ultimateGymMachine.png'
+  }
+  else if (level > 10){
+    avatar = '/images/3gymBro.png'
+  }
+  else if (level > 5){
+      avatar = '/images/2gymAmatuer.png'
+  }  
+  else avatar = '/images/1couchPotato.png'
+  console.log("Your avatar should be: ", avatar)
+  console.log("Your current avatar is: ", currentCat.catAvatar)
+
+  if (avatar != currentCat.catAvatar){
+    console.log("Trigger Cat Level Up!!!")
+    console.log("I'll update your cat avatar in the Database!")
+    await User.findByIdAndUpdate(userId, {
+    catAvatar: avatar
+  });
+  console.log("Database updated, your new cat is", avatar)
+  }
+  else{
+    console.log("Your avatar is as it should be.")
+  }
+  return avatar
+}
+
 
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
