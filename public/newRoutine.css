@@ -10,34 +10,32 @@ body {
     text-align: center;
   }
   
-  .welcome-text {
-    font-size: 20px;
-    margin-bottom: 10px;
-    font-weight: bold; 
-    font-family: 'Winky Rough', sans-serif; 
-    color: #333; 
-  }
+.welcome-text {
+  font-size: 20px;
+  max-width: 350px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 auto 5px auto;
+  padding-right:20px
+}
   
-  .routine-container {
-    width: 400px;
-    height: 350px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ddd;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-size: 20px;
-    font-weight: bold; 
-    font-family: 'Winky Rough', sans-serif; 
-    color: #333; 
-  }
+.routine-container {
+  width: 400px;
+  height: 60vh;
+  margin: 10px auto; 
+  background-color: #ddd;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  font-weight: bold; 
+  font-family: 'Winky Rough', sans-serif; 
+  color: #333; 
+}
   
   .routine-list-container {
     width: 90%;
@@ -93,26 +91,23 @@ body {
     margin-right: 10p
   }
   
-  .back-icon {
-    max-width: 40px;
-  }
-  
-  .back-button {
-    position: absolute;
-    left: calc(50% - 240px);
-    top: 16%;
-    transform: translateY(-50%);
-    border: none;
-    background-color: transparent;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 100;
-  }
-  
-  .back-button:hover {
-    background-color: #f0f0f0;
-  }
+.back-icon {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.back-button {
+  border: none;
+  background-color: transparent;
+  float: left;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.back-button:hover {
+  background-color: #f0f0f060;
+}
   
   .add-exercise-button:hover {
     background-color: #e0e0e0;
@@ -140,24 +135,24 @@ body {
     transform: scale(1.2);
   }
 
-  .button-row {
-    position: fixed;
-    top: 82%;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    z-index: 100;
-    width: 90vw; 
-    max-width: 600px; 
-  }
+.button-row {
+  position: fixed; /* Keep fixed for bottom positioning */
+  bottom: 20px; /* Position from bottom instead of top */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  z-index: 100;
+  width: 90vw; 
+  max-width: 600px; 
+}
   
   .add-exercise-button,
   .save-routine-button {
     flex: 1 1 45%; 
-    min-width: 120px;
+    min-width: 100px;
     max-width: 300px;
     padding: 10px 20px;
     font-size: 18px; 
@@ -213,4 +208,28 @@ body {
   .action-button:hover {
     background-color: #e0e0e0;
     transform: scale(1.05);
+  }
+
+  #error-message {
+  max-width: 275px;
+  font-size: 0.9rem;
+  padding: 4px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  z-index: 1000;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 22%; /* adjust as needed for vertical position */
+
+}
+
+  @media (max-height: 499px) {
+    .button-row {
+      position: relative;
+      margin: 100px auto;
+    }
   }
