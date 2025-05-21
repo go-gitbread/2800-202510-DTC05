@@ -51,10 +51,10 @@
           </p>
 
           <div class="stats">
-            <p><strong>Level:</strong> 5</p>
-            <p><strong>XP:</strong> 1,240</p>
-            <p><strong>Streaks/Days Active:</strong> 12</p>
-          </div>
+            <p><strong>Level:</strong> <%= level %></p>
+            <p><strong>XP:</strong> <%= exp.toLocaleString() %></p>
+            <p><strong>Streaks/Days Active:</strong> <%= streak %></p>
+          </div>          
 
           <div class="button-row">
             <% if (isOwnProfile) { %>

@@ -238,13 +238,18 @@ app.get('/routines', async (req, res) => {
 });
 
 //Route for profile page
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
+
+  const user = await User.findById(req.session.userId).select('name email level exp streak');
 
   res.render('profile', {
     isOwnProfile: true,
-    username: req.session.userName,
-    email: req.session.userEmail,
+    username: user.name,
+    email: user.email,
+    level: user.level || 1,
+    exp: user.exp || 0,
+    streak: user.streak || 0,
     showToast: req.query.updated === '1'
   });
 });
