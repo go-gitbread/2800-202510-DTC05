@@ -14,62 +14,61 @@
 <body class="container">
   <%- include('partials/navbar') %>
 
-  <div class="welcome-banner">
-    <h2>Welcome back, <%= username %>!</h2>
-  </div>
+  <div class="dashboard-layout">
 
-  <div class="header-top">
-    <div class="avatar-container">
-      <div class="cat-avatar">
-        <img src="<%= catAvatar %>" alt="Cat Avatar" />
+    <div class="welcome-card">
+      <div class="welcome-banner">
+        <h2>Welcome back, <%= username %>!</h2>
+      </div>
+    
+      <div class="avatar-container">
+        <div class="cat-avatar">
+          <img src="<%= catAvatar %>" alt="Cat Avatar" />
+        </div>
       </div>
     </div>
-  </div>
+    
 
-  <div class="quote-box">
-    <p><%= quote %></p>
-  </div>
+      <div class="quote-box">
+        <p><%= quote %></p>
+      </div>
 
-  <div class="stat-grid">
-    <div class="row">
-      <div class="stat-card">
-        <span class="stat-icon">🐾</span>
-        8,550<br><small>Steps</small>
+      <div class="stat-grid">
+        <div class="row">
+          <div class="stat-card">
+            <span class="stat-icon">⏱️</span>
+            <%= todayDuration %> min<br><small>Today's Workout</small>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">⭐</span>
+            <%= todayXP %> XP<br><small>Today's XP</small>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📆</span>
+            <%= streak %><br><small>Streak</small>
+          </div>
+        </div>
       </div>
-      <div class="stat-card">
-        <span class="stat-icon">📍</span>
-        4.2 km<br><small>Distance</small>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">🔥</span>
-        510<br><small>Calories</small>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">📆</span>
-        <%= streak %><br><small>Streak</small>
-      </div>
-    </div>
-  </div>
 
-  <div class="quick-actions">
-    <a href="/routines" class="quick-btn">🏋️ Workout</a>
-    <a href="/history" class="quick-btn">📊 Swole Stats</a> 
-  </div>
+      <div class="quick-actions">
+        <a href="/routines" class="quick-btn btn-workout">🏆 Workout</a>
+        <a href="/history" class="quick-btn btn-history">📊 History</a>
+      </div>      
 
-  <div class="level-system-card">
-    <div class="level-header">
-      <div class="level-label">Level <%= level %></div>
-      <div class="xp-count">XP: <%= exp %> / <%= xpForNextLevel %></div>
-    </div>
-  
-    <div class="xp-bar-row">
-      <span class="xp-text-label">XP</span>
-      <div class="xp-bar-container">
-        <div class="xp-bar-fill" style="width: <%= progressPercent %>%"></div>
+      <div class="level-system-card">
+        <div class="level-header">
+          <div class="level-label">Level <%= level %></div>
+          <div class="xp-count">XP: <%= exp %> / <%= xpForNextLevel %></div>
+        </div>
+      
+        <div class="xp-bar-row">
+          <span class="xp-text-label">XP</span>
+          <div class="xp-bar-container">
+            <div class="xp-bar-fill" style="width: <%= progressPercent %>%"></div>
+          </div>
+        </div>
       </div>
-    </div>
   </div>
-  
   
 </body>
 </html>
