@@ -106,32 +106,42 @@ body {
     text-align: center;
     border-radius: 12px;
     text-decoration: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
-  }
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.25s ease;
+  }  
   
   
   .quick-btn:hover {
-    background-color: #1e2a40;
-    transform: scale(1.02);
-  }
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+  }  
   
   /* Specific button overrides */
-.btn-workout {
-  background-color: #303C58;
-}
-
-.btn-workout:hover {
-  background-color: #1e2a40;
-}
-
-.btn-history {
-  background-color: #EB7C69;
-}
-
-.btn-history:hover {
-  background-color: #cf6756;
-}
+  .btn-workout {
+    background-color: #303C58;
+    color: white;
+  }
+  
+  .btn-workout:hover {
+    background-color: #CAD5E1;
+    color: black;
+    box-shadow: 0 0 10px rgba(48, 60, 88, 0.3);
+  }
+  
+  .btn-history {
+    background-color: #EB7C69;
+    color: white;
+  }
+  
+  .btn-history:hover {
+    background-color: #F4B173;
+    color: black;
+    box-shadow: 0 0 10px rgba(235, 124, 105, 0.3);
+  }
+  
+  
+  
 
   /* XP bar */
   
