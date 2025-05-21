@@ -40,7 +40,7 @@ body {
     height: 130px;
     margin: 0 auto 10px;
     border-radius: 50%;
-    background-color: #CAD5E1;
+    background-color: #e7f1fc;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -166,7 +166,7 @@ body {
   /* XP bar */
   
   .level-system-card {
-    background-color: #CAD5E1;
+    background-color: #e7f1fc;
     border-radius: 12px;
     padding: 14px 18px;
     margin-top: 10px;
