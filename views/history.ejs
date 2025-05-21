@@ -1,95 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Workout History</title>
-    <link rel="stylesheet" href="/navbar.css" />
-    <link rel="stylesheet" href="/weather.css" />
-    <link rel="stylesheet" href="/dashboard.css" />
-    <link
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        rel="stylesheet"
-    />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
-        rel="stylesheet"
-    />
-    
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workout History</title>
+  <link rel="stylesheet" href="/navbar.css" />
+  <link rel="stylesheet" href="/weather.css" />
+  <link rel="stylesheet" href="/history.css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet"/>
 </head>
+<body>
+  <%- include('partials/navbar') %>
 
-<body class="body">
-    <div class="container">
-        <%- include('partials/navbar') %>
+  <div class="history-layout">
+    <h2 class="history-title">📜 Workout History</h2>
 
-        <div class="container my-5">
-            <h1 class="text-center my-5">Workout History</h1>
+    <% if (workouts && workouts.length > 0) { %>
+      <% workouts.forEach(function(workout) { %>
+        <div class="workout-card">
+          <div class="workout-header">
+            <div class="workout-date"><%= new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></div>
+            <div class="workout-summary">
+              <span>⏱️ <%= workout.duration %></span>
+              <span>⭐ <%= workout.xpGained %> XP</span>
+            </div>
+          </div>
 
-            <% if (workouts && workouts.length > 0) { %>
-                <% workouts.forEach(function(workout) { %>
-                    <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
-                            <div class="d-flex justify-content-between">
-                                <span>
-                                    <i class="far fa-calendar-alt mr-2"></i>
-                                    <%= new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %>
-                                </span>
-                                <span>
-                                    <i class="far fa-clock mr-1"></i> <%= workout.duration || '00:00' %> |
-                                    <i class="fas fa-award ml-3 mr-1"></i> <%= workout.xpGained || 0 %> XP
-                                </span>
-                            </div>
+          <% Object.entries(workout.routines).forEach(function([routineName, routine]) { %>
+            <div class="routine-block">
+              <div class="routine-name">🏋️ <%= routineName %></div>
+              <div class="exercise-table">
+                <% Object.entries(routine.exercises).forEach(function([exerciseName, sets]) { %>
+                  <div class="exercise-row">
+                    <div class="exercise-name"><%= exerciseName %></div>
+                    <div class="set-info">
+                      <% sets.forEach(function(set, index) { %>
+                        <div class="set-badge">
+                          <% if (set.duration !== undefined) { %>
+                            <%= set.duration %> min<%= set.distance ? `, ${set.distance} km` : '' %>
+                          <% } else { %>
+                            Set <%= index + 1 %>: <%= set.reps %> reps × <%= set.weight %> lbs
+                          <% } %>
                         </div>
-                        <div class="card-body">
-                            <% Object.entries(workout.routines).forEach(function([routineName, routine]) { %>
-                                <h5 class="mb-3">
-                                    <i class="fas fa-dumbbell mr-2"></i><%= routineName %>
-                                </h5>
-                                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Exercise</th>
-                                            <th>Sets</th>
-                                            <th>Set Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% Object.entries(routine.exercises).forEach(function([exerciseName, sets]) { %>
-                                            <tr>
-                                                <td><%= exerciseName %></td>
-                                                <td><%= sets.length %></td>
-                                                <td>
-                                                    <% sets.forEach(function(set) { %>
-                                                        <span class="badge badge-secondary mr-1">
-                                                            <% if (set.duration !== undefined) { %>
-                                                                <%= set.duration || 0 %> min<%= set.distance ? `, ${set.distance} km` : '' %>
-                                                            <% } else { %>
-                                                                <%= set.reps || 0 %> reps × <%= set.weight || 0 %> lbs
-                                                            <% } %>
-                                                        </span>
-                                                    <% }); %>
-                                                </td>
-                                            </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
-                            <% }); %>
-                        </div>
+                      <% }); %>
                     </div>
+                  </div>
                 <% }); %>
-            <% } else { %>
-                <p class="text-center">No workouts found.</p>
-            <% } %>
+              </div>
+            </div>
+          <% }); %>
         </div>
-    </div>
+      <% }); %>
+    <% } else { %>
+      <p class="no-workouts">No workouts found.</p>
+    <% } %>
+  </div>
 </body>
-
 </html>
