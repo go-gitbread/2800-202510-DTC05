@@ -821,13 +821,13 @@ let avatar;
 const user = await User.findById(userId).select('level');
 const currentCat = await User.findById(userId).select('catAvatar') 
 const level = user.level;
-if (level > 15){
+if (level >= 15){
     avatar = '/images/4ultimateGymMachine.png'
   }
-  else if (level > 10){
+  else if (level >= 10){
     avatar = '/images/3gymBro.png'
   }
-  else if (level > 5){
+  else if (level >= 5){
       avatar = '/images/2gymAmatuer.png'
   }  
   else avatar = '/images/1couchPotato.png'
