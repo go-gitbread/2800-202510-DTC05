@@ -179,4 +179,11 @@ app.get('/about', (req, res) => {
   res.render('about');
 })
 
+
+
+app.get('/workoutGuide', (req, res) => {
+    res.render('workoutGuide');
+})
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
