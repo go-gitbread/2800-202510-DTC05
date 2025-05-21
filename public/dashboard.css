@@ -116,6 +116,23 @@ body {
     transform: scale(1.02);
   }
   
+  /* Specific button overrides */
+.btn-workout {
+  background-color: #303C58;
+}
+
+.btn-workout:hover {
+  background-color: #1e2a40;
+}
+
+.btn-history {
+  background-color: #EB7C69;
+}
+
+.btn-history:hover {
+  background-color: #cf6756;
+}
+
   /* XP bar */
   
   .level-system-card {
