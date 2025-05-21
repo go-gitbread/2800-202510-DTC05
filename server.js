@@ -281,7 +281,9 @@ app.get('/routines', async (req, res) => {
 app.get('/profile', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
-  const user = await User.findById(req.session.userId).select('name email level exp streak');
+  const user = await User.findById(req.session.userId).select('name email level exp');
+  const streak = await calculateWorkoutStreak(req.session.userId);
+
 
   res.render('profile', {
     isOwnProfile: true,
@@ -289,7 +291,7 @@ app.get('/profile', async (req, res) => {
     email: user.email,
     level: user.level || 1,
     exp: user.exp || 0,
-    streak: user.streak || 0,
+    streak: streak,
     showToast: req.query.updated === '1'
   });
 });
