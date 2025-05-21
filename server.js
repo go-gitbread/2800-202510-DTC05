@@ -286,6 +286,8 @@ app.get('/profile/:id', async (req, res) => {
       isOwnProfile: false,
       username: user.name,
       email: user.email,
+      showToast: req.query.updated === '0'
+
       // joinedDate: user.createdAt.toDateString()
     });
   } catch (err) {
