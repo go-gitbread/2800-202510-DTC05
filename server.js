@@ -701,6 +701,7 @@ app.get('/routine/:id/session', async (req, res) => {
 //Route for saving workout to the database
 app.post('/api/log-workout/:routineId', async (req, res) => {
   try {
+
     const { userId, date, routines, duration, xpGained } = req.body;
     const mainRoutineId = req.params.routineId;
 
@@ -720,6 +721,9 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
 
     // Save to database
     await workoutLog.save();
+
+    const newStreak = await calculateWorkoutStreak(userId);
+    await User.findByIdAndUpdate(userId, { streak: newStreak });
 
     // Clear the active routine since workout is completed
     req.session.activeRoutineId = null;
