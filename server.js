@@ -292,7 +292,7 @@ app.get('/profile', async (req, res) => {
     email: user.email,
     level: user.level || 1,
     exp: user.exp || 0,
-    streak: user.streak || 0,
+    streak: streak || 0,
     success,
     showToast: req.query.updated === '1'
   });
@@ -329,6 +329,8 @@ app.get('/profile/:id', async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
     const success = req.query.success;
+    const streak = await calculateWorkoutStreak(req.session.userId);
+
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -341,7 +343,7 @@ app.get('/profile/:id', async (req, res) => {
       userId: user._id,
       level: user.level,
       exp: user.exp,
-      streak: user.streak,
+      streak: streak,
       success,
       showToast: req.query.updated === '0'
 
@@ -417,10 +419,13 @@ app.get('/friends', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1
   const limit = 8; // 8 users per page
+  const streak = await calculateWorkoutStreak(req.session.userId);
+
 
   try {
     const totalUsers = await User.countDocuments();
     const usersList = await User.find()
+
       .select('name')
       .select('level')
       .select('streak')
@@ -434,11 +439,14 @@ app.get('/leaderboard', async (req, res) => {
     const hasNextPage = page * limit < totalUsers;
     const hasPrevPage = page > 1;
 
+
+
     res.render('leaderboard', {
       usersList,
       currentPage: page,
       hasNextPage,
-      hasPrevPage
+      hasPrevPage,
+      streak: streak
     });
   } catch (err) {
     console.error(err);
