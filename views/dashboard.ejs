@@ -56,18 +56,20 @@
     <a href="/history" class="quick-btn">📊 Swole Stats</a> 
   </div>
 
-  <table class="level-system">
-    <tr>
-      <th id="level-display">Level <%= level %></th>
-      <th id="level-xp">XP: <%= exp %> / <%= xpForNextLevel %></th>
-    </tr>
-    <tr>
-      <th id="level-bar" colspan="2">
-        <div id="level-bar-container">
-        <div id="level-bar-fill" style="width: <%= progressPercent %>%;"></div>
-        </div>
-      </th>
-    </tr>
-  </table>
+  <div class="level-system-card">
+    <div class="level-header">
+      <div class="level-label">Level <%= level %></div>
+      <div class="xp-count">XP: <%= exp %> / <%= xpForNextLevel %></div>
+    </div>
+  
+    <div class="xp-bar-row">
+      <span class="xp-text-label">XP</span>
+      <div class="xp-bar-container">
+        <div class="xp-bar-fill" style="width: <%= progressPercent %>%"></div>
+      </div>
+    </div>
+  </div>
+  
+  
 </body>
 </html>

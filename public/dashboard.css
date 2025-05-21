@@ -113,48 +113,59 @@ body {
   }
   
   /* XP bar */
-  table.level-system {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    font-size: 13px;
-    background-color: #cad5e1;
-    z-index: 99;
+  
+  .level-system-card {
+    background-color: #CAD5E1;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-family: 'Winky Rough', sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
   
-  #level-display,
-  #level-xp {
-    border: 1px solid #666;
-    padding: 4px;
-    width: 50%;
-    text-align: center;
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
     font-weight: bold;
-    background-color: #dfeaf5;
+    color: #303C58;
+    padding-bottom: 6px;
+  }
+
+  .level-label,
+  .xp-count {
+    font-size: 16px;
   }
   
-  #level-bar {
-    border: 1px solid #666;
-    background-color: #111;
-    color: white;
-    padding: 4px;
-    text-align: center;
+  .xp-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   
-  #level-bar-container {
-    margin-top: 4px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 85%;
-    height: 14px;
-    background-color: #333;
-    border-radius: 20px;
-    border: 1px solid white;
+  .xp-text-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #303C58;
+    white-space: nowrap;
   }
   
-  #level-bar-fill {
+  .xp-bar-container {
+    flex: 1;
+    height: 12px;
+    background-color: #FFFFFC;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #303C58;
+  }
+  
+  .xp-bar-fill {
     height: 100%;
-    border-radius: 20px;
-    background-image: linear-gradient(to right, #303c58, #cad5e1);
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+    background-image: linear-gradient(to right, #303C58, #CAD5E1);
+    border-radius: 6px 0 0 6px;
   }
+  
   
