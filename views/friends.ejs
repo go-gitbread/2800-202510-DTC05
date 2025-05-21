@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>FriendsList</title>
+
+      <link rel="stylesheet" href="/friends.css">
+      <link rel="stylesheet" href="/navbar.css">
+      <link rel="stylesheet" href="/weather.css">
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+            rel="stylesheet">
+</head>
+
+<body>
+      <%- include('partials/navbar') %>
+
+            <div class="table">
+                  <div class="container mt-4">
+                        <h2>Your Friends List</h2>
+                        <% if (friends.length===0) { %>
+                              <p>You don't have any friends yet. Go add some!</p>
+                              <% } else { %>
+                                    <table class="table-style">
+                                          <thead>
+                                                <tr>
+                                                      <th>Username</th>
+                                                      <th>Level</th>
+                                                      <th>Streak</th>
+                                                      <th>Profile Link</th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                                <% friends.forEach(friend=> { %>
+                                                      <tr>
+                                                            <td>
+                                                                  <%= friend.name %>
+                                                            </td>
+                                                            <td>
+                                                                  <%= friend.level %>
+                                                            </td>
+                                                            <td>
+                                                                  <%= friend.streak %>
+                                                            </td>
+                                                            <td><a href="/profile/<%= friend._id %>"
+                                                                        class="profile_btn">View
+                                                                        Profile</a></td>
+                                                      </tr>
+                                                      <% }) %>
+                                          </tbody>
+                                    </table>
+                                    <% } %>
+                  </div>
+
+            </div>
+</body>
+
+</html>

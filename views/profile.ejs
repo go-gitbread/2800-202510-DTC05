@@ -17,54 +17,54 @@
 
   <%- include('partials/navbar') %>
 
-  <% if (showToast) { %>
-    <div id="toast" class="toast-message">
-      ✅ Profile updated successfully!
-    </div>
-    <script>
-      setTimeout(() => {
-        const toast = document.getElementById('toast');
-        if (toast) toast.classList.add('fade-out');
-      }, 2500);
-      setTimeout(() => {
-        const toast = document.getElementById('toast');
-        if (toast) toast.remove();
-      }, 3000);
-    </script>
-  <% } %>
-  
-
-    <div class="profile-card">
-      <h2 class="section-title">
-        <%= isOwnProfile ? "Your Profile" : username + "'s Profile" %>
-      </h2>
-
-      <img src="/images/profile.jpg" alt="Avatar" class="avatar">
-
-      <h3 class="username">
-        <%= username %>
-      </h3>
-      <p class="email">
-        <%= email %>
-      </p>
-
-      </p>
-
-      <div class="stats">
-        <p><strong>Level:</strong> 5</p>
-        <p><strong>XP:</strong> 1,240</p>
-        <p><strong>Streaks/Days Active:</strong> 12</p>
+    <% if (showToast) { %>
+      <div id="toast" class="toast-message">
+        ✅ Profile updated successfully!
       </div>
+      <script>
+        setTimeout(() => {
+          const toast = document.getElementById('toast');
+          if (toast) toast.classList.add('fade-out');
+        }, 2500);
+        setTimeout(() => {
+          const toast = document.getElementById('toast');
+          if (toast) toast.remove();
+        }, 3000);
+      </script>
+      <% } %>
 
-      <div class="button-row">
-        <% if (isOwnProfile) { %>
-          <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
-          <a href="/logout" class="btn logout-btn">Logout</a>
-          <% } else { %>
-            <a href="/addFriend/<%= username %>" class="btn btn-primary">Add User</a>
-            <% } %>
-      </div>
-    </div>
+
+        <div class="profile-card">
+          <h2 class="section-title">
+            <%= isOwnProfile ? "Your Profile" : username + "'s Profile" %>
+          </h2>
+
+          <img src="/images/profile.jpg" alt="Avatar" class="avatar">
+
+          <h3 class="username">
+            <%= username %>
+          </h3>
+          <p class="email">
+            <%= email %>
+          </p>
+
+          </p>
+
+          <div class="stats">
+            <p><strong>Level:</strong> 5</p>
+            <p><strong>XP:</strong> 1,240</p>
+            <p><strong>Streaks/Days Active:</strong> 12</p>
+          </div>
+
+          <div class="button-row">
+            <% if (isOwnProfile) { %>
+              <a href="/profile/edit" class="btn settings-btn">Edit Settings</a>
+              <a href="/logout" class="btn logout-btn">Logout</a>
+              <% } else { %>
+                <a href="/addFriend/<%= userId %>" class="btn btn-primary">Add User</a>
+                <% } %>
+          </div>
+        </div>
 
 </body>
 

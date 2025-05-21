@@ -286,6 +286,7 @@ app.get('/profile/:id', async (req, res) => {
       isOwnProfile: false,
       username: user.name,
       email: user.email,
+      userId: user._id,
       showToast: req.query.updated === '0'
 
       // joinedDate: user.createdAt.toDateString()
@@ -295,6 +296,66 @@ app.get('/profile/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+// this route was adapted from the 2537 addFavourites route
+app.get('/addFriend/:id', async (req, res) => {
+  try {
+    const friendId = req.params.id;
+    const currentUserId = req.session.userId;
+
+    if (!currentUserId) {
+      return res.status(401).send('Please login first');
+    }
+
+    if (friendId === currentUserId.toString()) {
+      return res.status(400).send('Cannot add yourself as friend');
+    }
+
+    const currentUser = await User.findById(currentUserId);
+    if (!currentUser) {
+      return res.status(404).send('Current user not found');
+    }
+
+    const friendUser = await User.findById(friendId);
+    if (!friendUser) {
+      return res.status(404).send('User to add not found');
+    }
+
+    if (currentUser.friendsList.includes(friendId)) {
+      return res.status(400).send('User already in friends list');
+    }
+
+    currentUser.friendsList.push(friendId);
+    await currentUser.save();
+
+    res.redirect(`/profile/${friendId}`);
+  } catch (error) {
+    console.error('Error adding friend:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/friends', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId).populate('friendsList', 'name level streak');
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.render('friends', {
+      friends: user.friendsList
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+
+
 
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
