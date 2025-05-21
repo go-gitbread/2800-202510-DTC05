@@ -130,6 +130,8 @@ app.get('/dashboard', async (req, res) => {
   req.session.level = userLevel;
   req.session.exp = totalXP;
 
+  const streak = await calculateWorkoutStreak(req.session.userId);
+
   res.render('dashboard', {
     quote: randomQuote,
     username: req.session.userName,
@@ -140,7 +142,8 @@ app.get('/dashboard', async (req, res) => {
     progressPercent: xpProgress.progressPercent,
     xpToNextLevel: xpProgress.xpToNextLevel,
     xpForCurrentLevel: xpProgress.xpForCurrentLevel,
-    xpForNextLevel: xpProgress.xpForNextLevel
+    xpForNextLevel: xpProgress.xpForNextLevel,
+    streak: streak
   });
 });
 
@@ -853,6 +856,30 @@ if (level >= 15){
   return avatar
 }
 
+// Calculate streaks
+async function calculateWorkoutStreak(userId) {
+  const logs = await WorkoutLog.find({ userId }).sort({ date: -1 }).lean();
 
+  // Normalize each workout date to just the day
+  const workoutDays = new Set(
+    logs.map(log => {
+      const date = new Date(log.date);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime();
+    })
+  );
+
+  let streak = 0;
+  let currentDay = new Date();
+  currentDay.setHours(0, 0, 0, 0);
+
+  // Loop backwards through days until we hit a day with no workout
+  while (workoutDays.has(currentDay.getTime())) {
+    streak++;
+    currentDay.setDate(currentDay.getDate() - 1);
+  }
+
+  return streak;
+}
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
