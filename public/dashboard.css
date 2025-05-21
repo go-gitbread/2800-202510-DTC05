@@ -54,22 +54,6 @@ body {
     position: relative;
   }
   
-  .quote-box::before {
-    content: "🐱";
-    font-size: 20px;
-    position: absolute;
-    top: 8px;
-    left: 12px;
-  }
-  
-  .quote-box::after {
-    content: "💪";
-    font-size: 18px;
-    position: absolute;
-    bottom: 8px;
-    right: 12px;
-  }
-  
   /* Stat Grid - Always 2x2 */
   .stat-grid .row {
     display: flex;

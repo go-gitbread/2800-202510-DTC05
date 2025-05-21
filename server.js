@@ -108,18 +108,18 @@ app.get('/dashboard', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   const quotes = [
-    "Unleash your inner beast. There's a lion inside every cat.",
-    "Don't stop until you're feline fine.",
-    "You're making good pawgress. Keep it up!",
-    "Fuel your purrformance with a little tuna.",
-    "What are you waiting for? The time is meow.",
-    "One smol step for cat, one swole leap for catkind.",
-    "It's a purrfect day to be swole.",
-    "Stay pawsitive. Gains are just a stretch away.",
-    "Consistency builds fur-titude.",
-    "The road to swole is paved with paw prints.",
-    "No more kitten around, it's go time.",
-    "It's never too late to pounce on your goals.",
+    "🐱 Unleash your inner beast. There's a lion inside every cat. 💪",
+    "🐱 Don't stop until you're feline fine. 💪",
+    "🐱 You're making good pawgress. Keep it up! 💪",
+    "🐱 Fuel your purrformance with a little tuna. 💪",
+    "🐱 What are you waiting for? The time is meow. 💪",
+    "🐱 One smol step for cat, one swole leap for catkind. 💪",
+    "🐱 It's a purrfect day to be swole. 💪",
+    "🐱 Stay pawsitive. Gains are just a stretch away. 💪",
+    "🐱 Consistency builds fur-titude. 💪",
+    "🐱 The road to swole is paved with paw prints. 💪",
+    "🐱 No more kitten around, it's go time. 💪",
+    "🐱 It's never too late to pounce on your goals. 💪",
   ];
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
