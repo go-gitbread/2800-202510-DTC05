@@ -40,7 +40,7 @@
                           <% if (set.duration !== undefined) { %>
                             <%= set.duration %> min<%= set.distance ? `, ${set.distance} km` : '' %>
                           <% } else { %>
-                            Set <%= index + 1 %>: <%= set.reps %> reps × <%= set.weight %> lbs
+                            Set <%= index + 1 %>: <%= set.reps || 0 %> reps × <%= set.weight || 0 %> lbs
                           <% } %>
                         </div>
                       <% }); %>
