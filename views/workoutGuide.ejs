@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Workout Guide Page</title>
     <link rel="stylesheet" href="/navbar.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,9 +83,26 @@
         </ul>
         <br>
         <h3>How to structure a workout plan?</h3>
-        <p>1. </p>
+        <p>1. Measure Your Fitness Level</p>
         <ul>
-            <li></li>
+            <li>- Your Body Mass Index (BMI)</li>
+            <li>- How many pushups can you do?</li>
+            <li>- How long does it take to run/walk 1 mile (1.6 kilometers)</li>
+            <li>- How well is your joint mobility?</li>
+        </ul>
+        <p>2. Think about your fitness goals</p>
+        <ul>
+            <li>Ask Yourself:</li>
+            <li>- Am I training to lose weight?</li>
+            <li>- Am I training to gain muscle?</li>
+            <li>- Am I training to get stronger?</li>
+            <li>- Am I training to run faster/longer?</li>
+        </ul>
+        <p>3. Make a balanced routine</p>
+        <ul>
+            <li>- Include aerobic activity throughout your week</li>
+            <li>- Incorporate strength training</li>
+            <li>- Include stretching exercises into your routine</li>
         </ul>
         <section>
             <h2>Select Your Fitness Level</h2>
@@ -169,35 +186,10 @@
                     <label for="search">Search Exercises</label>
                     <input type="search" id="search" data-search>
                 </div>
-                <!-- <div class="user-cards">
-                    <div class="card">
-                        <div class="header">Dumbbell Bench Press</div>
-                        <div class="body">youtube link</div>
-                    </div>
 
-                    <div class="card">
-                        <div class="header">Barbbell Bench Press</div>
-                        <div class="body">youtube link</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="header">Lat Pulldown</div>
-                        <div class="body">youtube link</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="header">Leg Press</div>
-                        <div class="body">youtube link</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="header">Barbell Back Squat</div>
-                        <div class="body">youtube link</div>
-                    </div>
-                </div> -->
-                <div class="user-cards" data-user-cards-container></div>
+                <div class="user-cards row" data-user-cards-container></div>
                 <template data-user-template>
-                        <div class="card">
+                        <div class="card column">
                             <div class="header" data-header></div>
                             <div class="body" data-body></div>
                         </div>
@@ -319,7 +311,7 @@
                         link: "https://www.youtube.com/embed/5s4_yeSC5C0?controls=1"
                     },
                     {
-                        exerciseName: "Barbbell Bench Press",
+                        exerciseName: "Barbell Bench Press",
                         muscleGroup: ["Chest", "Triceps"],
                         link: "https://www.youtube.com/embed/0cXAp6WhSj4?controls=1"
                     },
@@ -385,7 +377,7 @@
             searchInput.addEventListener("input", e => {
                 const value = e.target.value.toLowerCase()
                 exerciseCards.forEach(exercise =>{
-                    const isVisible = exercise.exerciseName.toLowerCase().includes(value) || exercise.muscleGroup.toLowerCase().includes(value)
+                    const isVisible = exercise.exerciseName.toLowerCase().includes(value) || exercise.muscle.toLowerCase().includes(value);
                     exercise.element.classList.toggle("hide", !isVisible)
                 })
             })
@@ -394,8 +386,9 @@
                 
                 const exerciseVideos = document.createElement("iframe");
                 exerciseVideos.src = e.link;
-                exerciseVideos.width = '200';
-                exerciseVideos.height = '200';
+                exerciseVideos.height = '100%';
+                exerciseVideos.width = '100%';
+                exerciseVideos.style.aspectRatio = '16/9';
 
                 const card = userCardTemplate.content.cloneNode(true).children[0];
                 const header = card.querySelector("[data-header]");
@@ -404,7 +397,7 @@
                 body.textContent = "Targeted Muscle Group: " + e.muscleGroup;
                 body.appendChild(exerciseVideos);
                 userCardContainer.append(card);
-                return { exerciseName: e.exerciseName, muscleGroup: e.muscleGroup, element: card }
+                return { exerciseName: e.exerciseName, muscle: e.muscleGroup.toString(), element: card }
             })
 
 

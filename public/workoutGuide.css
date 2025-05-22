@@ -75,18 +75,18 @@ input {
     font-size: 1rem;
 }
 
-.user-cards {
+/* .user-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: .25rem;
     margin-top: 1rem;
-}
+} */
 
 .card {
     border-radius: 5px;
     border: 1px solid black;
     background-color: white;
-    padding: .5rem;
+    padding: 2rem;
 }
 
 .card>.header {
@@ -100,3 +100,30 @@ input {
 .hide {
     display: none;
 }
+
+
+/* Code below cited from W3Schools Column Cards */
+.column {
+    float: left;
+    width: 25%;
+    padding: 0 10px; 
+}
+
+.row {
+    margin: 0 -5px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both; 
+}
+
+@media screen and (max-width: 900px) {
+    .column {
+        width: 100%;
+        display: inline-block;
+        margin-bottom: 20px;
+    } 
+}
+
