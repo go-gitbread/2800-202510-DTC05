@@ -66,17 +66,22 @@
       margin-bottom: 20px;
     }
 
-    .exercise {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
+.exercise {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 12px 16px; /* Match routine.css */
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Match routine.css */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add hover effect */
+}
+.exercise:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
     .icon {
       width: 40px;
@@ -90,10 +95,14 @@
       font-size: 1.5rem;
     }
 
-    .exercise-name {
-      flex-grow: 1;
-      font-size: 1rem;
-    }
+.exercise-name {
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Winky Rough', sans-serif;
+  margin-right: 40px;
+}
 
     .arrow {
       font-weight: bold;
@@ -308,4 +317,12 @@
 .rest-timer-controls {
   display: flex;
   align-items: center;
+}
+
+.header-item h4,
+.exercise-name,
+.set-entry,
+.btn,
+.finish-btn {
+  font-family: 'Winky Rough', sans-serif;
 }
