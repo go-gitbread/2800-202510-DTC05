@@ -245,6 +245,7 @@ function addSet() {
         workoutData[currentExercise].length === 0
     ) {
         console.log("I am NOT allowed to add a set");
+        showError("Please fill the current set.")
         return;
     }
 
@@ -266,7 +267,7 @@ function addSet() {
         workoutData[currentExercise].push({ reps: '', weight: '' });
         console.log("I've added a set");
     } else {
-        alert("Please fill out the previous set before adding a new one.");
+        showError("Please fill the current set");
         return;
     }
 }
@@ -369,7 +370,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     });
 
     if (Object.keys(routinesData).length === 0) {
-        alert('No exercise data to save. Please log at least one set.');
+        showError('No exercise data to save. Please log at least one set.');
         return;
     }
     isPaused = true;
@@ -499,3 +500,13 @@ document.getElementById("rest-restart-Btn").addEventListener("click", () => {
     const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     document.getElementById('restTimer').textContent = displayTime;
 });
+
+function showError(message) {
+  const errorMessage = document.getElementById('error-message');
+  errorMessage.textContent = message;
+  errorMessage.style.display = 'block';
+
+  setTimeout(() => {
+    errorMessage.style.display = 'none';
+  }, 3000); // Hide after 3 seconds
+}
