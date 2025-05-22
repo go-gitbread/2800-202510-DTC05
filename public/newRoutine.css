@@ -12,14 +12,14 @@ body {
   
 .welcome-text {
   font-size: 20px;
-  max-width: 350px;
+  max-width: 400px;
   font-weight: bold;
   color: #333;
   margin: 0 auto 5px auto;
   padding-right:20px
 }
   
-.routine-container {
+/* .routine-container {
   width: 400px;
   height: 60vh;
   margin: 10px auto; 
@@ -35,17 +35,22 @@ body {
   font-weight: bold; 
   font-family: 'Winky Rough', sans-serif; 
   color: #333; 
-}
+} */
   
-  .routine-list-container {
-    width: 90%;
-    height: 90%;
-    background-color: #eee;
-    border-radius: 10px;
-    overflow-y: auto;
-    padding: 10px;
-    color: #333;
-  }
+.routine-list-container {
+  width: 100%;
+  height: 375px;
+  max-width: 475px;
+  background-color: #eeeeeeb1;
+  border-radius: 10px;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+    display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 10px;
+}
   
   .exercise-list {
     display: flex;
@@ -72,7 +77,8 @@ body {
   .exercise-name {
     font-size: 18px;
     font-weight: 600;
-    text-align: left;
+    text-align: center;
+      flex: 1; /* take up available space */
   }
   
   .exercise-checkbox input[type="checkbox"] {
@@ -233,3 +239,9 @@ body {
       margin: 100px auto;
     }
   }
+
+@media (max-height: 499px) {
+  #error-message {
+      position: relative;
+  }
+}
