@@ -251,14 +251,14 @@ function addSet() {
     const existingSets = document.getElementById('sets-container').querySelectorAll('.set-entry');
     const setNumber = existingSets.length + 1;
     
-
     const lastSet = workoutData[currentExercise][workoutData[currentExercise].length - 1];
     const lastReps = lastSet.reps;
-    
+    const lastCardioSet = lastSet.duration
+    console.log("last Cardio set duration:" ,lastCardioSet)
     console.log("Last set reps:", lastReps);
     
     // Check if last set has reps >= 1
-    if (lastReps >= 1) {
+    if (lastReps >= 1 || lastCardioSet > 0) {
         console.log("I am allowed to add a set");
         addSetToDisplay(setNumber);
         
@@ -266,7 +266,7 @@ function addSet() {
         workoutData[currentExercise].push({ reps: '', weight: '' });
         console.log("I've added a set");
     } else {
-        alert("Please fill in reps and weight for the last set before adding a new one.");
+        alert("Please fill out the previous set before adding a new one.");
         return;
     }
 }
