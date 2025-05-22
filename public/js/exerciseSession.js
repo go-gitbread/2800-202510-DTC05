@@ -142,7 +142,7 @@ function refreshSetsDisplay() {
 }
 
 //Function to display a new set on the page
-function addSetToDisplay(setNumber, value1 = '', value2 = '') {
+function addSetToDisplay(setNumber, value1 = '0', value2 = '0') {
     const setsContainer = document.getElementById('sets-container');
     const exercise = exercises.find(ex => ex.name === currentExercise);
     const isCardio = exercise?.category === 'Cardio';
@@ -152,14 +152,14 @@ function addSetToDisplay(setNumber, value1 = '', value2 = '') {
     if (isCardio) {
         newSet.innerHTML = `
           <div>Set ${setNumber}</div>
-          <div><input type="number" class="duration-input" placeholder="Duration (min)" min="0" value="${value1}"> min</div>
-          <div><input type="number" class="distance-input" placeholder="Distance (km)" min="0" step="0.1" value="${value2}"> km</div>
+          <div><input type="number" class="duration-input" placeholder="0" min="0" value="${value1}"> min</div>
+          <div><input type="number" class="distance-input" placeholder="0" min="0" step="0.1" value="${value2}"> km</div>
         `;
     } else {
         newSet.innerHTML = `
           <div>Set ${setNumber}</div>
-          <div><input type="number" class="rep-input" value="${value1}" placeholder="Reps" min="0" step="1"> reps</div>
-          <div><input type="number" class="weight-input" value="${value2}" placeholder="Weight" min="0" step="1"> lbs</div>
+          <div><input type="number" class="rep-input" value="${value1}" placeholder="0" min="0" step="1"> reps</div>
+          <div><input type="number" class="weight-input" value="${value2}" placeholder="0" min="0" step="1"> lbs</div>
         `;
     }
 
@@ -240,19 +240,38 @@ function displayXP(xpGained) {
 
 //Function to add a new set in the exercise log
 function addSet() {
-    const setsContainer = document.getElementById('sets-container');
-    const existingSets = setsContainer.querySelectorAll('.set-entry');
-    const setNumber = existingSets.length + 1; //Determine what number the next set will be
-
-    addSetToDisplay(setNumber); //Call this helper function to display the new set with the new set number
-
-    // Add a new empty set to the workoutData for logging 
-    // **workoutData stores all the currently saved workout data**
-    if (!workoutData[currentExercise]) {
-        workoutData[currentExercise] = [];
+    if (
+        !workoutData[currentExercise] ||
+        workoutData[currentExercise].length === 0
+    ) {
+        console.log("I am NOT allowed to add a set");
+        showError("Please fill the current set.")
+        return;
     }
-    workoutData[currentExercise].push({ reps: '', weight: '' });
+
+    const existingSets = document.getElementById('sets-container').querySelectorAll('.set-entry');
+    const setNumber = existingSets.length + 1;
+    
+    const lastSet = workoutData[currentExercise][workoutData[currentExercise].length - 1];
+    const lastReps = lastSet.reps;
+    const lastCardioSet = lastSet.duration
+    console.log("last Cardio set duration:" ,lastCardioSet)
+    console.log("Last set reps:", lastReps);
+    
+    // Check if last set has reps >= 1
+    if (lastReps >= 1 || lastCardioSet > 0) {
+        console.log("I am allowed to add a set");
+        addSetToDisplay(setNumber);
+        
+        // Add new empty set to workoutData
+        workoutData[currentExercise].push({ reps: '', weight: '' });
+        console.log("I've added a set");
+    } else {
+        showError("Please fill the current set");
+        return;
+    }
 }
+
 //Function to save the reps/weight data inputted by the user 
 function saveCurrentExerciseData() {
     const setsContainer = document.getElementById('sets-container');
@@ -351,7 +370,7 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
     });
 
     if (Object.keys(routinesData).length === 0) {
-        alert('No exercise data to save. Please log at least one set.');
+        showError('No exercise data to save. Please log at least one set.');
         return;
     }
     isPaused = true;
@@ -481,3 +500,13 @@ document.getElementById("rest-restart-Btn").addEventListener("click", () => {
     const displayTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     document.getElementById('restTimer').textContent = displayTime;
 });
+
+function showError(message) {
+  const errorMessage = document.getElementById('error-message');
+  errorMessage.textContent = message;
+  errorMessage.style.display = 'block';
+
+  setTimeout(() => {
+    errorMessage.style.display = 'none';
+  }, 3000); // Hide after 3 seconds
+}

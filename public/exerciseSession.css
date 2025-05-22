@@ -66,17 +66,22 @@
       margin-bottom: 20px;
     }
 
-    .exercise {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
+.exercise {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 12px 16px; /* Match routine.css */
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Match routine.css */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add hover effect */
+}
+.exercise:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
     .icon {
       width: 40px;
@@ -90,29 +95,48 @@
       font-size: 1.5rem;
     }
 
-    .exercise-name {
-      flex-grow: 1;
-      font-size: 1rem;
-    }
+.exercise-name {
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Winky Rough', sans-serif;
+  margin-right: 40px;
+}
 
     .arrow {
       font-weight: bold;
       font-size: 1.2rem;
     }
 
-    .finish-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: #4CAF50;
-      color: white;
-      text-align: center;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 30px;
-    }
+.finish-btn {
+  position: fixed; 
+  bottom: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  /* Size & layout */
+  width: 90vw;
+  max-width: 425px;
+  padding: 20px 80px;  /* Taller padding */
+  
+  font-family: 'Winky Rough', sans-serif;
+  font-size: 24px;     
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
 
     .finish-btn:hover {
       background: #45a049;
@@ -126,6 +150,7 @@
       border-radius: 10px;
       margin-bottom: 10px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+       align-items: center;
     }
 
     .set-entry div {
@@ -141,21 +166,38 @@
       text-align: center;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
+.buttons {
+  position: fixed; 
+  bottom: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;  /* keep this in case of smaller screens */
+  z-index: 100;
+  width: 90vw; 
+  max-width: 600px; 
+}
 
-    .btn {
-      flex: 1;
-      padding: 12px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 40px;
+  color: rgb(0, 0, 0);
+  font-family: 'Winky Rough', sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 48%; /* changed here */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
     .btn-add {
       background: #2196F3;
@@ -262,6 +304,7 @@
       border-radius: 10px;
       font-size: 10px;
       cursor: pointer;
+      float: right;
     }
 
     .btn-link:hover{
@@ -309,3 +352,54 @@
   display: flex;
   align-items: center;
 }
+
+.header-item h4,
+.exercise-name,
+.set-entry,
+.btn,
+.finish-btn {
+  font-family: 'Winky Rough', sans-serif;
+}
+
+
+.back-icon {
+  max-width: 40px;
+  max-height: 40px;
+}
+  
+.back-button {
+  border: none;
+  background-color: transparent;
+  float: left;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+  .back-button:hover {
+    background-color: #f0f0f0;
+  }
+
+    #error-message {
+  max-width: 375px;
+  font-size: 0.9rem;
+  padding: 4px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  z-index: 1000;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 14%;
+
+}
+
+  @media (max-height: 499px) {
+    .buttons {
+      position: relative;
+      margin: 400px auto;
+    }
+  }

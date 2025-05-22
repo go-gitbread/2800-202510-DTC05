@@ -21,14 +21,18 @@
   <div class="container"><%- include('partials/navbar') %> </div>
 
   <div class="main-content">
-    <a href="/back" class="back-button">
-      <img src="/images/back.png" alt="Back" class="back-icon">
-    </a>
+
     <!-- <div class="welcome-text">My New Routine</div> -->
     <div class="welcome-text">
-      <label for="routine-name">Routine Name:</label>
+      <a href="/back" class="back-button">
+      <img src="/images/back.png" alt="Back" class="back-icon">
+    </a>
+      <label for="routine-name">Enter a Routine Name:</label>
       <input type="text" id="routine-name" name="routineName" placeholder="My New Routine" required>
+
+
     </div>
+                  <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
     <div class="routine-container">
       <div class="routine-list-container">
         <div class="exercise-list">
@@ -53,7 +57,7 @@
     </div>
 
     <div class="button-row">
-      <a href="/selectExercise" class="add-exercise-button">
+      <a href="/selectExercise" class="add-exercise-button" onclick="saveRoutineNameToLocalStorage()">
         <img src="/images/plus.png" alt="Add" class="plus-icon">
         Add Exercise
       </a>
@@ -64,33 +68,64 @@
     </div>
 
     <script>
+      //Save the inputted routine name in local storage so it doesnt get erased
+      function saveRoutineNameToLocalStorage() {
+    const routineName = document.getElementById('routine-name').value.trim();
+    localStorage.setItem('routineName', routineName);
+  }
+
+  // On page load, prefill the given name if one has been provided
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('routineName');
+    if (savedName) {
+      document.getElementById('routine-name').value = savedName;
+    }
+  });
       //Save button logic
-      document.querySelector('.save-routine-button').addEventListener('click', async () => { //When the Save Routine button is clicked...
-        const routineName = document.getElementById('routine-name').value.trim(); //Get the name of the routine
 
-        //Ensure a name is entered
-        if (!routineName) {
-          alert('Please enter a name for your routine.');
-          return;
-        }
+  document.querySelector('.save-routine-button').addEventListener('click', async () => {
+    const routineName = document.getElementById('routine-name').value.trim();
+    const errorMessage = document.getElementById('error-message');
 
-        // Get the current list of exercises in the routine draft
-        const exercises = Array.from(document.querySelectorAll('.exercise-name'))
-          .map(exerciseElement => exerciseElement.textContent.trim()); //Loop over each exercise element's text content and extract the name to a new array
+    // Clear previous error
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
 
-        const res = await fetch('/saveRoutine', {
-          method: 'POST', //modify the response (res) to send a POST request to the server
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ routineName, exercises })
-        });
+    // Get exercises
+    const exercises = Array.from(document.querySelectorAll('.exercise-name'))
+      .map(el => el.textContent.trim())
+      .filter(name => name !== 'No exercises added yet.');
 
-        if (res.ok) {
-          console.log('Routine saved successfully!');
-          window.location.href = '/routines'; //Redirect to the routines page
-        } else {
-          console.log('Failed to save routine.');
-        }
-      });
+    // Validation
+    if (!routineName) {
+      errorMessage.textContent = 'Please enter a name';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    if (exercises.length === 0) {
+      errorMessage.textContent = 'Please add at least one exercise.';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    // Saving
+    const res = await fetch('/saveRoutine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ routineName, exercises })
+    });
+
+    if (res.ok) {
+      console.log('Routine saved successfully!');
+      localStorage.removeItem('routineName'); //Remove saved routine name from local storage
+      window.location.href = '/routines';
+    } else {
+      errorMessage.textContent = 'Failed to save routine. Please try again.';
+      errorMessage.style.display = 'block';
+    }
+  });
+
 
       //Delete button logic
       document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
