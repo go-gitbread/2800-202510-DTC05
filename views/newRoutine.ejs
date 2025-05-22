@@ -57,7 +57,7 @@
     </div>
 
     <div class="button-row">
-      <a href="/selectExercise" class="add-exercise-button">
+      <a href="/selectExercise" class="add-exercise-button" onclick="saveRoutineNameToLocalStorage()">
         <img src="/images/plus.png" alt="Add" class="plus-icon">
         Add Exercise
       </a>
@@ -68,6 +68,25 @@
     </div>
 
     <script>
+      //Save the inputted routine name in local storage so it doesnt get erased
+      function saveRoutineNameToLocalStorage() {
+    const routineName = document.getElementById('routine-name').value.trim();
+    localStorage.setItem('routineName', routineName);
+  }
+
+  // On page load, prefill the given name if one has been provided
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('routineName');
+    if (savedName) {
+      document.getElementById('routine-name').value = savedName;
+    }
+  });
+
+  if (res.ok) {
+  console.log('Routine saved successfully!');
+  localStorage.removeItem('routineName'); // Clear saved name
+  window.location.href = '/routines';
+}
       //Save button logic
 
   document.querySelector('.save-routine-button').addEventListener('click', async () => {
@@ -105,6 +124,7 @@
 
     if (res.ok) {
       console.log('Routine saved successfully!');
+      localStorage.removeItem('routineName'); //Remove saved routine name from local storage
       window.location.href = '/routines';
     } else {
       errorMessage.textContent = 'Failed to save routine. Please try again.';
