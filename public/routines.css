@@ -12,7 +12,7 @@ body {
 
 .welcome-text {
   font-size: 20px;
-  max-width: 400px;
+  max-width: 440px;
   font-weight: bold;
   color: #333;
   margin: 0 auto 20px auto; /* top: 0, sides: auto, bottom: 20px */
@@ -79,8 +79,8 @@ body {
 }
 
 .back-icon {
-  max-width: 24px;
-  max-height: 24px;
+  max-width: 40px;
+  max-height: 40px;
 }
 
 .back-button {
@@ -117,7 +117,7 @@ body {
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 375px;
+  max-width: 305px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -197,6 +197,10 @@ body {
   .button-row {
     gap: 40px;
   }
+
+.add-exercise-button{
+  max-width: 375px;
+}
 }
 
     .arrow {

@@ -12,30 +12,12 @@ body {
   
 .welcome-text {
   font-size: 20px;
-  max-width: 400px;
+  max-width: 440px;
   font-weight: bold;
   color: #333;
   margin: 0 auto 5px auto;
   padding-right:20px
 }
-  
-/* .routine-container {
-  width: 400px;
-  height: 60vh;
-  margin: 10px auto; 
-  background-color: #ddd;
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-size: 20px;
-  font-weight: bold; 
-  font-family: 'Winky Rough', sans-serif; 
-  color: #333; 
-} */
   
 .routine-list-container {
   width: 100%;
@@ -78,7 +60,7 @@ body {
     font-size: 18px;
     font-weight: 600;
     text-align: center;
-      flex: 1; /* take up available space */
+      flex: 1; 
   }
   
   .exercise-checkbox input[type="checkbox"] {
@@ -142,8 +124,8 @@ body {
   }
 
 .button-row {
-  position: fixed; /* Keep fixed for bottom positioning */
-  bottom: 20px; /* Position from bottom instead of top */
+  position: fixed; 
+  bottom: 20px; 
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -229,7 +211,7 @@ body {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  top: 22%; /* adjust as needed for vertical position */
+  top: 22%;
 
 }
 
