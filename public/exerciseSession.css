@@ -403,3 +403,10 @@
       margin: 400px auto;
     }
   }
+
+  @media (max-width: 600px) {
+  .modal-content {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
