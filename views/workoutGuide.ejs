@@ -83,6 +83,11 @@
             <li>- You will feel less fatigued (increased fatigue can increase the risk of injury)</li>
         </ul>
         <br>
+        <h3>How to structure a workout plan?</h3>
+        <p>1. </p>
+        <ul>
+            <li></li>
+        </ul>
         <section>
             <h2>Select Your Fitness Level</h2>
             <!-- Build 3 cards with images indicating a beginner cat, intermediate cat, and an advanced cat-->
@@ -163,15 +168,41 @@
                 <h2>Videos for Proper Technique</h2>
                 <div class="search-wrapper">
                     <label for="search">Search Exercises</label>
-                    <input type="search" id="search">
+                    <input type="search" id="search" data-search>
                 </div>
-                <div class="user-cards">
+                <!-- <div class="user-cards">
                     <div class="card">
-                        <div class="header">Exercise Name</div>
+                        <div class="header">Dumbbell Bench Press</div>
                         <div class="body">youtube link</div>
                     </div>
-                </div>
-                
+
+                    <div class="card">
+                        <div class="header">Barbbell Bench Press</div>
+                        <div class="body">youtube link</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="header">Lat Pulldown</div>
+                        <div class="body">youtube link</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="header">Leg Press</div>
+                        <div class="body">youtube link</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="header">Barbell Back Squat</div>
+                        <div class="body">youtube link</div>
+                    </div>
+                </div> -->
+                <div class="user-cards" data-user-cards-container></div>
+                <template data-user-template>
+                        <div class="card">
+                            <div class="header" data-header></div>
+                            <div class="body" data-body></div>
+                        </div>
+                </template>
             </section>
     </div>
     </main>
@@ -281,6 +312,109 @@
                     rest: "3-5 minutes"
                 }
             ];
+
+            const exercises = [
+                    {
+                        exerciseName: "Dumbbell Bench Press",
+                        muscleGroup: ["Chest", "Triceps"],
+                        link: "https://www.youtube.com/embed/5s4_yeSC5C0?controls=1"
+                    },
+                    {
+                        exerciseName: "Barbbell Bench Press",
+                        muscleGroup: ["Chest", "Triceps"],
+                        link: "https://www.youtube.com/embed/0cXAp6WhSj4?controls=1"
+                    },
+                    {
+                        exerciseName: "Lat Pulldown",
+                        muscleGroup: ["Back", "Biceps"],
+                        link: "https://www.youtube.com/embed/Z_3xHwuO8Tk?controls=1"
+                    },
+                    {
+                        exerciseName: "Leg Press",
+                        muscleGroup: ["Legs"],
+                        link: "https://www.youtube.com/embed/yZmx_Ac3880?controls=1"
+                    },
+                    {
+                        exerciseName: "Barbell Back Squat",
+                        muscleGroup: ["Legs", "Quads"],
+                        link: "https://www.youtube.com/embed/VZ90qWlfQUE?controls=1"
+                    },
+                    {
+                        exerciseName: "Seated Dumbbell Overhead Shoulder Press",
+                        muscleGroup: ["Shoulders", "Triceps"],
+                        link: "https://www.youtube.com/embed/rO_iEImwHyo?controls=1"
+                    },
+                    {
+                        exerciseName: "Tricep Pushdown",
+                        muscleGroup: ["Triceps"],
+                        link: "https://www.youtube.com/embed/GCa8Q4e7laU?controls=1"
+                    },
+                    {
+                        exerciseName: "Chest Fly",
+                        muscleGroup: ["Chest"],
+                        link: "https://www.youtube.com/embed/eGjt4lk6g34?controls=1"
+                    },
+                    {
+                        exerciseName: "Tricep Rope Pressdown",
+                        muscleGroup: ["Triceps"],
+                        link: "https://www.youtube.com/embed/-xa-6cQaZKY?controls=1"
+                    },
+                    {
+                        exerciseName: "Lying Leg Curl",
+                        muscleGroup: ["Legs", "Hamstrings"],
+                        link: "https://www.youtube.com/embed/bvVZJbye9BU?controls=1"
+                    },
+                    {
+                        exerciseName: "Seated Leg Curl",
+                        muscleGroup: ["Legs", "Hamstrings"],
+                        link: "https://www.youtube.com/embed/Orxowest56U?controls=1"
+                    },
+                    {
+                        exerciseName: "Incline Barbell Bench Press",
+                        muscleGroup: ["Chest", "Triceps"],
+                        link: "https://www.youtube.com/embed/7UB2HQg5FNY?controls=1"
+                    },
+
+                ];
+
+            const userCardTemplate = document.querySelector("[data-user-template]");
+            const userCardContainer = document.querySelector("[data-user-cards-container]");
+            const searchInput = document.querySelector("[data-search]");
+            
+            let exerciseCards = [];
+
+            searchInput.addEventListener("input", e => {
+                const value = e.target.value.toLowerCase()
+                exerciseCards.forEach(exercise =>{
+                    const isVisible = exercise.exerciseName.toLowerCase().includes(value) || exercise.muscleGroup.toLowerCase().includes(value)
+                    exercise.element.classList.toggle("hide", !isVisible)
+                })
+            })
+
+            exerciseCards = exercises.map(e =>{
+                
+                const exerciseVideos = document.createElement("iframe");
+                exerciseVideos.src = e.link;
+                exerciseVideos.width = '200';
+                exerciseVideos.height = '200';
+
+                const card = userCardTemplate.content.cloneNode(true).children[0];
+                const header = card.querySelector("[data-header]");
+                const body = card.querySelector("[data-body]");
+                header.textContent = e.exerciseName;
+                body.textContent = "Targeted Muscle Group: " + e.muscleGroup;
+                body.appendChild(exerciseVideos);
+                userCardContainer.append(card);
+                return { exerciseName: e.exerciseName, muscleGroup: e.muscleGroup, element: card }
+            })
+
+
+
+
+
+
+
+
 
             let table = document.getElementById("week");
             let rows = table.rows;
