@@ -14,7 +14,6 @@
 </head>
 
 <body style="background-color: #CAD5E1; font-family: 'Winky Rough', sans-serif;">
-
   <%- include('partials/navbar') %>
     <!-- for the successful friend added -->
     <% if (success) { %>
@@ -66,11 +65,17 @@
 
               </p>
 
-          <div class="stats">
-            <p><strong>Level:</strong> <%= level %></p>
-            <p><strong>XP:</strong> <%= exp.toLocaleString() %></p>
-            <p><strong>Current Streak:</strong> <%= streak %></p>
-          </div>          
+              <div class="stats">
+                <p><strong>Level:</strong>
+                  <%= level %>
+                </p>
+                <p><strong>XP:</strong>
+                  <%= exp.toLocaleString() %>
+                </p>
+                <p><strong>Current Streak:</strong>
+                  <%= streak %>
+                </p>
+              </div>
 
               <div class="button-row">
                 <% if (isOwnProfile) { %>

@@ -2,48 +2,49 @@
 <html lang="en">
 
 <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Home</title>
-      <link rel="stylesheet" href="/coachOffice.css">
-      <link rel="stylesheet" href="/navbar.css">
-      <link rel="stylesheet" href="/weather.css">
-      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/coachOffice.css">
+    <link rel="stylesheet" href="/navbar.css">
+    <link rel="stylesheet" href="/weather.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
-            rel="stylesheet">
-       <link rel="stylesheet" href="/coachOffice.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/coachOffice.css">
 </head>
 
-<body>
- <div class="container"><%- include('partials/navbar') %> </div>
+<body style="font-family: 'Winky Rough', sans-serif;">
+    <%- include('partials/navbar') %>
 
-<div class="main-content">
-    <div class="chat-layout">
-        <div class="avatar-side">
-            <div class="welcome-text">
-                <%= catName || "Your Cat" %>'s Office
-            </div>
-            <img class="cat-avatar" src="<%= catAvatar %>" alt="Cat Avatar" />
-        </div>
+        <div class="main-content">
+            <div class="chat-layout">
+                <div class="avatar-side">
+                    <div class="welcome-text">
+                        <%= catName || "Your Cat" %>'s Office
+                    </div>
+                    <img class="cat-avatar" src="<%= catAvatar %>" alt="Cat Avatar" />
+                </div>
 
-        <div class="chat-container">
-            <h3>Purrsonal Trainer Chat</h3>
-            <div class="chat-messages" id="chat-messages">
-                <div class="message coach-message clearfix">
-                    <p>Meow there! I'm <%= catName || "Your Cat" %>, your purr-sonal fitness coach. How can I help you get fit today?</p>
+                <div class="chat-container">
+                    <h3>Purrsonal Trainer Chat</h3>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message coach-message clearfix">
+                            <p>Meow there! I'm <%= catName || "Your Cat" %>, your purr-sonal fitness coach. How can I
+                                    help you get fit today?</p>
+                        </div>
+                    </div>
+                    <div class="message-input">
+                        <textarea id="message-text" placeholder="Type your message here..." rows="2"></textarea>
+                        <button id="send-button">Send</button>
+                    </div>
                 </div>
             </div>
-            <div class="message-input">
-                <textarea id="message-text" placeholder="Type your message here..." rows="2"></textarea>
-                <button id="send-button">Send</button>
-            </div>
         </div>
-    </div>
-</div>
-    <script src="/js/coachOffice.js"></script>
+        <script src="/js/coachOffice.js"></script>
 </body>
 
 </html>

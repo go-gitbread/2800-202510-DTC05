@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/navbar.css">
   <link rel="stylesheet" href="/weather.css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/newRoutine.css">
+  <link rel="stylesheet" href="/newRoutine.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,137 +17,139 @@
     rel="stylesheet">
 </head>
 
-<body>
-  <div class="container"><%- include('partials/navbar') %> </div>
-
-  <div class="main-content">
-
-    <!-- <div class="welcome-text">My New Routine</div> -->
-    <div class="welcome-text">
-      <a href="/back" class="back-button">
-      <img src="/images/back.png" alt="Back" class="back-icon">
-    </a>
-      <label for="routine-name">Enter a Routine Name:</label>
-      <input type="text" id="routine-name" name="routineName" placeholder="My New Routine" required>
 
 
-    </div>
-                  <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
-    <div class="routine-container">
-      <div class="routine-list-container">
-        <div class="exercise-list">
-          <% if (routine && routine.length> 0) { %>
-            <% routine.forEach(function(exercise) { %>
-              <div class="exercise-item" data-exercise-name="<%= exercise %>">
-                <div class="exercise-name">
-                  <%= exercise %>
+<body style="background-color: #CAD5E1; font-family: 'Winky Rough', sans-serif;">
+  <%- include('partials/navbar') %>
+
+    <div class="main-content">
+
+      <!-- <div class="welcome-text">My New Routine</div> -->
+      <div class="welcome-text">
+        <a href="/back" class="back-button">
+          <img src="/images/back.png" alt="Back" class="back-icon">
+        </a>
+        <label for="routine-name">Enter a Routine Name:</label>
+        <input type="text" id="routine-name" name="routineName" placeholder="My New Routine" required>
+
+
+      </div>
+      <div id="error-message" class="alert alert-danger" role="alert" style="display: none;"></div>
+      <div class="routine-container">
+        <div class="routine-list-container">
+          <div class="exercise-list">
+            <% if (routine && routine.length> 0) { %>
+              <% routine.forEach(function(exercise) { %>
+                <div class="exercise-item" data-exercise-name="<%= exercise %>">
+                  <div class="exercise-name">
+                    <%= exercise %>
+                  </div>
+                  <div class="exercise-delete">
+                    <img src="/images/garbageBin.png" alt="Delete" class="trash-icon delete-btn"
+                      data-exercise="<%= exercise %>">
+                  </div>
                 </div>
-                <div class="exercise-delete">
-                  <img src="/images/garbageBin.png" alt="Delete" class="trash-icon delete-btn"
-                    data-exercise="<%= exercise %>">
-                </div>
-              </div>
-              <% }) %>
-                <% } else { %>
-                  <div class="exercise-name">No exercises added yet.</div>
-                  <% } %>
+                <% }) %>
+                  <% } else { %>
+                    <div class="exercise-name">No exercises added yet.</div>
+                    <% } %>
 
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="button-row">
-      <a href="/selectExercise" class="add-exercise-button" onclick="saveRoutineNameToLocalStorage()">
-        <img src="/images/plus.png" alt="Add" class="plus-icon">
-        Add Exercise
-      </a>
-      <button class="save-routine-button">
-        <img src="/images/diskette.png" alt="Add" class="save-icon">
-        Save Routine
-      </button>
-    </div>
+      <div class="button-row">
+        <a href="/selectExercise" class="add-exercise-button" onclick="saveRoutineNameToLocalStorage()">
+          <img src="/images/plus.png" alt="Add" class="plus-icon">
+          Add Exercise
+        </a>
+        <button class="save-routine-button">
+          <img src="/images/diskette.png" alt="Add" class="save-icon">
+          Save Routine
+        </button>
+      </div>
 
-    <script>
-      //Save the inputted routine name in local storage so it doesnt get erased
-      function saveRoutineNameToLocalStorage() {
-    const routineName = document.getElementById('routine-name').value.trim();
-    localStorage.setItem('routineName', routineName);
-  }
+      <script>
+        //Save the inputted routine name in local storage so it doesnt get erased
+        function saveRoutineNameToLocalStorage() {
+          const routineName = document.getElementById('routine-name').value.trim();
+          localStorage.setItem('routineName', routineName);
+        }
 
-  // On page load, prefill the given name if one has been provided
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedName = localStorage.getItem('routineName');
-    if (savedName) {
-      document.getElementById('routine-name').value = savedName;
-    }
-  });
-      //Save button logic
+        // On page load, prefill the given name if one has been provided
+        document.addEventListener('DOMContentLoaded', () => {
+          const savedName = localStorage.getItem('routineName');
+          if (savedName) {
+            document.getElementById('routine-name').value = savedName;
+          }
+        });
+        //Save button logic
 
-  document.querySelector('.save-routine-button').addEventListener('click', async () => {
-    const routineName = document.getElementById('routine-name').value.trim();
-    const errorMessage = document.getElementById('error-message');
+        document.querySelector('.save-routine-button').addEventListener('click', async () => {
+          const routineName = document.getElementById('routine-name').value.trim();
+          const errorMessage = document.getElementById('error-message');
 
-    // Clear previous error
-    errorMessage.style.display = 'none';
-    errorMessage.textContent = '';
+          // Clear previous error
+          errorMessage.style.display = 'none';
+          errorMessage.textContent = '';
 
-    // Get exercises
-    const exercises = Array.from(document.querySelectorAll('.exercise-name'))
-      .map(el => el.textContent.trim())
-      .filter(name => name !== 'No exercises added yet.');
+          // Get exercises
+          const exercises = Array.from(document.querySelectorAll('.exercise-name'))
+            .map(el => el.textContent.trim())
+            .filter(name => name !== 'No exercises added yet.');
 
-    // Validation
-    if (!routineName) {
-      errorMessage.textContent = 'Please enter a name';
-      errorMessage.style.display = 'block';
-      return;
-    }
+          // Validation
+          if (!routineName) {
+            errorMessage.textContent = 'Please enter a name';
+            errorMessage.style.display = 'block';
+            return;
+          }
 
-    if (exercises.length === 0) {
-      errorMessage.textContent = 'Please add at least one exercise.';
-      errorMessage.style.display = 'block';
-      return;
-    }
+          if (exercises.length === 0) {
+            errorMessage.textContent = 'Please add at least one exercise.';
+            errorMessage.style.display = 'block';
+            return;
+          }
 
-    // Saving
-    const res = await fetch('/saveRoutine', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ routineName, exercises })
-    });
-
-    if (res.ok) {
-      console.log('Routine saved successfully!');
-      localStorage.removeItem('routineName'); //Remove saved routine name from local storage
-      window.location.href = '/routines';
-    } else {
-      errorMessage.textContent = 'Failed to save routine. Please try again.';
-      errorMessage.style.display = 'block';
-    }
-  });
-
-
-      //Delete button logic
-      document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
-        btn.addEventListener('click', async () => {
-          const exerciseName = btn.getAttribute('data-exercise'); //This event listener will get the name of the exercise associated with the delete button when clicked
-
-          const res = await fetch('/deleteExercise', {
-            method: 'POST',       //modify the response (res) to send a POST request to the server
-            headers: { 'Content-Type': 'application/json' }, // 'headers' tell the HTTP what the type of content is, as a key-value pair. application/json means "We're sending you a JSON" as the request body
-            body: JSON.stringify({ exerciseName }) // convert exerciseName to a JSON string for sending to the server
+          // Saving
+          const res = await fetch('/saveRoutine', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ routineName, exercises })
           });
 
           if (res.ok) {
-            // Remove from DOM
-            const item = btn.closest('.exercise-item'); //item = the 'exercise-item' associated with the delete button
-            item.remove(); //remove the item from DOM
+            console.log('Routine saved successfully!');
+            localStorage.removeItem('routineName'); //Remove saved routine name from local storage
+            window.location.href = '/routines';
           } else {
-            alert('Failed to delete exercise.');
+            errorMessage.textContent = 'Failed to save routine. Please try again.';
+            errorMessage.style.display = 'block';
           }
         });
-      });
-    </script>
+
+
+        //Delete button logic
+        document.querySelectorAll('.delete-btn').forEach(btn => {    //For every delete button, add an event listener
+          btn.addEventListener('click', async () => {
+            const exerciseName = btn.getAttribute('data-exercise'); //This event listener will get the name of the exercise associated with the delete button when clicked
+
+            const res = await fetch('/deleteExercise', {
+              method: 'POST',       //modify the response (res) to send a POST request to the server
+              headers: { 'Content-Type': 'application/json' }, // 'headers' tell the HTTP what the type of content is, as a key-value pair. application/json means "We're sending you a JSON" as the request body
+              body: JSON.stringify({ exerciseName }) // convert exerciseName to a JSON string for sending to the server
+            });
+
+            if (res.ok) {
+              // Remove from DOM
+              const item = btn.closest('.exercise-item'); //item = the 'exercise-item' associated with the delete button
+              item.remove(); //remove the item from DOM
+            } else {
+              alert('Failed to delete exercise.');
+            }
+          });
+        });
+      </script>
 </body>
 
 </html>
