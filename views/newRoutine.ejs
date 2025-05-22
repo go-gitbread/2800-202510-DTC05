@@ -81,12 +81,6 @@
       document.getElementById('routine-name').value = savedName;
     }
   });
-
-  if (res.ok) {
-  console.log('Routine saved successfully!');
-  localStorage.removeItem('routineName'); // Clear saved name
-  window.location.href = '/routines';
-}
       //Save button logic
 
   document.querySelector('.save-routine-button').addEventListener('click', async () => {

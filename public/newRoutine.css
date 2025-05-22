@@ -40,28 +40,29 @@ body {
     gap: 12px;
   }
   
-  .exercise-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+.exercise-item {
+  display: flex;
+  justify-content: center; /* Center the content */
+  align-items: center;
+  padding: 10px 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative; /* Position relative for absolute positioning of child */
+}
   
   .exercise-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .exercise-name {
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-      flex: 1; 
-  }
+.exercise-name {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  /* No positioning needed as it will be centered by the parent's justify-content */
+}
   
   .exercise-checkbox input[type="checkbox"] {
     width: 20px;
@@ -108,10 +109,13 @@ body {
   }
 
   .exercise-delete {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  right: 15px; /* Position at the right side with some padding */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   }
+
   
   .trash-icon {
     width: 24px;
