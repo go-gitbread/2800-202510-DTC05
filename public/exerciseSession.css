@@ -271,6 +271,7 @@
       border-radius: 10px;
       font-size: 10px;
       cursor: pointer;
+      float: right;
     }
 
     .btn-link:hover{
@@ -326,3 +327,22 @@
 .finish-btn {
   font-family: 'Winky Rough', sans-serif;
 }
+
+
+.back-icon {
+  max-width: 40px;
+  max-height: 40px;
+}
+  
+.back-button {
+  border: none;
+  background-color: transparent;
+  float: left;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+  .back-button:hover {
+    background-color: #f0f0f0;
+  }
