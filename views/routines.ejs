@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
- 
+
   <link rel="stylesheet" href="/navbar.css">
   <link rel="stylesheet" href="/weather.css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-   <link rel="stylesheet" href="/routines.css">
+  <link rel="stylesheet" href="/routines.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,18 +17,21 @@
     rel="stylesheet">
 </head>
 
-<body>
-  <div class="container"><%- include('partials/navbar') %> </div>
 
-  <div class="main-content">
-    <a href="/back" class="back-button">
-      <img src="/images/back.png" alt="Back" class="back-icon">
-    </a>
-    <div class="welcome-text">
-      Select your routine
-    </div>
 
-    <div class="routine-container">
+<body style="background-color: #CAD5E1; font-family: 'Winky Rough', sans-serif;">
+  <%- include('partials/navbar') %>
+
+    <div class="main-content">
+
+      <div class="welcome-text">
+        <a href="/back" class="back-button">
+          <img src="/images/back.png" alt="Back" class="back-icon">
+        </a>
+        Select your routine
+      </div>
+
+
       <div class="routine-list-container">
         <div class="exercise-list">
           <% if (routines && routines.length> 0) { %>
@@ -39,6 +42,7 @@
                     <%= routine.routineName %>
                   </a>
                 </div>
+                <div class="arrow">›</div>
               </div>
               <% }) %>
                 <% } else { %>
@@ -53,7 +57,7 @@
       Create New Routine
     </a>
 
-  </div>
+    </div>
 
 
 </body>

@@ -2,8 +2,7 @@
       margin-top: 100px;
       margin-left: auto;
       margin-right: auto;
-
-
+      border-collapse: collapse;
 }
 
 .dropdownSort {
@@ -15,8 +14,6 @@
 
 }
 
-
-
 /* CSS below inspired by this one */
 /* https://www.geekster.in/articles/cell-padding-and-cell-spacing-in-html/#:~:text=You%20can%20use%20the%20CSS,both%20headers%20and%20data%20cells. */
 thead {
@@ -27,6 +24,7 @@ th {
       padding: 0 20px;
 
 }
+
 
 h2 {
       padding-top: 80px;

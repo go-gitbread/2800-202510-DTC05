@@ -20,11 +20,18 @@ app.set('view engine', 'ejs');
 // static file for the style
 app.use(express.static("public"));
 
+
 app.use(session({
   secret: 'secretKey',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {
+    maxAge: null,
+    httpOnly: true,
+    secure: false
+  }
 }));
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
@@ -52,6 +59,33 @@ app.get('/', (req, res) => {
 });
 
 
+// Calculate streaks
+async function calculateWorkoutStreak(userId) {
+  const logs = await WorkoutLog.find({ userId }).sort({ date: -1 }).lean();
+
+  // Normalize each workout date to just the day
+  const workoutDays = new Set(
+    logs.map(log => {
+      const date = new Date(log.date);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime();
+    })
+  );
+
+  let streak = 0;
+  let currentDay = new Date();
+  currentDay.setHours(0, 0, 0, 0);
+
+  // Loop backwards through days until we hit a day with no workout
+  while (workoutDays.has(currentDay.getTime())) {
+    streak++;
+    currentDay.setDate(currentDay.getDate() - 1);
+  }
+
+  return streak;
+}
+
+
 //register.ejs
 app.get('/register', (req, res) => res.render('register'));
 app.post('/register', async (req, res) => {
@@ -66,7 +100,7 @@ app.post('/register', async (req, res) => {
 app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, remember } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -77,9 +111,9 @@ app.post('/login', async (req, res) => {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
+
     return res.render('login', { error: '🙀 Hiss! That password doesn\'t match our records. Try again.' });
   }
-
   req.session.userId = user._id;
   req.session.userEmail = user.email;
   req.session.userName = user.name;
@@ -87,36 +121,93 @@ app.post('/login', async (req, res) => {
   req.session.level = user.level;
   req.session.exp = user.exp;
   req.session.catAvatar = user.catAvatar;
+
+  if (remember) {
+    req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+  } else {
+    req.session.cookie.expires = false; // Session expires on browser close
+  }
+
   res.redirect('/dashboard');
+
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
 
   const quotes = [
-    "Unleash your inner beast. There's a lion inside every cat.",
-    "Don't stop until you're feline fine.",
-    "You're making good pawgress. Keep it up!",
-    "Fuel your purrformance with a little tuna.",
-    "What are you waiting for? The time is meow.",
-    "One smol step for cat, one swole leap for catkind.",
-    "It's a purrfect day to be swole.",
-    "Stay pawsitive. Gains are just a stretch away.",
-    "Consistency builds fur-titude.",
-    "The road to swole is paved with paw prints.",
-    "No more kitten around, it's go time.",
-    "It's never too late to pounce on your goals.",
+    "🐱 Unleash your inner beast. There's a lion inside every cat. 💪",
+    "🐱 Don't stop until you're feline fine. 💪",
+    "🐱 You're making good pawgress. Keep it up! 💪",
+    "🐱 Fuel your purrformance with a little tuna. 💪",
+    "🐱 What are you waiting for? The time is meow. 💪",
+    "🐱 One smol step for cat, one swole leap for catkind. 💪",
+    "🐱 It's a purrfect day to be swole. 💪",
+    "🐱 Stay pawsitive. Gains are just a stretch away. 💪",
+    "🐱 Consistency builds fur-titude. 💪",
+    "🐱 The road to swole is paved with paw prints. 💪",
+    "🐱 No more kitten around, it's go time. 💪",
+    "🐱 It's never too late to pounce on your goals. 💪",
   ];
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
+  const { totalXP, userLevel, xpProgress } = await calculateTotalUserXP(req.session.userId);
+  console.log("Your avatar ISSSSSS: ", await updateAvatar(req.session.userId))
+
+  req.session.level = userLevel;
+  req.session.exp = totalXP;
+
+  // Get today's total workout duration
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const todayLogs = await WorkoutLog.find({
+    userId: req.session.userId,
+    date: { $gte: today }
+  });
+
+  let todayDuration = 0;
+
+  for (const log of todayLogs) {
+    if (log.duration && typeof log.duration === "string") {
+      const [minStr, secStr] = log.duration.split(":");
+      const minutes = parseInt(minStr, 10);
+      const seconds = parseInt(secStr, 10);
+
+      if (!isNaN(minutes) && !isNaN(seconds)) {
+        todayDuration += minutes + seconds / 60;
+      }
+    }
+  }
+
+  // Round to nearest minute
+  todayDuration = Math.round(todayDuration);
+
+  // Today's XP Gained
+  let todayXP = 0;
+
+  for (const log of todayLogs) {
+    todayXP += log.xpGained || 0;
+  }
+
+
+  const user = await User.findById(req.session.userId).select('name email level exp streak');
+
   res.render('dashboard', {
+    streak: user.streak,
     quote: randomQuote,
     username: req.session.userName,
     catName: req.session.catName,
     catAvatar: req.session.catAvatar,
-    level: req.session.level,
-    exp: req.session.exp
+    level: userLevel,
+    exp: totalXP,
+    progressPercent: xpProgress.progressPercent,
+    xpToNextLevel: xpProgress.xpToNextLevel,
+    xpForCurrentLevel: xpProgress.xpForCurrentLevel,
+    xpForNextLevel: xpProgress.xpForNextLevel,
+    todayDuration,
+    todayXP
   });
 });
 
@@ -198,8 +289,15 @@ app.get('/routines', async (req, res) => {
     // Fetch routines associated with the current user from the database
     const routines = await Routine.find({ userId });
 
-    // Render the routines page and pass the routines data to the template
-    res.render('routines', { routines });
+    // Get any session message and clear it after use
+    const sessionMessage = req.session.sessionMessage || null;
+    req.session.sessionMessage = null; // Clear the message after use
+
+    // Render the routines page and pass the routines data and message to the template
+    res.render('routines', {
+      routines,
+      sessionMessage
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error fetching routines');
@@ -207,15 +305,26 @@ app.get('/routines', async (req, res) => {
 });
 
 //Route for profile page
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
+  const success = req.query.success;
+
+
   if (!req.session.userId) return res.redirect('/login');
+
+  const user = await User.findById(req.session.userId).select('name email level exp streak');
+
+
 
   res.render('profile', {
     isOwnProfile: true,
-    username: req.session.userName,
-    email: req.session.userEmail,
+    username: user.name,
+    email: user.email,
+    level: user.level || 1,
+    exp: user.exp || 0,
+    streak: user.streak,
+    success,
     showToast: req.query.updated === '1'
-  });  
+  });
 });
 
 // Show the edit settings form in profile page
@@ -244,9 +353,13 @@ app.post('/profile/edit', async (req, res) => {
 
 // Route for another user's profile page
 app.get('/profile/:id', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   try {
     const userId = req.params.id;
     const user = await User.findById(userId);
+    const success = req.query.success;
+
+
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -256,6 +369,13 @@ app.get('/profile/:id', async (req, res) => {
       isOwnProfile: false,
       username: user.name,
       email: user.email,
+      userId: user._id,
+      level: user.level,
+      exp: user.exp,
+      streak: user.streak,
+      success,
+      showToast: req.query.updated === '0'
+
       // joinedDate: user.createdAt.toDateString()
     });
   } catch (err) {
@@ -263,6 +383,66 @@ app.get('/profile/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+// this route was adapted from the 2537 addFavourites route
+app.get('/addFriend/:id', async (req, res) => {
+  try {
+    const friendId = req.params.id;
+    const currentUserId = req.session.userId;
+
+    if (!currentUserId) {
+      return res.redirect('/login');
+    }
+
+    if (friendId === currentUserId.toString()) {
+      return res.status(400).send('Cannot add yourself as friend');
+    }
+
+    const currentUser = await User.findById(currentUserId);
+    if (!currentUser) {
+      return res.status(404).send('Current user not found');
+    }
+
+    const friendUser = await User.findById(friendId);
+    if (!friendUser) {
+      return res.status(404).send('User to add not found');
+    }
+
+    if (currentUser.friendsList.includes(friendId)) {
+      return res.status(400).send('User already in friends list');
+    }
+
+    currentUser.friendsList.push(friendId);
+    await currentUser.save();
+    res.redirect(`/profile/${friendId}?success=Friend+added+successfully`);
+    // res.redirect(`/profile/${friendId}`);
+  } catch (error) {
+    console.error('Error adding friend:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/friends', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId).populate('friendsList', 'name level streak');
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+
+    res.render('friends', {
+      friends: user.friendsList
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+
+
 
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
@@ -272,20 +452,25 @@ app.get('/leaderboard', async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const usersList = await User.find()
-      .select('name')
-      .select('level')
-      .select('streak')
+
+      .select('name level streak')
+
+      .sort({ level: -1 })
+      // change to streak if want streak descending
+
       .skip((page - 1) * limit)
       .limit(limit);
 
     const hasNextPage = page * limit < totalUsers;
     const hasPrevPage = page > 1;
 
+
+
     res.render('leaderboard', {
       usersList,
       currentPage: page,
       hasNextPage,
-      hasPrevPage
+      hasPrevPage,
     });
   } catch (err) {
     console.error(err);
@@ -297,6 +482,11 @@ app.get('/leaderboard', async (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about');
 })
+//Workout guide page
+app.get('/workoutGuide', (req, res) => {
+  res.render('workoutGuide');
+})
+
 
 //WEATHER
 app.get('/weather', (req, res) => {
@@ -381,31 +571,31 @@ app.get('/api/weather', async (req, res) => {
 
 
 
-//Route linking routine to session page after clicking a routine
-app.get('/routine/:id/session', async (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect('/login');
-  }
-  const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
-  const userId = req.session.userId; //Grab the userID from the session
-  try {
-    // Find the specific routine by ID and ensure it belongs to the current user
-    const routine = await Routine.findOne({ _id: routineId, userId: userId });
-    if (!routine) {
-      return res.status(404).send('Routine not found');
-    }
-    const workouts = []; //Initialize workouts as an empty array
-    // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
-    res.render('exerciseSession', {
-      routine: routine,
-      workouts: workouts,
-      userId: userId
-    });
-  } catch (err) {
-    console.error('Error loading exercise session:', err);
-    res.status(500).send('Error fetching routine details');
-  }
-});
+// //Route linking routine to session page after clicking a routine
+// app.get('/routine/:id/session', async (req, res) => {
+//   if (!req.session.userId) {
+//     return res.redirect('/login');
+//   }
+//   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
+//   const userId = req.session.userId; //Grab the userID from the session
+//   try {
+//     // Find the specific routine by ID and ensure it belongs to the current user
+//     const routine = await Routine.findOne({ _id: routineId, userId: userId });
+//     if (!routine) {
+//       return res.status(404).send('Routine not found');
+//     }
+//     const workouts = []; //Initialize workouts as an empty array
+//     // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
+//     res.render('exerciseSession', {
+//       routine: routine,
+//       workouts: workouts,
+//       userId: userId
+//     });
+//   } catch (err) {
+//     console.error('Error loading exercise session:', err);
+//     res.status(500).send('Error fetching routine details');
+//   }
+// });
 
 
 
@@ -489,6 +679,10 @@ app.get('/routine/:id/session', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
   const userId = req.session.userId; //Grab the userID from the session
+
+  // Set this as the active routine in the session 
+  req.session.activeRoutineId = routineId;
+
   try {
     const routine = await Routine.findOne({ _id: routineId, userId });
     // Find the specific routine by ID and ensure it belongs to the current user
@@ -496,9 +690,12 @@ app.get('/routine/:id/session', async (req, res) => {
     const workouts = workoutLogs[routineId] || []; //Initialize workouts as an empty array if none are logged yet
     const tempExercises = (req.session.tempExercises && req.session.tempExercises[routineId]) || [];
     const allExercises = [...new Set([...routine.exercises, ...tempExercises])]; // Merge all exercises and deduplicate
+
+    // Pass activeRoutineId to the template so we can show it's an active session
     res.render('exerciseSession', {
       routine: { ...routine.toObject(), exercises: allExercises },
-      workouts
+      workouts,
+      activeRoutineId: routineId
     });
   } catch (err) {
     console.error('Error loading exercise session:', err);
@@ -509,6 +706,7 @@ app.get('/routine/:id/session', async (req, res) => {
 //Route for saving workout to the database
 app.post('/api/log-workout/:routineId', async (req, res) => {
   try {
+
     const { userId, date, routines, duration, xpGained } = req.body;
     const mainRoutineId = req.params.routineId;
 
@@ -528,6 +726,12 @@ app.post('/api/log-workout/:routineId', async (req, res) => {
 
     // Save to database
     await workoutLog.save();
+
+    const newStreak = await calculateWorkoutStreak(userId);
+    await User.findByIdAndUpdate(userId, { streak: newStreak });
+
+    // Clear the active routine since workout is completed
+    req.session.activeRoutineId = null;
 
     // Send success response
     res.status(201).json({ message: 'Workout logged successfully', workoutLog });
@@ -566,42 +770,184 @@ app.get('/logout', (req, res) => {
 });
 
 //AI CHAT BOT: API call to get the AI coach's response
-app.post('/api/chat', async (req, res) =>{
+app.post('/api/chat', async (req, res) => {
   const userMessage = req.body.message
   const apiKey = process.env.OPENAI_API_KEY
-  if (!userMessage){
+  if (!userMessage) {
     console.log('Message is required')
   }
-  if (!apiKey){
+  if (!apiKey) {
     console.log("API Key not found")
   }
   console.log('Sending message to OpenAI:', userMessage);
   //AI assisted API Fetch call    
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { 
-            role: "system", 
-            content: "You are Whiskers, a smart, sassy, and pun-loving cat-themed fitness coach inside a gamified fitness app called SwoleCat. Your goal is to help users build healthy habits and get stronger, one paw at a time. You give real fitness tips, advice, and beginner-friendly workout routines when asked—whether it’s about cardio, strength training, stretching, nutrition, or staying consistent. You also offer motivation and cat puns to keep things light and fun. Keep your answers practical and specific. Be concise, but include clear recommendations, lists, or routines when appropriate. Always sneak in at least one clever cat pun or feline-themed encouragement." 
-          },
-          { role: "user", content: userMessage }
-        ]
-      })
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('OpenAI API error:', response.status, errorData);
-      return res.status(500).json({ error: 'Failed to get response from AI service' });
-    }
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are Whiskers, a smart, sassy, and pun-loving cat-themed fitness coach inside a gamified fitness app called SwoleCat. Your goal is to help users build healthy habits and get stronger, one paw at a time. You give real fitness tips, advice, and beginner-friendly workout routines when asked—whether it’s about cardio, strength training, stretching, nutrition, or staying consistent. You also offer motivation and cat puns to keep things light and fun. Keep your answers practical and specific. Be concise, but include clear recommendations, lists, or routines when appropriate. Always sneak in at least one clever cat pun or feline-themed encouragement."
+        },
+        { role: "user", content: userMessage }
+      ]
+    })
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    console.error('OpenAI API error:', response.status, errorData);
+    return res.status(500).json({ error: 'Failed to get response from AI service' });
+  }
 
-    const data = await response.json() // Wait to receive a response & store it as a JSON 
-    console.log('Received response from OpenAI');
-    res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
+  const data = await response.json() // Wait to receive a response & store it as a JSON 
+  console.log('Received response from OpenAI');
+  res.json({ response: data.choices[0].message.content }); //Send response to front end as a JSON as {response: "<ai generated response>"}
 })
+
+//Workout history page route
+app.get('/history', async (req, res) => {
+
+  // Check if user is logged in
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+
+  // Retrieve user's workout history data from DB 
+  const workouts = await WorkoutLog.find({ userId: req.session.userId }) //Find all workout logs tied to userID
+    .sort({ date: -1 }) // Sort by date (newest first)
+    .lean(); // Convert Mongoose documents to plain JavaScript objects (Strips away unnecessary fields)
+  // Use lean if you want to only read from the db 
+
+  // Render the history page with the workout data
+  res.render('history', {
+    userId: req.session.userId,
+    workouts: workouts
+  });
+});
+
+//Calculate user's total XP
+async function calculateTotalUserXP(userId) {
+  console.log("bonjour")
+  const workoutLogs = await WorkoutLog.find({ userId });
+  const totalXP = workoutLogs.reduce((sum, log) => sum + (log.xpGained || 0), 0);
+  const userLevel = await calculateUserLevel(totalXP)
+  console.log(`You're total xp: ${totalXP}`);
+  console.log("user level", userLevel)
+  //Update the user's XP & Level in the database  
+  await User.findByIdAndUpdate(userId, {
+    exp: totalXP,
+    level: userLevel
+  });
+  console.log("Database Updated: XP = ", totalXP)
+  console.log("Database Updated: Level = ", userLevel)
+  const xpProgress = getXPProgress(totalXP, userLevel);
+  console.log("Level:", xpProgress.level);
+  console.log("XP Remaining until next level:", xpProgress.xpToNextLevel);
+  console.log("Progress this level:", xpProgress.progressPercent + "%");
+  console.log("total Xp required to reach current level", xpProgress.xpForCurrentLevel)
+  console.log("Total Xp needed for Next level", xpProgress.xpForNextLevel)
+  return { //Return as an object to pass to the front end
+    totalXP,
+    userLevel,
+    xpProgress
+  };
+}
+
+//Calculate User Level
+async function calculateUserLevel(totalXP) {
+  let level = 1;
+  let xpSum = 0;
+  while (totalXP >= xpSum + getXPForLevel(level)) {
+    xpSum += getXPForLevel(level);
+    level++;
+  }
+  return level;
+}
+
+// Calculate XP required for a given level (Small Exponential)
+function getXPForLevel(level) {
+  return Math.round(1000 * Math.pow(1.25, level - 1));
+}
+
+//Function to determine XP progress for front end UI visualization
+function getXPProgress(totalXP, level) {
+  let xpSum = 0;
+
+  //Calculate the total XP required to reach the start of the user's current level
+  for (let previousLevel = 1; previousLevel < level; previousLevel++) {
+    xpSum += getXPForLevel(previousLevel);
+  }
+
+  const xpForCurrentLevel = xpSum; // Total XP required to reach the the current level
+  const xpForNextLevel = xpSum + getXPForLevel(level); //Total xp required to reach the next level
+  const xpIntoLevel = totalXP - xpForCurrentLevel; // How much XP the user has earned within their current level
+  const xpToNextLevel = xpForNextLevel - totalXP; // How much XP the user needs to gain until next level 
+  const progressPercent = Math.floor((xpIntoLevel / (xpForNextLevel - xpForCurrentLevel)) * 100); // Percentage of progress made through the current level
+
+  return {
+    level,
+    xpForCurrentLevel, // Total XP required to reach the the current level
+    xpForNextLevel,   // Total xp required to reach the next level
+    xpIntoLevel,     // How much XP the user has earned within their current level
+    xpToNextLevel,   // How much XP the user needs to gain until next level 
+    progressPercent  // Percentage of progress made through the current level
+  };
+}
+
+app.get('/trackSession', (req, res) => {
+
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  } else {
+    // Check if there's an active session in progress
+    if (req.session.activeRoutineId) {
+      // If there is, redirect to that session
+      res.redirect(`/routine/${req.session.activeRoutineId}/session`);
+    } else {
+      // If not, redirect to routines page with a small message
+      req.session.sessionMessage = "Please select a routine to begin a workout session";
+      res.redirect('/routines');
+    }
+  }
+});
+
+async function updateAvatar(userId) {
+  let avatar;
+  const user = await User.findById(userId).select('level');
+  const currentCat = await User.findById(userId).select('catAvatar')
+  const level = user.level;
+  if (level >= 15) {
+    avatar = '/images/4ultimateGymMachine.png'
+  }
+  else if (level >= 10) {
+    avatar = '/images/3gymBro.png'
+  }
+  else if (level >= 5) {
+    avatar = '/images/2gymAmatuer.png'
+  }
+  else avatar = '/images/1couchPotato.png'
+  console.log("Your avatar should be: ", avatar)
+  console.log("Your current avatar is: ", currentCat.catAvatar)
+
+  if (avatar != currentCat.catAvatar) {
+    console.log("Trigger Cat Level Up!!!")
+    console.log("I'll update your cat avatar in the Database!")
+    await User.findByIdAndUpdate(userId, {
+      catAvatar: avatar
+    });
+    console.log("Database updated, your new cat is", avatar)
+  }
+  else {
+    console.log("Your avatar is as it should be.")
+  }
+  return avatar
+}
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

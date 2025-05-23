@@ -18,6 +18,10 @@ ul {
 }
 
 
+#workout-link {
+      padding-left: 250px;
+}
+
 /* side bar is based on this link as bootstrap can't cover it 
 https://www.w3schools.com/howto/howto_js_sidenav.asp  */
 /* The side navigation menu */
