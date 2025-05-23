@@ -410,3 +410,13 @@
     transform: translateX(-50%);
   }
 }
+
+#exercise-list{
+    max-height: 51vh;
+  overflow-y: auto;
+}
+
+#exercise-detail{
+      max-height: 51vh;
+  overflow-y: auto;
+}
