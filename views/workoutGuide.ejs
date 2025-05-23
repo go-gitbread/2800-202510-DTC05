@@ -15,7 +15,7 @@
         rel="stylesheet">
 </head>
 
-<body style="font-family: 'Winky Rough', sans-serif;">
+<body class="body-container" style="font-family: 'Winky Rough', sans-serif;">
     <%- include('partials/navbar') %>
 
 
@@ -389,27 +389,21 @@
     exerciseCards = exercises.map(e => {
 
         const exerciseVideos = document.createElement("iframe");
+        const card = userCardTemplate.content.cloneNode(true).children[0];
+        const header = card.querySelector("[data-header]");
+        const body = card.querySelector("[data-body]");
         exerciseVideos.src = e.link;
         exerciseVideos.height = '100%';
         exerciseVideos.width = '100%';
         exerciseVideos.style.aspectRatio = '16/9';
 
-        const card = userCardTemplate.content.cloneNode(true).children[0];
-        const header = card.querySelector("[data-header]");
-        const body = card.querySelector("[data-body]");
+
         header.textContent = e.exerciseName;
         body.textContent = "Targeted Muscle Group: " + e.muscleGroup;
         body.appendChild(exerciseVideos);
         userCardContainer.append(card);
         return { exerciseName: e.exerciseName, muscle: e.muscleGroup.toString(), element: card }
-    })
-
-
-
-
-
-
-
+    });
 
 
     let table = document.getElementById("week");

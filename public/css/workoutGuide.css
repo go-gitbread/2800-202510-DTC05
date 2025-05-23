@@ -1,6 +1,13 @@
 /* table, tr, th, td {
     border: 1px solid #303c58;
 } */
+
+iframe {
+    padding: 10px;
+    overflow: hidden;
+}
+
+
 body {
     background-color: #f7f7ff;
     font-family: 'Winky Rough', sans-serif;
@@ -72,12 +79,10 @@ input {
     font-size: 1rem;
 }
 
-/* .user-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: .25rem;
-    margin-top: 1rem;
-} */
+.body-container {
+    padding-bottom: 500px;
+}
+
 
 .card {
     border-radius: 5px;
@@ -95,7 +100,7 @@ input {
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
 
 
@@ -103,7 +108,7 @@ input {
 .column {
     float: left;
     width: 25%;
-    padding: 0 10px;
+    /* padding: 0 10px; */
 }
 
 .row {
