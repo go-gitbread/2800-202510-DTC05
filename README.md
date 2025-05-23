@@ -29,58 +29,64 @@
 ## 📁 Folder Structure Overview
 
 ```
-1. /
-├── 1.1 server.js                 # Main Express server file
-├── 1.2 package.json             # Project metadata and dependencies
-├── 1.3 package-lock.json        # Auto-generated lockfile for npm installs
-├── 1.4 README.md                # Project documentation
-├── 1.5 text.txt                 # Temporary or placeholder file (not part of app)
-├── 1.6 .env                     # Environment variables (not included in repo)
-│
-├── 2. public/                   # Static frontend assets
-│   ├── 2.1 about.css
-│   ├── 2.2 coachOffice.css
-│   ├── 2.3 dashboard.css
-│   ├── 2.4 exerciseSession.css
-│   ├── 2.5 friends.css
-│   ├── 2.6 history.css
-│   ├── 2.7 home.css
-│   ├── 2.8 images/              # App icons and cat evolution sprites
-│   │   ├── 2.8.1 1couchPotato.png         # First evolution stage
-│   │   ├── 2.8.2 2gymAmatuer.png
-│   │   ├── 2.8.3 3gymBro.png
-│   │   ├── 2.8.4 4ultimateGymMachine.png  # Final evolution stage
-│   │   ├── 2.8.5 plus.png, garbageBin.png, link.png, etc.  # UI icons
-│   ├── 2.9 index.css
-│   ├── 2.10 leaderboard.css
-│   ├── 2.11 login.css
-│   ├── 2.12 navbar.css
-│   ├── 2.13 newRoutine.css
-│   ├── 2.14 profile.css
-│   ├── 2.15 register.css
-│   ├── 2.16 routines.css
-│   ├── 2.17 selectExercise.css
-│   ├── 2.18 weather.css
-│   ├── 2.19 js/                 # Frontend logic
-│   │   ├── 2.19.1 coachOffice.js          # Handles AI chat logic
-│   │   ├── 2.19.2 compareExercises.js     # Exercise comparison logic
-│   │   ├── 2.19.3 exercises.js            # Stores exercise data
-│   │   ├── 2.19.4 exerciseSession.js      # Logs sessions
-│   │   ├── 2.19.5 navbar.js               # Navbar toggle behavior
-│   │   └── 2.19.6 weather.js              # Fetches and displays weather
-│
-├── 3. routes/
-│   └── 3.1 exerciseSession.js   # Route handler for workout sessions
-│
-└── 4. views/                    # EJS templates for each page
-    ├── 4.1 about.ejs
-    ├── 4.2 coachOffice.ejs      # Chatbot UI
-    ├── 4.3 dashboard.ejs
-    ├── 4.4 editProfile.ejs
-    ├── 4.5 exerciseSession.ejs
-    ├── 4.6 friends.ejs
-    ├── 4.7 history.ejs
-    ├── 4.8 home.ejs
+├── package-lock.json
+├── package.json
+├── public
+│   ├── css
+│   │   ├── about.css
+│   │   ├── coachOffice.css
+│   │   ├── dashboard.css
+│   │   ├── exerciseSession.css
+│   │   ├── friends.css
+│   │   ├── history.css
+│   │   ├── leaderboard.css
+│   │   ├── login.css
+│   │   ├── navbar.css
+│   │   ├── newRoutine.css
+│   │   ├── profile.css
+│   │   ├── register.css
+│   │   ├── routines.css
+│   │   ├── selectExercise.css
+│   │   ├── weather.css
+│   │   └── workoutGuide.css
+│   ├── images
+│   │   ├── 1couchPotato.png
+│   │   ├── 2gymAmatuer.png
+│   │   ├── 3gymBro.png
+│   │   ├── 4ultimateGymMachine.png
+│   │   ├── back.png
+│   │   ├── diskette.png
+│   │   ├── garbageBin.png
+│   │   ├── link.png
+│   │   ├── plus.png
+│   │   └── profile.jpg
+│   └── js
+│       ├── coachOffice.js
+│       ├── compareExercises.js
+│       ├── exercises.js
+│       ├── exerciseSession.js
+│       ├── navbar.js
+│       └── weather.js
+├── README.md
+├── server.js
+└── views
+    ├── about.ejs
+    ├── coachOffice.ejs
+    ├── dashboard.ejs
+    ├── editProfile.ejs
+    ├── exerciseSession.ejs
+    ├── friends.ejs
+    ├── history.ejs
+    ├── leaderboard.ejs
+    ├── login.ejs
+    ├── newRoutine.ejs
+    ├── partials
+    │   └── navbar.ejs
+    ├── profile.ejs
+    ├── register.ejs
+    ├── routines.ejs
+    ├── selectExercise.ejs
+    └── workoutGuide.ejs
 
 ```
 
