@@ -6,9 +6,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Leaderboard</title>
 
-      <link rel="stylesheet" href="/leaderboard.css">
-      <link rel="stylesheet" href="/navbar.css">
-      <link rel="stylesheet" href="/weather.css">
+      <link rel="stylesheet" href="/css/leaderboard.css">
+      <link rel="stylesheet" href="/css/navbar.css">
+      <link rel="stylesheet" href="/css/weather.css">
       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,33 +19,16 @@
 
 <body style="font-family: 'Winky Rough', sans-serif;">
       <%- include('partials/navbar') %>
-
-
             <div class="container mt-4">
                   <h2>Global Leaderboard</h2>
-
                   <div class="table">
-
                         <table class="table-style">
-
                               <thead>
                                     <tr>
                                           <th>Username</th>
                                           <th>Level</th>
                                           <th>Streak</th>
                                           <th>Profile Link</th>
-                                          <!-- <th>
-
-                                                <label for="">Sort by:</label>
-
-                                                <select name="" id="">
-                                                      <option value="ascending level">ascending level</option>
-                                                      <option value="descending level">descending level</option>
-                                                      <option value="ascending streak">ascending streak</option>
-                                                      <option value="descending streak">descending streak</option>
-                                                </select>
-
-                                          </th> -->
                                     </tr>
                               </thead>
                               <tbody>
@@ -64,18 +47,13 @@
                                                 <td>
                                                       <a href="/profile/<%= user._id %>" class="profile_btn"> View
                                                             User's Profile</a>
-
                                                 </td>
                                           </tr>
                                           <% }) %>
                               </tbody>
-
                         </table>
                   </div>
             </div>
-
-
-
             <div class="container mt-4">
                   <ul class="pagination justify-content-center">
                         <% if (hasPrevPage) { %>
@@ -83,7 +61,6 @@
                                     <a class="page-link" href="/leaderboard?page=<%= currentPage - 1 %>">Back</a>
                               </li>
                               <% } %>
-
                                     <% if (hasNextPage) { %>
                                           <li class="page-item">
                                                 <a class="page-link"
