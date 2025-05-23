@@ -31,9 +31,6 @@ p {
     margin: 20px;
 }
 
-li {
-    margin: 5px;
-}
 
 h1 {
     margin-bottom: 20px;
@@ -106,7 +103,7 @@ input {
 .column {
     float: left;
     width: 25%;
-    padding: 0 10px; 
+    padding: 0 10px;
 }
 
 .row {
@@ -116,7 +113,7 @@ input {
 .row:after {
     content: "";
     display: table;
-    clear: both; 
+    clear: both;
 }
 
 @media screen and (max-width: 900px) {
@@ -124,6 +121,5 @@ input {
         width: 100%;
         display: inline-block;
         margin-bottom: 20px;
-    } 
+    }
 }
-
