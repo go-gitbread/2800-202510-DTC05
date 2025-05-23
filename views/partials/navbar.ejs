@@ -1,6 +1,5 @@
 <head>
       <script src="/js/navbar.js"></script>
-      <!-- <script src="/js/weather.js"></script> -->
 
 </head>
 
@@ -20,7 +19,7 @@
 
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav ms-auto">
+                  <ul class="navbar-nav">
                         <li class="nav-item">
                               <a class="nav-link active" href="/dashboard">Dashboard</a>
                         </li>
@@ -39,7 +38,7 @@
                         </li>
                         <li class="nav-item">
                               <a class="nav-link" href="/coachOffice">Cat Office</a>
-                              
+
                         </li>
 
                         <li class="nav-item" id="workout-link">
@@ -78,18 +77,14 @@
             <a href="/about">About</a>
             <a href="/leaderboard">Leaderboard</a>
             <a href="/friends">Friends List</a>
-            <a href="/exerciseSession">Track Session</a>
+            <a href="/routines">Track Session</a>
             <a href="/coachOffice">Cat Office</a>
             <a href="/workoutGuide">Workout Guide</a>
       </div>
 
-
 </nav>
 
-
 <script>
-
-
       // Fetch weather data
       fetch('/api/weather')
             .then(res => res.json())

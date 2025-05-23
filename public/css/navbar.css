@@ -12,11 +12,13 @@ ul {
       font-family: 'Winky Rough', sans-serif;
 }
 
-
 .custom-colour-nav {
       background-color: #303c58;
 }
 
+#navbarNav {
+      margin: auto;
+}
 
 #workout-link {
       padding-left: 250px;

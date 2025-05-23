@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Guide Page</title>
-    <link rel="stylesheet" href="/workoutGuide.css">
-    <link rel="stylesheet" href="/navbar.css">
-    <link rel="stylesheet" href="/weather.css">
+    <link rel="stylesheet" href="/css/workoutGuide.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/weather.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,10 @@
         rel="stylesheet">
 </head>
 
-<body style="font-family: 'Winky Rough', sans-serif;">
+<body class="body-container" style="font-family: 'Winky Rough', sans-serif;">
     <%- include('partials/navbar') %>
-    <main class="">
-    <div class="main-content">
+
+
         <h1>Exercise Guide</h1>
         <div>
             <h3>Introduction</h3>
@@ -28,7 +28,7 @@
                 This page will show you the basics on how to structure
                 exercise routines for specific muscle groups and a weekly workout plan.</p>
         </div>
-        
+
         <br>
         <h3>How to get stronger/build more muscle?</h3>
         <p>1. Be Consistent</p>
@@ -41,11 +41,13 @@
         <p>2. Progressive Overload</p>
         <ul>
             <li>- Important if you want to continuously increase your strength</li>
-            <li>- You should gradually increase the intensity of your workouts over time (Increase the weight or volume)</li>
+            <li>- You should gradually increase the intensity of your workouts over time (Increase the weight or
+                volume)</li>
         </ul>
         <p>3. Proper Nutrition</p>
         <ul>
-            <li>- Aim for 1.6-2.2 grams of protein per kilogram of bodyweight per day (Lean meats, protein powder, milk, eggs,
+            <li>- Aim for 1.6-2.2 grams of protein per kilogram of bodyweight per day (Lean meats, protein
+                powder, milk, eggs,
                 etc.)</li>
             <li>- Drink plenty of water</li>
             <li>- Eat a balanceed diet of carbohydrates, protein and fats</li>
@@ -63,7 +65,8 @@
         <ul>
             <li>- Dynamic Stretching (e.g. Arm circles, leg swings, high knees, lunges, etc.)</li>
             <li>- Start with some light cardio (e.g. light jogging, walking, stair climbs)</li>
-            <li>- Start with some warm-up exercises that target the muscles you are working on (Start with lighter weight)</li>
+            <li>- Start with some warm-up exercises that target the muscles you are working on (Start with
+                lighter weight)</li>
         </ul>
         <p>2. Learn Proper Form</p>
         <ul>
@@ -72,13 +75,15 @@
         </ul>
         <p>3. Listen to your body</p>
         <ul>
-            <li>- If your body is sore or you're sick, then you should rest. Easy as that. "No pain, no gain" is not real. :3</li>
+            <li>- If your body is sore or you're sick, then you should rest. Easy as that. "No pain, no gain" is
+                not real. :3</li>
             <li>- Do not overdo yourself in the gym; focus on weight you can handle</li>
         </ul>
         <p>4. Stay hydrated</p>
         <ul>
             <li>- You will get better muscle function</li>
-            <li>- Hydration helps the body have better bloodflow which helps deliver oxygen and nutrients to your muscles</li>
+            <li>- Hydration helps the body have better bloodflow which helps deliver oxygen and nutrients to
+                your muscles</li>
             <li>- You will feel less fatigued (increased fatigue can increase the risk of injury)</li>
         </ul>
         <br>
@@ -178,357 +183,349 @@
                 <td id="reps"></td>
                 <td id="rest_time"></td>
             </tr>
-            </table>
-            <br>
-            <section>
-                <h2>Videos for Proper Technique</h2>
-                <div class="search-wrapper">
-                    <label for="search">Search Exercises</label>
-                    <input type="search" id="search" data-search>
+        </table>
+        <br>
+        <section>
+            <h2>Videos for Proper Technique</h2>
+            <div class="search-wrapper">
+                <label for="search">Search Exercises</label>
+                <input type="search" id="search" data-search>
+            </div>
+
+            <div class="user-cards row" data-user-cards-container></div>
+            <template data-user-template>
+                <div class="card column">
+                    <div class="header" data-header></div>
+                    <div class="body" data-body></div>
                 </div>
-
-                <div class="user-cards row" data-user-cards-container></div>
-                <template data-user-template>
-                        <div class="card column">
-                            <div class="header" data-header></div>
-                            <div class="body" data-body></div>
-                        </div>
-                </template>
-            </section>
-    </div>
-    </main>
-    <!-- comment: maybe we can make the bottom-nav into a partial (as it will need to open other pages/do things) -->
-    <!-- <div class="bottom-nav">
-        <a href="/routines" class="bottom-nav-item">Workout</a>
-        <div class="bottom-nav-item">Swole Stats</div>
-    </div> -->
+            </template>
+        </section>
 
 
 
-    <script>
-        const beginnerBodybuildingExercises = [
-                {
-                    name: "FullBody day",
-                    fbExercise1: "Dumbbell Bench Press",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise2: "Lat Pulldown",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise3: "Seated Dumbbell Overhead Shoulder Press",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise4: "Leg Press",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise5: "Lying Leg Curl",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise6: "Tricep Rope Pressdown",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise7: "Barbell Biceps Curl",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "FullBody day",
-                    fbExercise8: "Seated Overhead Dumbbell Shoulder Press",
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-            ];
-            const intermediateBodybuildingExercises = [
-                {
-                    name: "Upper Day",
-                    uppExercises: ["Barbell Bench Press", "Chest Fly", "Barbell Bent-over Row", "Lat Pulldown", "Seated Overhead Dumbbell Shoulder Press", "Dumbbell Lateral Raise", "Barbell Biceps Curl", "Ez-Bar Preacher Curls", "Tricep Pushdown", "JM Press", "Bodyweight crunch"],
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "Lower Day",
-                    lowerExercises: ["Squats", "Leg Press", "Lying Leg Curl", "Seated Leg Curl", "Standing Calf Raise", "Seated Calf Raise", "Leg Extensions"],
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                }
-            ];
-            const advancedBodybuildingExercises = [
-                {
-                    name: "Push Day",
-                    pushExercises: ["Incline Barbell Bench Press", "Dumbbell Flye", "Overhead Dumbbell Press", "Smith Machine Upright Row", "Lying EZ - Bar Triceps Extension"],
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "Pull Day",
-                    pullExercises: ["Lat Pulldown", "Barbell Upright Row", "Single-Arm Neutral-Grip Dumbbell Row", "Incline Dumbbell Biceps Curl", "Preacher Curl with Cable"],
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                },
-                {
-                    name: "Leg Day",
-                    legExercises: ["Back Squat", "Leg Press", "Seated Leg Curl", "Romanian Deadlift", "Seated Calf Raise", "Standing Calf Raise", "Leg Extensions"],
-                    sets: 3,
-                    reps: "6-8",
-                    rest: "3-5 minutes"
-                }
-            ];
-
-            const exercises = [
-                    {
-                        exerciseName: "Dumbbell Bench Press",
-                        muscleGroup: ["Chest", "Triceps"],
-                        link: "https://www.youtube.com/embed/5s4_yeSC5C0?controls=1"
-                    },
-                    {
-                        exerciseName: "Barbell Bench Press",
-                        muscleGroup: ["Chest", "Triceps"],
-                        link: "https://www.youtube.com/embed/0cXAp6WhSj4?controls=1"
-                    },
-                    {
-                        exerciseName: "Lat Pulldown",
-                        muscleGroup: ["Back", "Biceps"],
-                        link: "https://www.youtube.com/embed/Z_3xHwuO8Tk?controls=1"
-                    },
-                    {
-                        exerciseName: "Leg Press",
-                        muscleGroup: ["Legs"],
-                        link: "https://www.youtube.com/embed/yZmx_Ac3880?controls=1"
-                    },
-                    {
-                        exerciseName: "Barbell Back Squat",
-                        muscleGroup: ["Legs", "Quads"],
-                        link: "https://www.youtube.com/embed/VZ90qWlfQUE?controls=1"
-                    },
-                    {
-                        exerciseName: "Seated Dumbbell Overhead Shoulder Press",
-                        muscleGroup: ["Shoulders", "Triceps"],
-                        link: "https://www.youtube.com/embed/rO_iEImwHyo?controls=1"
-                    },
-                    {
-                        exerciseName: "Tricep Pushdown",
-                        muscleGroup: ["Triceps"],
-                        link: "https://www.youtube.com/embed/GCa8Q4e7laU?controls=1"
-                    },
-                    {
-                        exerciseName: "Chest Fly",
-                        muscleGroup: ["Chest"],
-                        link: "https://www.youtube.com/embed/eGjt4lk6g34?controls=1"
-                    },
-                    {
-                        exerciseName: "Tricep Rope Pressdown",
-                        muscleGroup: ["Triceps"],
-                        link: "https://www.youtube.com/embed/-xa-6cQaZKY?controls=1"
-                    },
-                    {
-                        exerciseName: "Lying Leg Curl",
-                        muscleGroup: ["Legs", "Hamstrings"],
-                        link: "https://www.youtube.com/embed/bvVZJbye9BU?controls=1"
-                    },
-                    {
-                        exerciseName: "Seated Leg Curl",
-                        muscleGroup: ["Legs", "Hamstrings"],
-                        link: "https://www.youtube.com/embed/Orxowest56U?controls=1"
-                    },
-                    {
-                        exerciseName: "Incline Barbell Bench Press",
-                        muscleGroup: ["Chest", "Triceps"],
-                        link: "https://www.youtube.com/embed/7UB2HQg5FNY?controls=1"
-                    },
-
-                ];
-
-            const userCardTemplate = document.querySelector("[data-user-template]");
-            const userCardContainer = document.querySelector("[data-user-cards-container]");
-            const searchInput = document.querySelector("[data-search]");
-            
-            let exerciseCards = [];
-
-            searchInput.addEventListener("input", e => {
-                const value = e.target.value.toLowerCase()
-                exerciseCards.forEach(exercise =>{
-                    const isVisible = exercise.exerciseName.toLowerCase().includes(value) || exercise.muscle.toLowerCase().includes(value);
-                    exercise.element.classList.toggle("hide", !isVisible)
-                })
-            })
-
-            exerciseCards = exercises.map(e =>{
-                
-                const exerciseVideos = document.createElement("iframe");
-                exerciseVideos.src = e.link;
-                exerciseVideos.height = '100%';
-                exerciseVideos.width = '100%';
-                exerciseVideos.style.aspectRatio = '16/9';
-
-                const card = userCardTemplate.content.cloneNode(true).children[0];
-                const header = card.querySelector("[data-header]");
-                const body = card.querySelector("[data-body]");
-                header.textContent = e.exerciseName;
-                body.textContent = "Targeted Muscle Group: " + e.muscleGroup;
-                body.appendChild(exerciseVideos);
-                userCardContainer.append(card);
-                return { exerciseName: e.exerciseName, muscle: e.muscleGroup.toString(), element: card }
-            })
-
-
-
-
-
-
-
-
-
-            let table = document.getElementById("week");
-            let rows = table.rows;
-            // let firstRowCells = rows[0].cells;
-            
-            const beginnerBtn = document.getElementById("beginner");
-            const intermediateBtn = document.getElementById("intermediate");
-            const advancedBtn = document.getElementById("advanced");
-
-                beginnerBtn.addEventListener("click", () =>{
-                    let cells = document.querySelectorAll("td");
-                    cells.forEach(cell =>{
-                        cell.innerText = "";
-                    });
-                        //Fullbody day
-                        table.rows[1].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
-                        table.rows[1].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
-                        table.rows[1].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
-                        table.rows[1].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
-                        table.rows[1].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
-
-                        //Fullbody day
-                        table.rows[3].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
-                        table.rows[3].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
-                        table.rows[3].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
-                        table.rows[3].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
-                        table.rows[3].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
-
-
-                        //Fullbody day
-                        table.rows[5].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
-                        table.rows[5].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
-                        table.rows[5].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
-                        table.rows[5].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
-                        table.rows[5].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
-                    })
-
-            intermediateBtn.addEventListener("click", () =>{
-                let cells = document.querySelectorAll("td");
-                cells.forEach(cell => {
-                    cell.innerText = "";
-                });
-
-                    //upper day
-                    table.rows[1].cells[1].innerText = `${intermediateBodybuildingExercises[0].name}`;
-                    table.rows[1].cells[2].innerText = `${intermediateBodybuildingExercises[0].uppExercises}`;
-                    table.rows[1].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
-                    table.rows[1].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
-                    table.rows[1].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
-
-                    //lower day
-                    table.rows[2].cells[1].innerText = `${intermediateBodybuildingExercises[1].name}`;
-                    table.rows[2].cells[2].innerText = `${intermediateBodybuildingExercises[1].lowerExercises}`;
-                    table.rows[2].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
-                    table.rows[2].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
-                    table.rows[2].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
-
-                    //upper day
-                    table.rows[4].cells[1].innerText = `${intermediateBodybuildingExercises[0].name}`;
-                    table.rows[4].cells[2].innerText = `${intermediateBodybuildingExercises[0].uppExercises}`;
-                    table.rows[4].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
-                    table.rows[4].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
-                    table.rows[4].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
-
-
-                    //lower day
-                    table.rows[5].cells[1].innerText = `${intermediateBodybuildingExercises[1].name}`;
-                    table.rows[5].cells[2].innerText = `${intermediateBodybuildingExercises[1].lowerExercises}`;
-                    table.rows[5].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
-                    table.rows[5].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
-                    table.rows[5].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
-                });
-
-            advancedBtn.addEventListener("click", () => {
-                let cells = document.querySelectorAll("td");
-                cells.forEach(cell => {
-                    cell.innerText = "";
-                });
-                    //push day
-                    table.rows[1].cells[1].innerText = `${advancedBodybuildingExercises[0].name}`;
-                    table.rows[1].cells[2].innerText = `${advancedBodybuildingExercises[0].pushExercises}`;
-                    table.rows[1].cells[3].innerText = `${advancedBodybuildingExercises[0].sets}`;
-                    table.rows[1].cells[4].innerText = `${advancedBodybuildingExercises[0].reps}`;
-                    table.rows[1].cells[5].innerText = `${advancedBodybuildingExercises[0].rest}`;
-
-                    //pull day
-                    table.rows[2].cells[1].innerText = `${advancedBodybuildingExercises[1].name}`;
-                    table.rows[2].cells[2].innerText = `${advancedBodybuildingExercises[1].pullExercises}`;
-                    table.rows[2].cells[3].innerText = `${advancedBodybuildingExercises[1].sets}`;
-                    table.rows[2].cells[4].innerText = `${advancedBodybuildingExercises[1].reps}`;
-                    table.rows[2].cells[5].innerText = `${advancedBodybuildingExercises[1].rest}`;
-
-                    //legs
-                    table.rows[3].cells[1].innerText = `${advancedBodybuildingExercises[2].name}`;
-                    table.rows[3].cells[2].innerText = `${advancedBodybuildingExercises[2].legExercises}`;
-                    table.rows[3].cells[3].innerText = `${advancedBodybuildingExercises[2].sets}`;
-                    table.rows[3].cells[4].innerText = `${advancedBodybuildingExercises[2].reps}`;
-                    table.rows[3].cells[5].innerText = `${advancedBodybuildingExercises[2].rest}`;
-
-                    //push day
-                    table.rows[4].cells[1].innerText = `${advancedBodybuildingExercises[0].name}`;
-                    table.rows[4].cells[2].innerText = `${advancedBodybuildingExercises[0].pushExercises}`;
-                    table.rows[4].cells[3].innerText = `${advancedBodybuildingExercises[0].sets}`;
-                    table.rows[4].cells[4].innerText = `${advancedBodybuildingExercises[0].reps}`;
-                    table.rows[4].cells[5].innerText = `${advancedBodybuildingExercises[0].rest}`;
-
-
-                    //
-                    table.rows[5].cells[1].innerText = `${advancedBodybuildingExercises[1].name}`;
-                    table.rows[5].cells[2].innerText = `${advancedBodybuildingExercises[1].pullExercises}`;
-                    table.rows[5].cells[3].innerText = `${advancedBodybuildingExercises[1].sets}`;
-                    table.rows[5].cells[4].innerText = `${advancedBodybuildingExercises[1].reps}`;
-                    table.rows[5].cells[5].innerText = `${advancedBodybuildingExercises[1].rest}`;
-
-                    table.rows[6].cells[1].innerText = `${advancedBodybuildingExercises[2].name}`;
-                    table.rows[6].cells[2].innerText = `${advancedBodybuildingExercises[2].legExercises}`;
-                    table.rows[6].cells[3].innerText = `${advancedBodybuildingExercises[2].sets}`;
-                    table.rows[6].cells[4].innerText = `${advancedBodybuildingExercises[2].reps}`;
-                    table.rows[6].cells[5].innerText = `${advancedBodybuildingExercises[2].rest}`;
-                });
-
-    </script>
 </body>
+
+
+
+
+
+<script>
+    const beginnerBodybuildingExercises = [
+        {
+            name: "FullBody day",
+            fbExercise1: "Dumbbell Bench Press",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise2: "Lat Pulldown",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise3: "Seated Dumbbell Overhead Shoulder Press",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise4: "Leg Press",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise5: "Lying Leg Curl",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise6: "Tricep Rope Pressdown",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise7: "Barbell Biceps Curl",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "FullBody day",
+            fbExercise8: "Seated Overhead Dumbbell Shoulder Press",
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+    ];
+    const intermediateBodybuildingExercises = [
+        {
+            name: "Upper Day",
+            uppExercises: ["Barbell Bench Press", "Chest Fly", "Barbell Bent-over Row", "Lat Pulldown", "Seated Overhead Dumbbell Shoulder Press", "Dumbbell Lateral Raise", "Barbell Biceps Curl", "Ez-Bar Preacher Curls", "Tricep Pushdown", "JM Press", "Bodyweight crunch"],
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "Lower Day",
+            lowerExercises: ["Squats", "Leg Press", "Lying Leg Curl", "Seated Leg Curl", "Standing Calf Raise", "Seated Calf Raise", "Leg Extensions"],
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        }
+    ];
+    const advancedBodybuildingExercises = [
+        {
+            name: "Push Day",
+            pushExercises: ["Incline Barbell Bench Press", "Dumbbell Flye", "Overhead Dumbbell Press", "Smith Machine Upright Row", "Lying EZ - Bar Triceps Extension"],
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "Pull Day",
+            pullExercises: ["Lat Pulldown", "Barbell Upright Row", "Single-Arm Neutral-Grip Dumbbell Row", "Incline Dumbbell Biceps Curl", "Preacher Curl with Cable"],
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        },
+        {
+            name: "Leg Day",
+            legExercises: ["Back Squat", "Leg Press", "Seated Leg Curl", "Romanian Deadlift", "Seated Calf Raise", "Standing Calf Raise", "Leg Extensions"],
+            sets: 3,
+            reps: "6-8",
+            rest: "3-5 minutes"
+        }
+    ];
+
+    const exercises = [
+        {
+            exerciseName: "Dumbbell Bench Press",
+            muscleGroup: ["Chest", "Triceps"],
+            link: "https://www.youtube.com/embed/5s4_yeSC5C0?controls=1"
+        },
+        {
+            exerciseName: "Barbell Bench Press",
+            muscleGroup: ["Chest", "Triceps"],
+            link: "https://www.youtube.com/embed/0cXAp6WhSj4?controls=1"
+        },
+        {
+            exerciseName: "Lat Pulldown",
+            muscleGroup: ["Back", "Biceps"],
+            link: "https://www.youtube.com/embed/Z_3xHwuO8Tk?controls=1"
+        },
+        {
+            exerciseName: "Leg Press",
+            muscleGroup: ["Legs"],
+            link: "https://www.youtube.com/embed/yZmx_Ac3880?controls=1"
+        },
+        {
+            exerciseName: "Barbell Back Squat",
+            muscleGroup: ["Legs", "Quads"],
+            link: "https://www.youtube.com/embed/VZ90qWlfQUE?controls=1"
+        },
+        {
+            exerciseName: "Seated Dumbbell Overhead Shoulder Press",
+            muscleGroup: ["Shoulders", "Triceps"],
+            link: "https://www.youtube.com/embed/rO_iEImwHyo?controls=1"
+        },
+        {
+            exerciseName: "Tricep Pushdown",
+            muscleGroup: ["Triceps"],
+            link: "https://www.youtube.com/embed/GCa8Q4e7laU?controls=1"
+        },
+        {
+            exerciseName: "Chest Fly",
+            muscleGroup: ["Chest"],
+            link: "https://www.youtube.com/embed/eGjt4lk6g34?controls=1"
+        },
+        {
+            exerciseName: "Tricep Rope Pressdown",
+            muscleGroup: ["Triceps"],
+            link: "https://www.youtube.com/embed/-xa-6cQaZKY?controls=1"
+        },
+        {
+            exerciseName: "Lying Leg Curl",
+            muscleGroup: ["Legs", "Hamstrings"],
+            link: "https://www.youtube.com/embed/bvVZJbye9BU?controls=1"
+        },
+        {
+            exerciseName: "Seated Leg Curl",
+            muscleGroup: ["Legs", "Hamstrings"],
+            link: "https://www.youtube.com/embed/Orxowest56U?controls=1"
+        },
+        {
+            exerciseName: "Incline Barbell Bench Press",
+            muscleGroup: ["Chest", "Triceps"],
+            link: "https://www.youtube.com/embed/7UB2HQg5FNY?controls=1"
+        },
+
+    ];
+
+    const userCardTemplate = document.querySelector("[data-user-template]");
+    const userCardContainer = document.querySelector("[data-user-cards-container]");
+    const searchInput = document.querySelector("[data-search]");
+
+    let exerciseCards = [];
+
+    searchInput.addEventListener("input", e => {
+        const value = e.target.value.toLowerCase()
+        exerciseCards.forEach(exercise => {
+            const isVisible = exercise.exerciseName.toLowerCase().includes(value) || exercise.muscle.toLowerCase().includes(value);
+            exercise.element.classList.toggle("hide", !isVisible)
+        })
+    })
+
+    exerciseCards = exercises.map(e => {
+
+        const exerciseVideos = document.createElement("iframe");
+        const card = userCardTemplate.content.cloneNode(true).children[0];
+        const header = card.querySelector("[data-header]");
+        const body = card.querySelector("[data-body]");
+        exerciseVideos.src = e.link;
+        exerciseVideos.height = '100%';
+        exerciseVideos.width = '100%';
+        exerciseVideos.style.aspectRatio = '16/9';
+
+
+        header.textContent = e.exerciseName;
+        body.textContent = "Targeted Muscle Group: " + e.muscleGroup;
+        body.appendChild(exerciseVideos);
+        userCardContainer.append(card);
+        return { exerciseName: e.exerciseName, muscle: e.muscleGroup.toString(), element: card }
+    });
+
+
+    let table = document.getElementById("week");
+    let rows = table.rows;
+    // let firstRowCells = rows[0].cells;
+
+    const beginnerBtn = document.getElementById("beginner");
+    const intermediateBtn = document.getElementById("intermediate");
+    const advancedBtn = document.getElementById("advanced");
+
+    beginnerBtn.addEventListener("click", () => {
+        let cells = document.querySelectorAll("td");
+        cells.forEach(cell => {
+            cell.innerText = "";
+        });
+        //Fullbody day
+        table.rows[1].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
+        table.rows[1].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
+        table.rows[1].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
+        table.rows[1].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
+        table.rows[1].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
+
+        //Fullbody day
+        table.rows[3].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
+        table.rows[3].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
+        table.rows[3].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
+        table.rows[3].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
+        table.rows[3].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
+
+
+        //Fullbody day
+        table.rows[5].cells[1].innerText = `${beginnerBodybuildingExercises[0].name}`;
+        table.rows[5].cells[2].innerText = `${beginnerBodybuildingExercises[0].fbExercise1}, ${beginnerBodybuildingExercises[1].fbExercise2}, ${beginnerBodybuildingExercises[2].fbExercise3}, ${beginnerBodybuildingExercises[3].fbExercise4}, ${beginnerBodybuildingExercises[4].fbExercise5}, ${beginnerBodybuildingExercises[5].fbExercise6}, ${beginnerBodybuildingExercises[6].fbExercise7}, ${beginnerBodybuildingExercises[7].fbExercise8}`;
+        table.rows[5].cells[3].innerText = `${beginnerBodybuildingExercises[0].sets}`;
+        table.rows[5].cells[4].innerText = `${beginnerBodybuildingExercises[0].reps}`;
+        table.rows[5].cells[5].innerText = `${beginnerBodybuildingExercises[0].rest}`;
+    })
+
+    intermediateBtn.addEventListener("click", () => {
+        let cells = document.querySelectorAll("td");
+        cells.forEach(cell => {
+            cell.innerText = "";
+        });
+
+        //upper day
+        table.rows[1].cells[1].innerText = `${intermediateBodybuildingExercises[0].name}`;
+        table.rows[1].cells[2].innerText = `${intermediateBodybuildingExercises[0].uppExercises}`;
+        table.rows[1].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
+        table.rows[1].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
+        table.rows[1].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
+
+        //lower day
+        table.rows[2].cells[1].innerText = `${intermediateBodybuildingExercises[1].name}`;
+        table.rows[2].cells[2].innerText = `${intermediateBodybuildingExercises[1].lowerExercises}`;
+        table.rows[2].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
+        table.rows[2].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
+        table.rows[2].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
+
+        //upper day
+        table.rows[4].cells[1].innerText = `${intermediateBodybuildingExercises[0].name}`;
+        table.rows[4].cells[2].innerText = `${intermediateBodybuildingExercises[0].uppExercises}`;
+        table.rows[4].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
+        table.rows[4].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
+        table.rows[4].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
+
+
+        //lower day
+        table.rows[5].cells[1].innerText = `${intermediateBodybuildingExercises[1].name}`;
+        table.rows[5].cells[2].innerText = `${intermediateBodybuildingExercises[1].lowerExercises}`;
+        table.rows[5].cells[3].innerText = `${intermediateBodybuildingExercises[0].sets}`;
+        table.rows[5].cells[4].innerText = `${intermediateBodybuildingExercises[0].reps}`;
+        table.rows[5].cells[5].innerText = `${intermediateBodybuildingExercises[0].rest}`;
+    });
+
+    advancedBtn.addEventListener("click", () => {
+        let cells = document.querySelectorAll("td");
+        cells.forEach(cell => {
+            cell.innerText = "";
+        });
+        //push day
+        table.rows[1].cells[1].innerText = `${advancedBodybuildingExercises[0].name}`;
+        table.rows[1].cells[2].innerText = `${advancedBodybuildingExercises[0].pushExercises}`;
+        table.rows[1].cells[3].innerText = `${advancedBodybuildingExercises[0].sets}`;
+        table.rows[1].cells[4].innerText = `${advancedBodybuildingExercises[0].reps}`;
+        table.rows[1].cells[5].innerText = `${advancedBodybuildingExercises[0].rest}`;
+
+        //pull day
+        table.rows[2].cells[1].innerText = `${advancedBodybuildingExercises[1].name}`;
+        table.rows[2].cells[2].innerText = `${advancedBodybuildingExercises[1].pullExercises}`;
+        table.rows[2].cells[3].innerText = `${advancedBodybuildingExercises[1].sets}`;
+        table.rows[2].cells[4].innerText = `${advancedBodybuildingExercises[1].reps}`;
+        table.rows[2].cells[5].innerText = `${advancedBodybuildingExercises[1].rest}`;
+
+        //legs
+        table.rows[3].cells[1].innerText = `${advancedBodybuildingExercises[2].name}`;
+        table.rows[3].cells[2].innerText = `${advancedBodybuildingExercises[2].legExercises}`;
+        table.rows[3].cells[3].innerText = `${advancedBodybuildingExercises[2].sets}`;
+        table.rows[3].cells[4].innerText = `${advancedBodybuildingExercises[2].reps}`;
+        table.rows[3].cells[5].innerText = `${advancedBodybuildingExercises[2].rest}`;
+
+        //push day
+        table.rows[4].cells[1].innerText = `${advancedBodybuildingExercises[0].name}`;
+        table.rows[4].cells[2].innerText = `${advancedBodybuildingExercises[0].pushExercises}`;
+        table.rows[4].cells[3].innerText = `${advancedBodybuildingExercises[0].sets}`;
+        table.rows[4].cells[4].innerText = `${advancedBodybuildingExercises[0].reps}`;
+        table.rows[4].cells[5].innerText = `${advancedBodybuildingExercises[0].rest}`;
+
+
+        //
+        table.rows[5].cells[1].innerText = `${advancedBodybuildingExercises[1].name}`;
+        table.rows[5].cells[2].innerText = `${advancedBodybuildingExercises[1].pullExercises}`;
+        table.rows[5].cells[3].innerText = `${advancedBodybuildingExercises[1].sets}`;
+        table.rows[5].cells[4].innerText = `${advancedBodybuildingExercises[1].reps}`;
+        table.rows[5].cells[5].innerText = `${advancedBodybuildingExercises[1].rest}`;
+
+        table.rows[6].cells[1].innerText = `${advancedBodybuildingExercises[2].name}`;
+        table.rows[6].cells[2].innerText = `${advancedBodybuildingExercises[2].legExercises}`;
+        table.rows[6].cells[3].innerText = `${advancedBodybuildingExercises[2].sets}`;
+        table.rows[6].cells[4].innerText = `${advancedBodybuildingExercises[2].reps}`;
+        table.rows[6].cells[5].innerText = `${advancedBodybuildingExercises[2].rest}`;
+    });
+
+</script>
 
 </html>
