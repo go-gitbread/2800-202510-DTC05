@@ -4,11 +4,29 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const User = require('./models/User');
-const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modular route for exercise session
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
 const axios = require('axios');
 const WorkoutLog = require('./models/WorkoutLog');
+
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+
+  if (!req.session.workouts) req.session.workouts = [];
+  if (!req.session.routine) {
+    req.session.routine = {
+      exercises: exercises.map(ex => ex.name)
+    };
+  }
+
+  res.render('exerciseSession', { workouts: req.session.workouts, routine: req.session.routine });
+});
+
+module.exports = router;
+
 
 dotenv.config();
 
@@ -44,7 +62,7 @@ app.use((req, res, next) => {
 });
 
 // Mount the exercise session routes at /exerciseSession
-app.use('/exerciseSession', exerciseSessionRoutes);
+
 
 // Route: Dashboard
 // If user is logged in, display dashboard with a random motivational quote
@@ -210,7 +228,6 @@ app.get('/dashboard', async (req, res) => {
     todayXP
   });
 });
-
 
 
 app.get('/weather', (req, res) => res.render('weather.ejs'));
@@ -442,8 +459,6 @@ app.get('/friends', async (req, res) => {
 });
 
 
-
-
 // this leaderboard function was aided with the help of stackoverflow and chatgpt
 app.get('/leaderboard', async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Default to page 1
@@ -568,35 +583,6 @@ app.get('/api/weather', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch weather data' });
   }
 });
-
-
-
-// //Route linking routine to session page after clicking a routine
-// app.get('/routine/:id/session', async (req, res) => {
-//   if (!req.session.userId) {
-//     return res.redirect('/login');
-//   }
-//   const routineId = req.params.id; //Grab the id from the URL >>> /routine/:id/session
-//   const userId = req.session.userId; //Grab the userID from the session
-//   try {
-//     // Find the specific routine by ID and ensure it belongs to the current user
-//     const routine = await Routine.findOne({ _id: routineId, userId: userId });
-//     if (!routine) {
-//       return res.status(404).send('Routine not found');
-//     }
-//     const workouts = []; //Initialize workouts as an empty array
-//     // Render the exerciseSession.ejs template, passing it the routine & workouts associated 
-//     res.render('exerciseSession', {
-//       routine: routine,
-//       workouts: workouts,
-//       userId: userId
-//     });
-//   } catch (err) {
-//     console.error('Error loading exercise session:', err);
-//     res.status(500).send('Error fetching routine details');
-//   }
-// });
-
 
 
 const workoutLogs = {}; // e.g., { routineId1: [workout1, workout2], routineId2: [...] }
@@ -948,6 +934,5 @@ async function updateAvatar(userId) {
   }
   return avatar
 }
-
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
