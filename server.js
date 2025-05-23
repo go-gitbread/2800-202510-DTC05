@@ -482,6 +482,11 @@ app.get('/leaderboard', async (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about');
 })
+//Workout guide page
+app.get('/workoutGuide', (req, res) => {
+  res.render('workoutGuide');
+})
+
 
 //WEATHER
 app.get('/weather', (req, res) => {
