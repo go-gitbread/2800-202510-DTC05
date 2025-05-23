@@ -1,4 +1,5 @@
 // Global object to store all exercise data
+
 const workoutData = {};
 let currentExercise = '';
 let currentUserId = window.routineData.userId;
@@ -251,18 +252,18 @@ function addSet() {
 
     const existingSets = document.getElementById('sets-container').querySelectorAll('.set-entry');
     const setNumber = existingSets.length + 1;
-    
+
     const lastSet = workoutData[currentExercise][workoutData[currentExercise].length - 1];
     const lastReps = lastSet.reps;
     const lastCardioSet = lastSet.duration
-    console.log("last Cardio set duration:" ,lastCardioSet)
+    console.log("last Cardio set duration:", lastCardioSet)
     console.log("Last set reps:", lastReps);
-    
+
     // Check if last set has reps >= 1
     if (lastReps >= 1 || lastCardioSet > 0) {
         console.log("I am allowed to add a set");
         addSetToDisplay(setNumber);
-        
+
         // Add new empty set to workoutData
         workoutData[currentExercise].push({ reps: '', weight: '' });
         console.log("I've added a set");
@@ -302,7 +303,7 @@ function saveCurrentExerciseData() {
 
             workoutData[currentExercise].push({ reps, weight }); //Add the data for the current exercise to workoutData
         }
-        });
+    });
     //Log each time anything is save - useful for keeping track of what's being logged & when!
     console.log('Saved data for', currentExercise, workoutData[currentExercise]);
 }
@@ -348,10 +349,10 @@ document.getElementById('finish-workout-btn').addEventListener('click', async ()
         const validSets = workoutData[exercise].filter(set => {
             if (isCardio) {
                 return (set.duration !== '' && set.duration !== null) ||
-                       (set.distance !== '' && set.distance !== null);
+                    (set.distance !== '' && set.distance !== null);
             } else {
                 return (set.reps !== '' && set.reps !== null) ||
-                       (set.weight !== '' && set.weight !== null);
+                    (set.weight !== '' && set.weight !== null);
             }
         });
 
@@ -502,11 +503,11 @@ document.getElementById("rest-restart-Btn").addEventListener("click", () => {
 });
 
 function showError(message) {
-  const errorMessage = document.getElementById('error-message');
-  errorMessage.textContent = message;
-  errorMessage.style.display = 'block';
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
 
-  setTimeout(() => {
-    errorMessage.style.display = 'none';
-  }, 3000); // Hide after 3 seconds
+    setTimeout(() => {
+        errorMessage.style.display = 'none';
+    }, 3000); // Hide after 3 seconds
 }

@@ -4,11 +4,33 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const User = require('./models/User');
-const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modular route for exercise session
+// const exerciseSessionRoutes = require('./routes/exerciseSession'); // Load modular route for exercise session
 const exercises = require('./public/js/exercises');
 const Routine = require('./models/Routine');
 const axios = require('axios');
 const WorkoutLog = require('./models/WorkoutLog');
+
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+
+  if (!req.session.workouts) req.session.workouts = [];
+  if (!req.session.routine) {
+    req.session.routine = {
+      exercises: exercises.map(ex => ex.name)
+    };
+  }
+
+  res.render('exerciseSession', { workouts: req.session.workouts, routine: req.session.routine });
+});
+
+module.exports = router;
+
+
+
+
 
 dotenv.config();
 
@@ -44,7 +66,7 @@ app.use((req, res, next) => {
 });
 
 // Mount the exercise session routes at /exerciseSession
-app.use('/exerciseSession', exerciseSessionRoutes);
+
 
 // Route: Dashboard
 // If user is logged in, display dashboard with a random motivational quote
